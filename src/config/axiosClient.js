@@ -1,5 +1,5 @@
 import axios from "axios";
-import { getItem, LOCAL_STORAGE } from "../utils/localStorage";
+import localStorageUtil from "../utils/localStorageUtil";
 
 const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_BE_URL,
@@ -11,7 +11,7 @@ const axiosClient = axios.create({
 axiosClient.interceptors.request.use(async (config) => {
   const customHeaders = {};
   // await isTokenExpired();
-  const accessToken = getItem(LOCAL_STORAGE.ACCESS_TOKEN);
+  const accessToken = localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
   if (accessToken) {
     customHeaders.Authorization = `Bearer ${accessToken}`;
   }
@@ -33,7 +33,7 @@ axiosClient.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error(error);
+    // console.error(error);
     if (error && error.response && error.response.data) {
       return error.response.data;
     }
