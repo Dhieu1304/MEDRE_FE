@@ -20,7 +20,7 @@ function App() {
         </a>
 
         <button onClick={testCode} type="submit">
-          test
+          test code
         </button>
       </header>
     </div>
