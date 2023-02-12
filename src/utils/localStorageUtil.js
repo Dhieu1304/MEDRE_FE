@@ -1,8 +1,6 @@
 const LOCAL_STORAGE = {
   ACCESS_TOKEN: "ACCESS_TOKEN",
   REFRESH_TOKEN: "REFRESH_TOKEN",
-  RECENT_GROUPS: "RECENT_GROUPS",
-  RECENT_PRESENTATIONS: "RECENT_PRESENTATIONS",
   UUID: "UUID"
 };
 
@@ -18,4 +16,4 @@ const removeItem = (name) => {
   localStorage.removeItem(name);
 };
 
-export { LOCAL_STORAGE, setItem, getItem, removeItem };
+export default { LOCAL_STORAGE, setItem, getItem, removeItem };
