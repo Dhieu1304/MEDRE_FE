@@ -1,3 +1,4 @@
+import PropTypes from "prop-types";
 import { Button, Grid, Typography, Box } from "@mui/material";
 import MuiPhoneNumber from "material-ui-phone-number";
 import { Controller, useForm } from "react-hook-form";
@@ -7,19 +8,24 @@ import routeConfig from "../../../config/routeConfig";
 import { authRoutes } from "../../../pages/AuthPage";
 import { inputErrorFormat } from "../../../utils/stringFormat";
 
-function OtpForm() {
+function PhoneNumberForm({ prevStep, nextStep }) {
   const { handleSubmit, control, trigger } = useForm({
     mode: "onChange",
     defaultValues: {
-      otp: ""
+      phone: "+84",
+      password: ""
     },
     criteriaMode: "all"
   });
 
-  const onVerifyOtp = async (formData) => {
+  const onSendOtp = async (formData) => {
     // write haphazardly to commit
     const success = formData;
-    return success;
+    if (success) {
+      nextStep();
+    } else {
+      prevStep();
+    }
   };
 
   const requireErrorMessage = "field can not empty";
@@ -29,7 +35,7 @@ function OtpForm() {
       <Typography component="h1" variant="h5">
         Phone number
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(onVerifyOtp)} sx={{ marginTop: 1 }}>
+      <Box component="form" noValidate onSubmit={handleSubmit(onSendOtp)} sx={{ marginTop: 1 }}>
         <Controller
           control={control}
           rules={{
@@ -90,4 +96,9 @@ function OtpForm() {
   );
 }
 
-export default OtpForm;
+PhoneNumberForm.propTypes = {
+  prevStep: PropTypes.func.isRequired,
+  nextStep: PropTypes.func.isRequired
+};
+
+export default PhoneNumberForm;

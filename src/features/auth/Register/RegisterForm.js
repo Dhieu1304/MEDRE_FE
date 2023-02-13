@@ -43,6 +43,7 @@ function RegisterForm({ prevStep, nextStep }) {
   const [hidePassword, setHidePassword] = useState(true);
 
   const onRegister = async (formData) => {
+    // write haphazardly to commit
     const success = formData;
     if (success) {
       nextStep();
