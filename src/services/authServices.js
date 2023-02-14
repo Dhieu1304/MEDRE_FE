@@ -42,7 +42,31 @@ const logout = async () => {
   };
 };
 
+const register = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
+  try {
+    const res = await axiosClient.post(authApi.register, { phoneNumber, email, password, name, gender, dob, address });
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   loginByPhoneNumber,
-  logout
+  logout,
+  register
 };

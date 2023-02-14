@@ -14,41 +14,45 @@ import {
   FormControl,
   FormHelperText
 } from "@mui/material";
-import PropTypes from "prop-types";
-import MuiPhoneNumber from "material-ui-phone-number";
+// import PropTypes from "prop-types";
+// import MuiPhoneNumber from "material-ui-phone-number";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import formatDate from "date-and-time";
 import routeConfig from "../../../config/routeConfig";
 import { authRoutes } from "../../../pages/AuthPage";
 import { inputErrorFormat } from "../../../utils/stringFormat";
+import { useAuthStore } from "../../../store/AuthStore/hooks";
 
-function RegisterForm({ prevStep, nextStep }) {
+function RegisterForm() {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
-      phone: "+84",
-      fullName: "",
-      gender: 0,
-      birthday: formatDate.format(new Date(), "YYYY-MM-DD"),
-      address: "",
-      password: "",
-      confirmPassword: ""
+      phoneNumber: "0375435896",
+      email: "d.hieu.13.04@gmail.com",
+      name: "Nguyễn Đình Hiệu",
+      gender: "Male",
+      dob: formatDate.format(new Date(), "YYYY-MM-DD"),
+      address: "Tân Phú, TP.HCM",
+      password: "dhieu1304",
+      confirmPassword: "dhieu1304"
     },
     criteriaMode: "all"
   });
 
-  const [hidePassword, setHidePassword] = useState(true);
+  const authStore = useAuthStore();
 
-  const onRegister = async (formData) => {
-    // write haphazardly to commit
-    const success = formData;
-    if (success) {
-      nextStep();
-    } else {
-      prevStep();
+  const [hidePassword, setHidePassword] = useState(true);
+  const [hideConfirmPassword, setConfirmHidePassword] = useState(true);
+
+  const navigate = useNavigate();
+
+  const onRegister = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
+    const result = await authStore.register({ phoneNumber, email, name, gender, dob: new Date(dob), address, password });
+    if (result) {
+      navigate(routeConfig.home);
     }
   };
 
@@ -74,8 +78,7 @@ function RegisterForm({ prevStep, nextStep }) {
             const label = "Phone";
             return (
               <Box
-                component={MuiPhoneNumber}
-                defaultCountry="vn"
+                component={TextField}
                 sx={{ mb: 2 }}
                 required
                 // error={error?.message}
@@ -94,7 +97,42 @@ function RegisterForm({ prevStep, nextStep }) {
               />
             );
           }}
-          name="phone"
+          name="phoneNumber"
+        />
+        <Controller
+          control={control}
+          rules={{
+            required: requireErrorMessage,
+            // https://ihateregex.io/expr/phone/
+            pattern: {
+              value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+              message: "is wrong format"
+            }
+          }}
+          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
+            const label = "Email";
+            return (
+              <Box
+                component={TextField}
+                sx={{ mb: 2 }}
+                required
+                // error={error?.message}
+                error={!!error}
+                value={value}
+                label={<Box component="span">{label}</Box>}
+                type="email"
+                fullWidth
+                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
+                variant="outlined"
+                onBlur={() => {
+                  trigger(name, { shouldFocus: true });
+                  onBlur();
+                }}
+                onChange={onChange}
+              />
+            );
+          }}
+          name="email"
         />
 
         <Controller
@@ -125,7 +163,7 @@ function RegisterForm({ prevStep, nextStep }) {
               />
             );
           }}
-          name="fullName"
+          name="name"
         />
 
         <Controller
@@ -150,8 +188,8 @@ function RegisterForm({ prevStep, nextStep }) {
                   }}
                   onChange={onChange}
                 >
-                  <MenuItem value={0}>Female</MenuItem>
-                  <MenuItem value={1}>Male</MenuItem>
+                  <MenuItem value="Female">Female</MenuItem>
+                  <MenuItem value="Male">Male</MenuItem>
                 </Select>
                 <FormHelperText>
                   <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
@@ -196,7 +234,15 @@ function RegisterForm({ prevStep, nextStep }) {
         <Controller
           control={control}
           rules={{
-            required: requireErrorMessage
+            required: requireErrorMessage,
+            minLength: {
+              value: 8,
+              message: "must be at least 8 characters"
+            },
+            pattern: {
+              value: /[a-zA-Z0-9]/,
+              message: "must have at least 1 digit and 1 character"
+            }
           }}
           render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
             const label = "Birthday";
@@ -221,13 +267,21 @@ function RegisterForm({ prevStep, nextStep }) {
               />
             );
           }}
-          name="birthday"
+          name="dob"
         />
 
         <Controller
           control={control}
           rules={{
-            required: requireErrorMessage
+            required: requireErrorMessage,
+            minLength: {
+              value: 8,
+              message: "must be at least 8 characters"
+            },
+            pattern: {
+              value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
+              message: "must have at least 1 digit and 1 character"
+            }
           }}
           render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
             const label = "Password";
@@ -252,7 +306,7 @@ function RegisterForm({ prevStep, nextStep }) {
                 error={!!error}
                 value={value}
                 label={<Box component="span">{label}</Box>}
-                type="tel"
+                type={hidePassword ? "password" : "text"}
                 fullWidth
                 helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
                 variant="outlined"
@@ -274,8 +328,8 @@ function RegisterForm({ prevStep, nextStep }) {
           rules={{
             required: requireErrorMessage,
             pattern: {
-              value: (value) => value === watch("password"),
-              message: "do not match"
+              value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
+              message: "must have at least 1 digit and 1 character"
             },
             validate: (value) => value === watch("password") || "do not match"
           }}
@@ -289,8 +343,8 @@ function RegisterForm({ prevStep, nextStep }) {
                     <InputAdornment position="end">
                       <FontAwesomeIcon
                         size="1x"
-                        icon={hidePassword ? faEye : faEyeSlash}
-                        onClick={() => setHidePassword((prev) => !prev)}
+                        icon={hideConfirmPassword ? faEye : faEyeSlash}
+                        onClick={() => setConfirmHidePassword((prev) => !prev)}
                         cursor="pointer"
                       />
                     </InputAdornment>
@@ -302,7 +356,7 @@ function RegisterForm({ prevStep, nextStep }) {
                 error={!!error}
                 value={value}
                 label={<Box component="span">{label}</Box>}
-                type="tel"
+                type={hideConfirmPassword ? "password" : "text"}
                 fullWidth
                 helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
                 variant="outlined"
@@ -341,9 +395,9 @@ function RegisterForm({ prevStep, nextStep }) {
   );
 }
 
-RegisterForm.propTypes = {
-  prevStep: PropTypes.func.isRequired,
-  nextStep: PropTypes.func.isRequired
-};
+// RegisterForm.propTypes = {
+//   prevStep: PropTypes.func.isRequired,
+//   nextStep: PropTypes.func.isRequired
+// };
 
 export default RegisterForm;

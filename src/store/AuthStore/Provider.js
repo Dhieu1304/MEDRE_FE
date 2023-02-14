@@ -38,6 +38,21 @@ function AuthProvider({ children }) {
           dispatch(actions.logout());
           dispatch(actions.fetchApiSuccess());
         }
+      },
+      register: async ({ phoneNumber, email, name, gender, dob, address, password }) => {
+        dispatch(actions.fetchApi());
+        const res = await authServices.register({ phoneNumber, email, name, gender, dob, address, password });
+
+        if (res?.success) {
+          const { message } = res;
+          dispatch(actions.fetchApiSuccess());
+          toast.success(message);
+          return true;
+        }
+        const { message } = res;
+        dispatch(actions.fetchApiFailed(message));
+        toast.success(message);
+        return false;
       }
     }),
     [state]
