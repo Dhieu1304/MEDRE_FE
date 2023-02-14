@@ -5,6 +5,7 @@ import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 import authServices from "../../services/authServices";
+import userServices from "../../services/userServices";
 
 function AuthProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initState);
@@ -45,6 +46,23 @@ function AuthProvider({ children }) {
 
         if (res?.success) {
           const { message } = res;
+          dispatch(actions.fetchApiSuccess());
+          toast.success(message);
+          return true;
+        }
+        const { message } = res;
+        dispatch(actions.fetchApiFailed(message));
+        toast.success(message);
+        return false;
+      },
+
+      loadUserInfo: async () => {
+        dispatch(actions.fetchApi());
+        const res = await userServices.getUserInfo();
+
+        if (res?.success) {
+          const { user, message } = res;
+          dispatch(actions.login(user));
           dispatch(actions.fetchApiSuccess());
           toast.success(message);
           return true;

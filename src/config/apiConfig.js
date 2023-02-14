@@ -3,4 +3,8 @@ const authApi = {
   register: "/auth/register"
 };
 
-export { authApi };
+const userApi = {
+  userInfo: "/user/info"
+};
+
+export { authApi, userApi };

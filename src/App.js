@@ -1,21 +1,28 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
 import { ToastContainer } from "react-toastify";
-import { privateRoutes, publicRoutes } from "./routes";
+import "react-toastify/dist/ReactToastify.css";
+import { Backdrop, CircularProgress } from "@mui/material";
 
+import { privateRoutes, publicRoutes } from "./routes";
 import DefaultLayout from "./layouts/DefaultLayout";
 import { useAuthStore } from "./store/AuthStore/hooks";
-import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   const authStore = useAuthStore();
 
+  useEffect(() => {
+    const loadData = async () => {
+      await authStore.loadUserInfo();
+    };
+    loadData();
+  }, []);
   return (
     <>
-      <button type="button" onClick={() => authStore.logout()}>
-        LOGOUT
-      </button>
+      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={authStore.isLoading}>
+        <CircularProgress color="inherit" />
+      </Backdrop>
       {authStore?.isLogin ? (
         <Router>
           <Routes>
