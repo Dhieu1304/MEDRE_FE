@@ -1,20 +1,20 @@
 import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { Button, Checkbox, FormControlLabel, Grid, TextField, Typography, Box, InputAdornment } from "@mui/material";
-import MuiPhoneNumber from "material-ui-phone-number";
 import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 import routeConfig from "../../config/routeConfig";
 import { authRoutes } from "../../pages/AuthPage";
+import { useAuthStore } from "../../store/AuthStore/hooks";
 import { inputErrorFormat } from "../../utils/stringFormat";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({
     mode: "onChange",
     defaultValues: {
-      phone: "+84",
+      phone: "",
       password: ""
     },
     criteriaMode: "all"
@@ -22,11 +22,12 @@ function Login() {
 
   const [hidePassword, setHidePassword] = useState(true);
 
+  const authStore = useAuthStore();
   const navigate = useNavigate();
 
-  const onLogin = async (formData) => {
-    const success = formData;
-    if (success) {
+  const onLogin = async ({ phone, password }) => {
+    const result = await authStore.loginByPhoneNumber(phone, password);
+    if (result) {
       navigate(routeConfig.home);
     }
   };
@@ -53,11 +54,10 @@ function Login() {
             const label = "Phone";
             return (
               <Box
-                component={MuiPhoneNumber}
-                defaultCountry="vn"
+                component={TextField}
                 sx={{ mb: 2 }}
                 required
-                error={error?.message}
+                error={!!error?.message}
                 value={value}
                 label={<Box component="span">{label}</Box>}
                 type="tel"
@@ -99,10 +99,10 @@ function Login() {
                 }}
                 sx={{ mb: 2 }}
                 required
-                error={error?.message}
+                error={!!error?.message}
                 value={value}
                 label={<Box component="span">{label}</Box>}
-                type="tel"
+                type={hidePassword ? "password" : "text"}
                 fullWidth
                 helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
                 variant="outlined"
