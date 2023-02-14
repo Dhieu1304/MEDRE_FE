@@ -1,4 +1,5 @@
 import * as React from "react";
+import PropTypes from "prop-types";
 import {
   AppBar,
   Box,
@@ -28,7 +29,7 @@ import { headerLeftItems, headerRightItems, headerDropdownMenu, drawerWidth } fr
 import images from "../../../assets/images";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 
-function Header() {
+function Header({ window }) {
   const [mobileOpen, setMobileOpen] = React.useState(false);
 
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -207,5 +208,9 @@ function Header() {
     </Box>
   );
 }
+
+Header.propTypes = {
+  window: PropTypes.func.isRequired
+};
 
 export default Header;
