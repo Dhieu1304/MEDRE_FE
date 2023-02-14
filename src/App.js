@@ -13,6 +13,9 @@ function App() {
 
   return (
     <>
+      <button type="button" onClick={() => authStore.logout()}>
+        LOGOUT
+      </button>
       {authStore?.isLogin ? (
         <Router>
           <Routes>

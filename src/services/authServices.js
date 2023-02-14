@@ -7,8 +7,8 @@ const loginByPhoneNumber = async (phoneNumber, password) => {
     const res = await axiosClient.post(authApi.loginByPhoneNumber, { phoneNumber, password });
 
     if (res?.status) {
-      const user = res?.data;
-      const tokens = res?.data;
+      const user = res?.data?.user;
+      const tokens = res?.data?.tokens;
 
       localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
       localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
@@ -32,6 +32,17 @@ const loginByPhoneNumber = async (phoneNumber, password) => {
   }
 };
 
+const logout = async () => {
+  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
+  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+
+  return {
+    success: true,
+    message: "Logout successfully"
+  };
+};
+
 export default {
-  loginByPhoneNumber
+  loginByPhoneNumber,
+  logout
 };

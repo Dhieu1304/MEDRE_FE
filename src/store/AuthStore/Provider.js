@@ -16,7 +16,7 @@ function AuthProvider({ children }) {
         dispatch(actions.fetchApi());
         const res = await authServices.loginByPhoneNumber(phone, password);
 
-        if (res.success) {
+        if (res?.success) {
           const { user, message } = res;
           dispatch(actions.login(user));
           dispatch(actions.fetchApiSuccess());
@@ -27,6 +27,17 @@ function AuthProvider({ children }) {
         dispatch(actions.fetchApiFailed(message));
         toast.success(message);
         return false;
+      },
+      logout: async () => {
+        dispatch(actions.fetchApi());
+        const res = await authServices.logout();
+        if (res?.success) {
+          dispatch(actions.logout());
+          dispatch(actions.fetchApiSuccess());
+        } else {
+          dispatch(actions.logout());
+          dispatch(actions.fetchApiSuccess());
+        }
       }
     }),
     [state]
