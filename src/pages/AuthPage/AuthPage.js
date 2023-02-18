@@ -24,9 +24,11 @@ export default function AuthPage() {
             sx={{
               my: 8,
               mx: 4,
+              px: 4,
               display: "flex",
               flexDirection: "column",
-              alignItems: "center"
+              alignItems: "center",
+              fontSize: 14
             }}
           >
             <Box

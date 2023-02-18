@@ -209,8 +209,12 @@ function Header({ window }) {
   );
 }
 
+Header.defaultProps = {
+  window: undefined
+};
+
 Header.propTypes = {
-  window: PropTypes.func.isRequired
+  window: PropTypes.func || undefined
 };
 
 export default Header;

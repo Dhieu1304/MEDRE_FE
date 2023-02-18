@@ -1,30 +1,16 @@
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  Button,
-  Checkbox,
-  FormControlLabel,
-  Grid,
-  TextField,
-  Typography,
-  Box,
-  InputAdornment,
-  Select,
-  MenuItem,
-  FormControl,
-  FormHelperText
-} from "@mui/material";
+import { Button, Grid, Typography, Box } from "@mui/material";
 // import PropTypes from "prop-types";
 // import MuiPhoneNumber from "material-ui-phone-number";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 import formatDate from "date-and-time";
 import routeConfig from "../../../config/routeConfig";
 import { authRoutes } from "../../../pages/AuthPage";
-import { inputErrorFormat } from "../../../utils/stringFormat";
+
 import { useAuthStore } from "../../../store/AuthStore/hooks";
+import AuthInput from "../../components/AuthInput";
 
 function RegisterForm() {
   const { handleSubmit, control, trigger, watch } = useForm({
@@ -44,9 +30,6 @@ function RegisterForm() {
 
   const authStore = useAuthStore();
 
-  const [hidePassword, setHidePassword] = useState(true);
-  const [hideConfirmPassword, setConfirmHidePassword] = useState(true);
-
   const navigate = useNavigate();
 
   const onRegister = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
@@ -60,11 +43,19 @@ function RegisterForm() {
 
   return (
     <>
-      <Typography component="h1" variant="h5">
+      <Typography
+        component="h1"
+        variant="h2"
+        sx={{
+          fontSize: 18,
+          fontWeight: 600,
+          mb: 2
+        }}
+      >
         Sign up
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit(onRegister)} sx={{ marginTop: 1 }}>
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage,
@@ -74,32 +65,13 @@ function RegisterForm() {
               message: "is wrong format"
             }
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Phone";
-            return (
-              <Box
-                component={TextField}
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                type="tel"
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Phone"
+          trigger={trigger}
           name="phoneNumber"
+          type="tel"
         />
-        <Controller
+
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage,
@@ -109,168 +81,65 @@ function RegisterForm() {
               message: "is wrong format"
             }
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Email";
-            return (
-              <Box
-                component={TextField}
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                type="email"
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Email"
+          trigger={trigger}
           name="email"
+          type="email"
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Full name";
-            return (
-              <Box
-                component={TextField}
-                type="text"
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Full name"
+          trigger={trigger}
           name="name"
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage
-            // https://ihateregex.io/expr/phone/
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Gender";
-            return (
-              <FormControl placeholder="Gender" sx={{ mb: 2 }} fullWidth variant="outlined">
-                <Select
-                  label={<Box component="span">{label}</Box>}
-                  required
-                  // error={error?.message}
-                  error={!!error}
-                  value={value}
-                  onBlur={() => {
-                    trigger(name, { shouldFocus: true });
-                    onBlur();
-                  }}
-                  onChange={onChange}
-                >
-                  <MenuItem value="Female">Female</MenuItem>
-                  <MenuItem value="Male">Male</MenuItem>
-                </Select>
-                <FormHelperText>
-                  <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
-                </FormHelperText>
-              </FormControl>
-            );
-          }}
+          label="Gender"
+          trigger={trigger}
           name="gender"
+          componentType="select"
+          selectItems={[
+            {
+              label: "Male",
+              value: "Male"
+            },
+            {
+              label: "Female",
+              value: "Female"
+            }
+          ]}
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Address";
-            return (
-              <Box
-                component={TextField}
-                type="text"
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Address"
+          trigger={trigger}
           name="address"
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
-            required: requireErrorMessage,
-            minLength: {
-              value: 8,
-              message: "must be at least 8 characters"
-            },
-            pattern: {
-              value: /[a-zA-Z0-9]/,
-              message: "must have at least 1 digit and 1 character"
-            }
+            required: requireErrorMessage
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Birthday";
-            return (
-              <Box
-                component={TextField}
-                type="date"
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Birthday"
+          trigger={trigger}
           name="dob"
+          type="date"
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage,
@@ -283,95 +152,33 @@ function RegisterForm() {
               message: "must have at least 1 digit and 1 character"
             }
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Password";
-            return (
-              <Box
-                component={TextField}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <FontAwesomeIcon
-                        size="1x"
-                        icon={hidePassword ? faEye : faEyeSlash}
-                        onClick={() => setHidePassword((prev) => !prev)}
-                        cursor="pointer"
-                      />
-                    </InputAdornment>
-                  )
-                }}
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                type={hidePassword ? "password" : "text"}
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  trigger("confirmPassword", { shouldFocus: true });
-
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Passwprd"
+          trigger={trigger}
+          triggerTo="confirmPassword"
           name="password"
+          type="password"
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage,
+            minLength: {
+              value: 8,
+              message: "must be at least 8 characters"
+            },
             pattern: {
               value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
               message: "must have at least 1 digit and 1 character"
             },
             validate: (value) => value === watch("password") || "do not match"
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Confirm password";
-            return (
-              <Box
-                component={TextField}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <FontAwesomeIcon
-                        size="1x"
-                        icon={hideConfirmPassword ? faEye : faEyeSlash}
-                        onClick={() => setConfirmHidePassword((prev) => !prev)}
-                        cursor="pointer"
-                      />
-                    </InputAdornment>
-                  )
-                }}
-                sx={{ mb: 2 }}
-                required
-                // error={error?.message}
-                error={!!error}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                type={hideConfirmPassword ? "password" : "text"}
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Confirm Passwprd"
+          trigger={trigger}
           name="confirmPassword"
+          type="password"
         />
 
-        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
           Register
         </Button>
@@ -384,7 +191,7 @@ function RegisterForm() {
           <Grid item>
             <Link variant="body2" to={routeConfig.auth + authRoutes.login}>
               Have an account?
-              <Box component="span" sx={{ color: "blue" }}>
+              <Box component="span" sx={{ color: "blue", ml: 1 }}>
                 Sign in
               </Box>
             </Link>

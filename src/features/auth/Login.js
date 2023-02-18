@@ -1,14 +1,12 @@
-import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { Button, Checkbox, FormControlLabel, Grid, TextField, Typography, Box, InputAdornment } from "@mui/material";
-import { useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { Button, Checkbox, FormControlLabel, Grid, Typography, Box } from "@mui/material";
+
+import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 import routeConfig from "../../config/routeConfig";
 import { authRoutes } from "../../pages/AuthPage";
 import { useAuthStore } from "../../store/AuthStore/hooks";
-import { inputErrorFormat } from "../../utils/stringFormat";
+import AuthInput from "../components/AuthInput";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({
@@ -19,8 +17,6 @@ function Login() {
     },
     criteriaMode: "all"
   });
-
-  const [hidePassword, setHidePassword] = useState(true);
 
   const authStore = useAuthStore();
   const navigate = useNavigate();
@@ -36,11 +32,19 @@ function Login() {
 
   return (
     <>
-      <Typography component="h1" variant="h5">
+      <Typography
+        component="h1"
+        variant="h2"
+        sx={{
+          fontSize: 18,
+          fontWeight: 600,
+          mb: 2
+        }}
+      >
         Sign in
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit(onLogin)} sx={{ marginTop: 1 }}>
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage,
@@ -50,71 +54,21 @@ function Login() {
               message: "is wrong format"
             }
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Phone";
-            return (
-              <Box
-                component={TextField}
-                sx={{ mb: 2 }}
-                required
-                error={!!error?.message}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                type="tel"
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Phone"
+          trigger={trigger}
           name="phone"
+          type="tel"
         />
 
-        <Controller
+        <AuthInput
           control={control}
           rules={{
             required: requireErrorMessage
           }}
-          render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-            const label = "Password";
-            return (
-              <Box
-                component={TextField}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment position="end">
-                      <FontAwesomeIcon
-                        size="1x"
-                        icon={hidePassword ? faEye : faEyeSlash}
-                        onClick={() => setHidePassword((prev) => !prev)}
-                        cursor="pointer"
-                      />
-                    </InputAdornment>
-                  )
-                }}
-                sx={{ mb: 2 }}
-                required
-                error={!!error?.message}
-                value={value}
-                label={<Box component="span">{label}</Box>}
-                type={hidePassword ? "password" : "text"}
-                fullWidth
-                helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-                variant="outlined"
-                onBlur={() => {
-                  trigger(name, { shouldFocus: true });
-                  onBlur();
-                }}
-                onChange={onChange}
-              />
-            );
-          }}
+          label="Password"
+          trigger={trigger}
           name="password"
+          type="password"
         />
 
         <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
@@ -130,7 +84,7 @@ function Login() {
           <Grid item>
             <Link variant="body2" to={routeConfig.auth + authRoutes.register}>
               Dont have an account?
-              <Box component="span" sx={{ color: "blue" }}>
+              <Box component="span" sx={{ color: "blue", ml: 1 }}>
                 Sign up
               </Box>
             </Link>
