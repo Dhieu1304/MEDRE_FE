@@ -12,6 +12,8 @@ import { useAuthStore } from "./store/AuthStore/hooks";
 function App() {
   const authStore = useAuthStore();
 
+  console.log("authStore: ", authStore);
+
   useEffect(() => {
     const loadData = async () => {
       await authStore.loadUserInfo();
