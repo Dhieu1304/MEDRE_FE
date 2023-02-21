@@ -5,8 +5,7 @@ const initState = {
   isLogin: false,
   isLoading: false,
   isFetchApiError: false,
-  fetchApiError: "",
-  loginByPhoneNumber: () => {}
+  fetchApiError: ""
 };
 
 function reducer(state, action) {
