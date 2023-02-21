@@ -1,13 +1,19 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
+import { AuthProvider } from "./store/AuthStore";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
+import GlobalStyles from "./components/GlobalStyles";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <React.StrictMode>
-    <App />
+    <GlobalStyles>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </GlobalStyles>
   </React.StrictMode>
 );
 
