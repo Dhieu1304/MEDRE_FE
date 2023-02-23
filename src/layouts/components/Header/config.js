@@ -4,37 +4,37 @@ import { authRoutes } from "../../../pages/AuthPage";
 export const headerLeftItems = [
   {
     to: routeConfig.home,
-    label: "Forum"
+    label: "forum_label"
   },
   {
     to: routeConfig.home,
-    label: "Booking"
+    label: "booking_label"
   },
   {
     to: routeConfig.home,
-    label: "Online"
+    label: "online_label"
   }
 ];
 
 export const headerRightItems = [
   {
     to: routeConfig.auth + authRoutes.login,
-    label: "Sign in"
+    label: "sign_in_label"
   },
   {
     to: routeConfig.auth + authRoutes.register,
-    label: "Sign up"
+    label: "sign_up_label"
   }
 ];
 
 export const headerDropdownMenu = [
   {
     to: routeConfig.home,
-    label: "Profile"
+    label: "profile_label"
   },
   {
     to: routeConfig.home,
-    label: "Change password"
+    label: "change_password_label"
   }
 ];
 

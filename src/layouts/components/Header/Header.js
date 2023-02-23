@@ -1,4 +1,3 @@
-import * as React from "react";
 import PropTypes from "prop-types";
 import {
   AppBar,
@@ -24,15 +23,28 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link } from "react-router-dom";
+import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { headerLeftItems, headerRightItems, headerDropdownMenu, drawerWidth } from "./config";
 
 import images from "../../../assets/images";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
+import { DARK, LIGHT } from "../../../config/themeConfig";
 
 function Header({ window }) {
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = useState(false);
 
-  const [anchorElUser, setAnchorElUser] = React.useState(null);
+  const [anchorElUser, setAnchorElUser] = useState(null);
+
+  const { mode, setMode, locale, setLocale } = useAppConfigStore();
+
+  const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
+
+  // console.log({
+  //   t,
+  //   i18n
+  // });
 
   const authStore = useAuthStore();
 
@@ -62,7 +74,7 @@ function Header({ window }) {
           <ListItem key={item.label} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText>
-                <Link to={item.to}>{item.label}</Link>
+                <Link to={item.to}>{t(item.label)}</Link>
               </ListItemText>
             </ListItemButton>
           </ListItem>
@@ -138,7 +150,7 @@ function Header({ window }) {
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {headerLeftItems.map((item) => (
                 <Button key={item.label} onClick={handleDrawerToggle} sx={{ my: 2, color: "white", display: "block" }}>
-                  <Link to={item.to}>{item.label}</Link>
+                  <Link to={item.to}>{t(item.label)}</Link>
                 </Button>
               ))}
             </Box>
@@ -168,11 +180,30 @@ function Header({ window }) {
                 >
                   {headerDropdownMenu.map((item) => (
                     <MenuItem key={item.label} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{item.label}</Typography>
+                      <Typography textAlign="center">{t(item.label)}</Typography>
                     </MenuItem>
                   ))}
+                  <MenuItem
+                    onClick={() => {
+                      setMode((prev) => {
+                        return prev === LIGHT ? DARK : LIGHT;
+                      });
+                    }}
+                  >
+                    <Typography textAlign="center">{mode}</Typography>
+                  </MenuItem>
+                  <MenuItem
+                    onClick={() => {
+                      const newLocale = locale === "viVN" ? "enUS" : "viVN";
+                      const code = newLocale.slice(0, 2);
+                      setLocale(newLocale);
+                      i18n.changeLanguage(code);
+                    }}
+                  >
+                    <Typography textAlign="center">{locale}</Typography>
+                  </MenuItem>
                   <MenuItem onClick={onLogout}>
-                    <Typography textAlign="center">Logout</Typography>
+                    <Typography textAlign="center">{t("logout_label")}</Typography>
                   </MenuItem>
                 </Menu>
               </Box>
@@ -180,7 +211,7 @@ function Header({ window }) {
               <Box sx={{ display: { xs: "flex", md: "flex" } }}>
                 {headerRightItems.map((item) => (
                   <Button key={item.label} onClick={handleDrawerToggle} sx={{ my: 2, color: "white", display: "block" }}>
-                    <Link to={item.to}>{item.label}</Link>
+                    <Link to={item.to}>{t(item.label)}</Link>
                   </Button>
                 ))}
               </Box>

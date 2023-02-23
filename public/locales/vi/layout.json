@@ -1,0 +1,12 @@
+{
+  "header": {
+    "profile_label": "Thông tin cá nhân",
+    "change_password_label": "Đổi mật khẩu",
+    "logout_label": "Đăng xuất",
+    "forum_label": "Diễn đàn",
+    "booking_label": "Đặt lịch",
+    "online_label": "Khám online",
+    "sign_in_label": "Đăng nhập",
+    "sign_up_label": "Đăng ký"
+  }
+}
