@@ -1,18 +1,22 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import { Fragment, useEffect } from "react";
+import { Fragment, useEffect, useMemo } from "react";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Backdrop, CircularProgress } from "@mui/material";
+import { Backdrop, CircularProgress, createTheme, ThemeProvider } from "@mui/material";
+import * as locales from "@mui/material/locale";
 
 import { privateRoutes, publicRoutes } from "./routes";
 import DefaultLayout from "./layouts/DefaultLayout";
 import { useAuthStore } from "./store/AuthStore/hooks";
+import { useAppConfigStore } from "./store/AppConfigStore";
+import { getTheme } from "./config/themeConfig";
 
 function App() {
   const authStore = useAuthStore();
+  const { mode, locale } = useAppConfigStore();
 
-  console.log("authStore: ", authStore);
+  const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
 
   useEffect(() => {
     const loadData = async () => {
@@ -20,9 +24,10 @@ function App() {
     };
     loadData();
   }, []);
+
   return (
-    <>
-      <Backdrop sx={{ color: "#fff", zIndex: (theme) => theme.zIndex.drawer + 1 }} open={authStore.isLoading}>
+    <ThemeProvider theme={theme}>
+      <Backdrop sx={{ color: "#fff", zIndex: (currentTheme) => currentTheme.zIndex.drawer + 1 }} open={authStore.isLoading}>
         <CircularProgress color="inherit" />
       </Backdrop>
       {authStore?.isLogin ? (
@@ -37,13 +42,14 @@ function App() {
               }
 
               const Page = route.component;
+              const to = route.props?.to;
               return (
                 <Route
                   key={route.path}
                   path={route.path}
                   element={
                     <Layout>
-                      <Page />
+                      <Page to={to} />
                     </Layout>
                   }
                 />
@@ -63,13 +69,14 @@ function App() {
               }
 
               const Page = route.component;
+              const to = route.props?.to;
               return (
                 <Route
                   key={route.path}
                   path={route.path}
                   element={
                     <Layout>
-                      <Page />
+                      <Page to={to} />
                     </Layout>
                   }
                 />
@@ -90,7 +97,7 @@ function App() {
         pauseOnHover
         theme="light"
       />
-    </>
+    </ThemeProvider>
   );
 }
 
