@@ -6,7 +6,9 @@ function DefaultLayout({ children }) {
   return (
     <Box sx={{ width: "100vw", minHeight: "100vh" }}>
       <Header />
-      <Box sx={{ width: "100%", height: "100%" }}>{children}</Box>;
+      <Box sx={{ width: "100%", height: "100%" }} px={8} py={4}>
+        {children}
+      </Box>
     </Box>
   );
 }

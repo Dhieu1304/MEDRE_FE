@@ -6,7 +6,7 @@ import { Link, useNavigate } from "react-router-dom";
 import routeConfig from "../../config/routeConfig";
 import { authRoutes } from "../../pages/AuthPage";
 import { useAuthStore } from "../../store/AuthStore/hooks";
-import AuthInput from "../components/AuthInput";
+import AuthInput from "./components/AuthInput";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({

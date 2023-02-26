@@ -13,10 +13,6 @@ export const headerLeftItems = [
   {
     to: routeConfig.home,
     label: "online_label"
-  },
-  {
-    to: routeConfig.doctor,
-    label: "doctor_label"
   }
 ];
 

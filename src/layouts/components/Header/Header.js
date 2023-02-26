@@ -31,6 +31,7 @@ import images from "../../../assets/images";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { DARK, LIGHT } from "../../../config/themeConfig";
+import routeConfig from "../../../config/routeConfig";
 
 function Header({ window }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -114,8 +115,8 @@ function Header({ window }) {
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="/"
+              component={Link}
+              to={routeConfig.home}
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },

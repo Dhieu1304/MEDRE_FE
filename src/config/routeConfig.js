@@ -1,6 +1,8 @@
 const routeConfig = {
   home: "/",
-  auth: "/auth"
+  auth: "/auth",
+  doctor: "/doctor",
+  default: "/*"
 };
 
 export default routeConfig;

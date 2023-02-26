@@ -1,6 +1,5 @@
 import { Button, Grid, Typography, Box } from "@mui/material";
 // import PropTypes from "prop-types";
-// import MuiPhoneNumber from "material-ui-phone-number";
 
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -10,7 +9,7 @@ import routeConfig from "../../../config/routeConfig";
 import { authRoutes } from "../../../pages/AuthPage";
 
 import { useAuthStore } from "../../../store/AuthStore/hooks";
-import AuthInput from "../../components/AuthInput";
+import AuthInput from "../components/AuthInput";
 
 function RegisterForm() {
   const { handleSubmit, control, trigger, watch } = useForm({

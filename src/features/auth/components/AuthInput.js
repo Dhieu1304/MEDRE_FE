@@ -5,7 +5,7 @@ import PropTypes from "prop-types";
 import { Box, FormControl, FormHelperText, InputAdornment, InputLabel, MenuItem, Select, TextField } from "@mui/material";
 import { useState } from "react";
 import { Controller } from "react-hook-form";
-import { inputErrorFormat } from "../../utils/stringFormat";
+import { inputErrorFormat } from "../../../utils/stringFormat";
 
 const AuthInput = ({
   control,

@@ -1,5 +1,4 @@
-import { Button, Grid, Typography, Box } from "@mui/material";
-import MuiPhoneNumber from "material-ui-phone-number";
+import { Button, Grid, Typography, Box, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
@@ -44,8 +43,7 @@ function OtpForm() {
             const label = "Phone";
             return (
               <Box
-                component={MuiPhoneNumber}
-                defaultCountry="vn"
+                component={TextField}
                 sx={{ mb: 2 }}
                 required
                 error={error?.message}
