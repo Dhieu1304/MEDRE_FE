@@ -121,7 +121,7 @@ const AuthInput = ({
 };
 
 AuthInput.prototype = {
-  control: PropTypes.string,
+  control: PropTypes.object,
   rules: PropTypes.object,
   label: PropTypes.string,
   trigger: PropTypes.func,

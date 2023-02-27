@@ -1,16 +1,17 @@
-import { MoreVert } from "@mui/icons-material";
-import { Avatar, Card, CardHeader, IconButton } from "@mui/material";
+import { Favorite as FavoriteIcon, FavoriteBorder as FavoriteBorderIcon } from "@mui/icons-material";
+import { Avatar, Box, Button, Card, CardActions, CardContent, CardHeader, IconButton, Typography } from "@mui/material";
 import { red } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
-import routeConfig from "../../../config/routeConfig";
+import PropTypes from "prop-types";
 
-function DoctorCard() {
+import routeConfig from "../../../config/routeConfig";
+import ExpertiseButton from "./ExpertiseButton";
+
+function DoctorCard({ isLiked = true }) {
   const navigate = useNavigate();
+
   return (
-    <Card
-      onClick={() => navigate(`${routeConfig.doctor}/1`)}
-      sx={{ height: "100%", maxWidth: 345, display: "flex", flexDirection: "column", p: 0, cursor: "pointer" }}
-    >
+    <Card sx={{ height: "100%", maxWidth: 500, display: "flex", flexDirection: "column", p: 0, cursor: "pointer" }}>
       <CardHeader
         avatar={
           <Avatar sx={{ bgcolor: red[500] }} aria-label="recipe">
@@ -19,34 +20,33 @@ function DoctorCard() {
         }
         action={
           <IconButton aria-label="settings">
-            <MoreVert />
+            {isLiked ? <FavoriteIcon color="red" /> : <FavoriteBorderIcon color="red" />}
           </IconButton>
         }
         title="Keegan"
-        subheader="September 14, 2016"
       />
-      {/* <CardMedia
-        component="img"
-        sx={{
-          // 16:9
-          // pt: "56.25%"
-          p: 0
-        }}
-        image="https://source.unsplash.com/random"
-        alt="random"
-      />
-      <CardContent sx={{ flexGrow: 1 }}>
-        <Typography gutterBottom variant="h5" component="h2">
-          Heading
+      <CardContent sx={{ flexGrow: 1, pt: 0 }}>
+        <Box>
+          {["Tâm lý", "Răng hàm mặt", "Tai mũi họng"].map((expertise) => (
+            <ExpertiseButton key={expertise} label={expertise} />
+          ))}
+        </Box>
+        <Typography>
+          Hơn 20 năm kinh nghiệm làm việc chuyên sâu trong lĩnh vực trị liệu tâm lý, tham vấn tâm lý và giáo cho trẻ em và vị
+          thành niên
         </Typography>
-        <Typography>This is a media card. You can use this section to describe the content.</Typography>
       </CardContent>
-      <CardActions>
-        <Button size="small">View</Button>
-        <Button size="small">Edit</Button>
-      </CardActions> */}
+      <CardActions sx={{ justifyContent: "flex-end" }}>
+        <Button variant="contained" size="small" onClick={() => navigate(`${routeConfig.doctor}/1`)}>
+          Book
+        </Button>
+      </CardActions>
     </Card>
   );
 }
+
+DoctorCard.propTypes = {
+  isLiked: PropTypes.bool.isRequired
+};
 
 export default DoctorCard;
