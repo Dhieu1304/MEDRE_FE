@@ -12,7 +12,6 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  Button,
   Avatar,
   Container,
   Menu,
@@ -150,9 +149,14 @@ function Header({ window }) {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {headerLeftItems.map((item) => (
-                <Button key={item.label} onClick={handleDrawerToggle} sx={{ my: 2, color: "white", display: "block" }}>
-                  <Link to={item.to}>{t(item.label)}</Link>
-                </Button>
+                <Box
+                  key={item.label}
+                  component={Link}
+                  to={item.to}
+                  sx={{ my: 2, px: 2, color: "white", display: "block", textDecoration: "none" }}
+                >
+                  {t(item.label)}
+                </Box>
               ))}
             </Box>
 
@@ -211,9 +215,14 @@ function Header({ window }) {
             ) : (
               <Box sx={{ display: { xs: "flex", md: "flex" } }}>
                 {headerRightItems.map((item) => (
-                  <Button key={item.label} onClick={handleDrawerToggle} sx={{ my: 2, color: "white", display: "block" }}>
-                    <Link to={item.to}>{t(item.label)}</Link>
-                  </Button>
+                  <Box
+                    key={item.label}
+                    component={Link}
+                    to={item.to}
+                    sx={{ my: 2, px: 2, color: "white", display: "block", textDecoration: "none" }}
+                  >
+                    {t(item.label)}
+                  </Box>
                 ))}
               </Box>
             )}

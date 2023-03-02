@@ -27,9 +27,14 @@ function App() {
 
   return (
     <ThemeProvider theme={theme}>
-      <Backdrop sx={{ color: "#fff", zIndex: (currentTheme) => currentTheme.zIndex.drawer + 1 }} open={authStore.isLoading}>
-        <CircularProgress color="inherit" />
-      </Backdrop>
+      {authStore.isLoading && (
+        <Backdrop
+          sx={{ color: "#fff", zIndex: (currentTheme) => currentTheme.zIndex.drawer + 1 }}
+          open={authStore.isLoading}
+        >
+          <CircularProgress color="inherit" />
+        </Backdrop>
+      )}
       {authStore?.isLogin ? (
         <Router>
           <Routes>

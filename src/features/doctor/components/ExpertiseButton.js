@@ -10,7 +10,7 @@ function ExpertiseButton({ label }) {
 }
 
 ExpertiseButton.propTypes = {
-  label: PropTypes.bool.isRequired
+  label: PropTypes.string.isRequired
 };
 
 export default ExpertiseButton;
