@@ -1,48 +1,75 @@
-import { Modal, Typography, Box, Button } from "@mui/material";
+import { Close } from "@mui/icons-material";
+import { Modal, Typography, Box, Button, Grid, IconButton } from "@mui/material";
 import PropTypes from "prop-types";
 
-function CustomModal({ show, setShow, data, setData }) {
+function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, onSubmit }) {
+  const handleClose = () => {
+    if (setData) setData(null);
+    setShow(false);
+  };
+
+  const handleSubmit = () => {
+    if (onSubmit) onSubmit();
+  };
   return (
-    <Modal open={show} onClose={() => setShow(false)}>
+    <Modal open={show} onClose={handleClose}>
       <Box
         sx={{
           position: "absolute",
           top: "50%",
           left: "50%",
           transform: "translate(-50%, -50%)",
-          width: 400,
+          width: 600,
           bgcolor: "background.paper",
-          border: "2px solid #000",
+          border: "1px solid rgba(0,0,0,0.2)",
+          borderRadius: 1,
           boxShadow: 24,
-          p: 4
+          p: 2
         }}
       >
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          {data?.toString()}
-        </Typography>
-        <Typography id="modal-modal-description" sx={{ mt: 2 }}>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-        </Typography>
-        <Button
-          onClick={() => {
-            setData("Sang");
-          }}
-        />
+        <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">
+          <Typography component="h1" fontSize={20} fontWeight="700" p={0}>
+            {title}
+          </Typography>
+          <IconButton onClick={handleClose}>
+            <Close />
+          </IconButton>
+        </Box>
+        <Box py={2}>{children}</Box>
+        <Grid container spacing={2} justifyContent="flex-end">
+          <Grid item columns={2}>
+            <Button variant="outlined" onClick={handleClose}>
+              Cancel
+            </Button>
+          </Grid>
+          <Grid item columns={2}>
+            {submitBtnLabel && (
+              <Button variant="contained" onClick={handleSubmit}>
+                {submitBtnLabel}
+              </Button>
+            )}
+          </Grid>
+        </Grid>
       </Box>
     </Modal>
   );
 }
 
 CustomModal.defaultProps = {
-  data: null,
-  setData: null
+  setData: null,
+  title: null,
+  submitBtnLabel: null,
+  onSubmit: null
 };
 
 CustomModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
-  data: PropTypes.oneOfType([PropTypes.number, PropTypes.string, PropTypes.object]),
-  setData: PropTypes.func
+  setData: PropTypes.func,
+  children: PropTypes.node.isRequired,
+  title: PropTypes.string,
+  submitBtnLabel: PropTypes.string,
+  onSubmit: PropTypes.func
 };
 
 export default CustomModal;

@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import doctorServices from "../../services/doctorServices";
 import DoctorCard from "./components/DoctorCard";
-import FilterInput from "./components/FilterInput";
+import CustomInput from "./components/CustomInput";
 
 function DoctorList() {
   const [doctors, setDoctors] = useState([]);
@@ -79,10 +79,10 @@ function DoctorList() {
       <Box>
         <Grid container spacing={{ xs: 2, md: 3 }}>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <FilterInput control={control} rules={{}} label="Search by name" trigger={trigger} name="search" type="text" />
+            <CustomInput control={control} rules={{}} label="Search by name" trigger={trigger} name="search" type="text" />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <FilterInput control={control} rules={{}} label="Types" trigger={trigger} name="types">
+            <CustomInput control={control} rules={{}} label="Types" trigger={trigger} name="types">
               <Select
                 multiple
                 renderValue={(selected) => {
@@ -98,10 +98,10 @@ function DoctorList() {
                   );
                 })}
               </Select>
-            </FilterInput>
+            </CustomInput>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <FilterInput control={control} rules={{}} label="Degrees" trigger={trigger} name="degrees">
+            <CustomInput control={control} rules={{}} label="Degrees" trigger={trigger} name="degrees">
               <Select
                 multiple
                 renderValue={(selected) => {
@@ -117,10 +117,10 @@ function DoctorList() {
                   );
                 })}
               </Select>
-            </FilterInput>
+            </CustomInput>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <FilterInput control={control} rules={{}} label="Khoa" trigger={trigger} name="specialties">
+            <CustomInput control={control} rules={{}} label="Khoa" trigger={trigger} name="specialties">
               <Select
                 multiple
                 renderValue={(selected) => {
@@ -136,7 +136,7 @@ function DoctorList() {
                   );
                 })}
               </Select>
-            </FilterInput>
+            </CustomInput>
           </Grid>
         </Grid>
       </Box>

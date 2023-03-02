@@ -18,145 +18,126 @@ import {
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
-import CustomModal, { useCustomModal } from "../../components/CustomModal";
+import { useCustomModal } from "../../components/CustomModal";
 import doctorServices from "../../services/doctorServices";
 import scheduleServices from "../../services/scheduleServices";
 import { getNext7DaysFrom } from "../../utils/datetimeUtil";
 import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "./components/BookingButton";
+import BookingModal from "./components/BookingModal";
 import ExpertiseButton from "./components/ExpertiseButton";
 
-// const groupArrayByKey = (arr, keys, key) => {
-//   const defaultGroups = keys.reduce((group, key) => ({ ...group, [key]: [] }), {});
-//   console.log("key: ", key);
-//
-//   return arr.reduce(
-//     (groups, item) => {
-//       const value = item[key];
-//       if (groups[value]) {
-//         groups[value].push(item);
-//       }
-//       return groups;
-//     },
-//     { ...defaultGroups }
-//   );
-// };
+const groupArrayByKey = (arr, keys, key) => {
+  const defaultGroups = keys.reduce((group, keyi) => ({ ...group, [keyi]: [] }), {});
 
-// const createData = (name, schedules, currentDate) => {
-//   const row = schedules.reduce(
-//     (newRow, schedule) => {
-//       const count = Math.ceil(formatDate.subtract(new Date(schedule?.date), currentDate).toDays());
-//       const key = `d${count}`;
-//       // switch (schedule?.status) {
-//       //   case "empty":
-//       //     {
-//       //       if
-//       //     }
+  return arr.reduce(
+    (groups, item) => {
+      const value = item[key];
+      if (groups[value]) {
+        groups[value].push(item);
+      }
+      return groups;
+    },
+    { ...defaultGroups }
+  );
+};
 
-//       //   default:
-//       //     break;
-//       // }
-
-//       // return {
-//       //   ...newRow,
-//       //   [key]: "sang"
-//       // };
-//     },
-//     { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null }
-//   );
-
-//   console.log("row: ", row);
-
-//   // const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
-//   // const newRow = Object.keys(row).reduce((result, key) => {}, {});
-//   // const index = Math.floor(Math.random() * 5) + 1;
-//   // switch (index) {
-//   //   case 2:
-//   //     return {
-//   //       ...newRow,
-//   //       [key]: BOOKED
-//   //     };
-//   //   case 3:
-//   //     return {
-//   //       ...newRow,
-//   //       [key]: EMPTY_PAST
-//   //     };
-//   //   case 4:
-//   //     return {
-//   //       ...newRow,
-//   //       [key]: RESERVED
-//   //     };
-//   //   case 5:
-//   //     return {
-//   //       ...newRow,
-//   //       [key]: BUSY
-//   //     };
-//   //   case 1:
-//   //   default:
-//   //     return {
-//   //       ...newRow,
-//   //       [key]: EMPTY
-//   //     };
-//   // }
-
-//   return {
-//     name,
-//     ...row
-//   };
-// };
-
-// const createDatas = (times, schedules, currentDate) => {
-const createDatas = (times) => {
-  // const groupSchedule = groupArrayByKey(
-  //   schedules,
-  //   times.map((time) => time.name),
-  //   "time"
-  // );
-
-  // return Object.keys(groupSchedule).map((time) => {
-  //   return createData(time, groupSchedule[time], currentDate);
-  // });
-
-  return times.map((time) => {
-    const name = time?.name;
-    const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
-    const newRow = Object.keys(row).reduce((result, key) => {
+const createData = (name, schedules, currentDate) => {
+  const row = schedules.reduce(
+    (newRow, schedule) => {
+      const count = Math.ceil(formatDate.subtract(new Date(schedule?.date), currentDate).toDays());
+      const key = `d${count}`;
       const index = Math.floor(Math.random() * 5) + 1;
       switch (index) {
         case 2:
           return {
-            ...result,
-            [key]: BOOKED
+            ...newRow,
+            [key]: { variant: BOOKED, data: schedule }
           };
         case 3:
           return {
-            ...result,
-            [key]: EMPTY_PAST
+            ...newRow,
+            [key]: { variant: EMPTY_PAST, data: schedule }
           };
         case 4:
           return {
-            ...result,
-            [key]: RESERVED
+            ...newRow,
+            [key]: { variant: RESERVED, data: schedule }
           };
         case 5:
           return {
-            ...result,
-            [key]: BUSY
+            ...newRow,
+            [key]: { variant: BUSY, data: schedule }
           };
         case 1:
         default:
           return {
-            ...result,
-            [key]: EMPTY
+            ...newRow,
+            [key]: { variant: EMPTY, data: schedule }
           };
       }
-    }, {});
+    },
+    { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null }
+  );
 
-    return {
-      name,
-      ...newRow
-    };
-    // return { name, d1, d2, d3, d4, d5, d6, d7 };
+  return {
+    name,
+    ...row
+  };
+};
+
+const createDatas = (times, schedules, currentDate) => {
+  // const createDatas = (times) => {
+  const groupSchedule = groupArrayByKey(
+    schedules,
+    times.map((time) => time.name),
+    "time"
+  );
+
+  return Object.keys(groupSchedule).map((time) => {
+    return createData(time, groupSchedule[time], currentDate);
   });
+
+  // return times.map((time) => {
+  //   const name = time?.name;
+  //   const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
+  //   const newRow = Object.keys(row).reduce((result, key) => {
+  //     const index = Math.floor(Math.random() * 5) + 1;
+  //     switch (index) {
+  //       case 2:
+  //         return {
+  //           ...result,
+  //           [key]: BOOKED
+  //         };
+  //       case 3:
+  //         return {
+  //           ...result,
+  //           [key]: EMPTY_PAST
+  //         };
+  //       case 4:
+  //         return {
+  //           ...result,
+  //           [key]: RESERVED
+  //         };
+  //       case 5:
+  //         return {
+  //           ...result,
+  //           [key]: BUSY
+  //         };
+  //       case 1:
+  //       default:
+  //         return {
+  //           ...result,
+  //           [key]: EMPTY
+  //         };
+  //     }
+  //   }, {});
+
+  //   return {
+  //     name,
+  //     ...newRow
+  //   };
+  //   // return { name, d1, d2, d3, d4, d5, d6, d7 };
+  // });
 };
 function DoctorDetail() {
   const [doctor, setDoctor] = useState();
@@ -168,12 +149,15 @@ function DoctorDetail() {
   const params = useParams();
   const doctorId = useMemo(() => params?.doctorId, [params?.doctorId]);
 
-  const renderCell = (variant) => {
+  const renderCell = (cell) => {
+    const variant = cell?.variant;
+    const data = cell?.data;
     let handleClick;
     switch (variant) {
       case EMPTY:
         handleClick = () => {
           bookingModal.setShow(true);
+          bookingModal.setData(data);
           setCurrentDate((prev) => prev);
         };
         break;
@@ -280,7 +264,14 @@ function DoctorDetail() {
           </TableContainer>
         </Grid>
       </Grid>
-      <CustomModal show={bookingModal.show} setShow={bookingModal.setShow} />
+      {bookingModal.show && (
+        <BookingModal
+          show={bookingModal.show}
+          setShow={bookingModal.setShow}
+          data={bookingModal.data}
+          setData={bookingModal.setData}
+        />
+      )}
     </>
   );
 }

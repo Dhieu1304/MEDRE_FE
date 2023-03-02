@@ -7,7 +7,7 @@ import { Children, cloneElement, isValidElement, useState } from "react";
 import { Controller } from "react-hook-form";
 import { inputErrorFormat } from "../../../utils/stringFormat";
 
-function FilterInput({ control, rules = {}, label, trigger, triggerTo, name, type = "text", placeholder, children }) {
+function CustomInput({ control, rules = {}, label, trigger, triggerTo, name, type = "text", placeholder, children }) {
   const [hidePassword, setHidePassword] = useState(true);
 
   const formControlStyle = {
@@ -108,12 +108,12 @@ function FilterInput({ control, rules = {}, label, trigger, triggerTo, name, typ
   );
 }
 
-FilterInput.defaultProps = {
+CustomInput.defaultProps = {
   triggerTo: null,
   children: null
 };
 
-FilterInput.propTypes = {
+CustomInput.propTypes = {
   control: PropTypes.shape({ root: PropTypes.string.isRequired }).isRequired,
   rules: PropTypes.shape({ root: PropTypes.string.isRequired }).isRequired,
   label: PropTypes.string.isRequired,
@@ -125,4 +125,4 @@ FilterInput.propTypes = {
   children: PropTypes.node || undefined
 };
 
-export default FilterInput;
+export default CustomInput;
