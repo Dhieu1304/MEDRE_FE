@@ -1,10 +1,13 @@
 import { Box, Checkbox, Grid, ListItemText, MenuItem, Pagination, Select } from "@mui/material";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
+import doctorServices from "../../services/doctorServices";
 import DoctorCard from "./components/DoctorCard";
 import FilterInput from "./components/FilterInput";
 
 function DoctorList() {
+  const [doctors, setDoctors] = useState([]);
+
   const { control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -61,6 +64,15 @@ function DoctorList() {
     ],
     []
   );
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res = await doctorServices.getDoctorList();
+      const doctorsData = res.doctors;
+      setDoctors(doctorsData);
+    };
+    loadData();
+  }, []);
 
   return (
     <Box>
@@ -129,9 +141,9 @@ function DoctorList() {
         </Grid>
       </Box>
       <Grid container spacing={4} px={0} py={4}>
-        {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((card) => (
-          <Grid item key={card} xs={12} sm={6} md={4} p={0}>
-            <DoctorCard />
+        {doctors.map((doctor) => (
+          <Grid item key={doctor?.id} xs={12} sm={6} md={4} p={0}>
+            <DoctorCard doctor={doctor} />
           </Grid>
         ))}
       </Grid>

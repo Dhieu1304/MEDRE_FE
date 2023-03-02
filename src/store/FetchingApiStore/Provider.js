@@ -4,7 +4,7 @@ import Context from "./Context";
 import reducer, { initState } from "./reducer";
 import actions from "./actions";
 
-function FetchingProvider({ children }) {
+function FetchingApiProvider({ children }) {
   const [state, dispatch] = useReducer(reducer, initState);
 
   const value = useMemo(
@@ -26,8 +26,8 @@ function FetchingProvider({ children }) {
   return <Context.Provider value={value}>{children}</Context.Provider>;
 }
 
-FetchingProvider.propTypes = {
+FetchingApiProvider.propTypes = {
   children: PropTypes.node.isRequired
 };
 
-export default FetchingProvider;
+export default FetchingApiProvider;

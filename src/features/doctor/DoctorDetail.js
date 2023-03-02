@@ -1,4 +1,3 @@
-import { Favorite, FavoriteBorder, RateReviewRounded } from "@mui/icons-material";
 import {
   Table,
   TableBody,
@@ -13,82 +12,161 @@ import {
   CardContent,
   CardHeader,
   Grid,
-  IconButton,
-  List,
-  ListItem,
   Typography
 } from "@mui/material";
 
 import formatDate from "date-and-time";
-import PropTypes from "prop-types";
+import { useEffect, useMemo, useState } from "react";
+import { useParams } from "react-router";
 import CustomModal, { useCustomModal } from "../../components/CustomModal";
+import doctorServices from "../../services/doctorServices";
+import scheduleServices from "../../services/scheduleServices";
 import { getNext7DaysFrom } from "../../utils/datetimeUtil";
 import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "./components/BookingButton";
 import ExpertiseButton from "./components/ExpertiseButton";
 
-const createData = (name) => {
-  const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
-  const newRow = Object.keys(row).reduce((result, key) => {
-    const index = Math.floor(Math.random() * 5) + 1;
-    switch (index) {
-      case 2:
-        return {
-          ...result,
-          [key]: BOOKED
-        };
-      case 3:
-        return {
-          ...result,
-          [key]: EMPTY_PAST
-        };
-      case 4:
-        return {
-          ...result,
-          [key]: RESERVED
-        };
-      case 5:
-        return {
-          ...result,
-          [key]: BUSY
-        };
-      case 1:
-      default:
-        return {
-          ...result,
-          [key]: EMPTY
-        };
-    }
-  }, {});
+// const groupArrayByKey = (arr, keys, key) => {
+//   const defaultGroups = keys.reduce((group, key) => ({ ...group, [key]: [] }), {});
+//   console.log("key: ", key);
+//
+//   return arr.reduce(
+//     (groups, item) => {
+//       const value = item[key];
+//       if (groups[value]) {
+//         groups[value].push(item);
+//       }
+//       return groups;
+//     },
+//     { ...defaultGroups }
+//   );
+// };
 
-  return {
-    name,
-    ...newRow
-  };
-  // return { name, d1, d2, d3, d4, d5, d6, d7 };
+// const createData = (name, schedules, currentDate) => {
+//   const row = schedules.reduce(
+//     (newRow, schedule) => {
+//       const count = Math.ceil(formatDate.subtract(new Date(schedule?.date), currentDate).toDays());
+//       const key = `d${count}`;
+//       // switch (schedule?.status) {
+//       //   case "empty":
+//       //     {
+//       //       if
+//       //     }
+
+//       //   default:
+//       //     break;
+//       // }
+
+//       // return {
+//       //   ...newRow,
+//       //   [key]: "sang"
+//       // };
+//     },
+//     { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null }
+//   );
+
+//   console.log("row: ", row);
+
+//   // const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
+//   // const newRow = Object.keys(row).reduce((result, key) => {}, {});
+//   // const index = Math.floor(Math.random() * 5) + 1;
+//   // switch (index) {
+//   //   case 2:
+//   //     return {
+//   //       ...newRow,
+//   //       [key]: BOOKED
+//   //     };
+//   //   case 3:
+//   //     return {
+//   //       ...newRow,
+//   //       [key]: EMPTY_PAST
+//   //     };
+//   //   case 4:
+//   //     return {
+//   //       ...newRow,
+//   //       [key]: RESERVED
+//   //     };
+//   //   case 5:
+//   //     return {
+//   //       ...newRow,
+//   //       [key]: BUSY
+//   //     };
+//   //   case 1:
+//   //   default:
+//   //     return {
+//   //       ...newRow,
+//   //       [key]: EMPTY
+//   //     };
+//   // }
+
+//   return {
+//     name,
+//     ...row
+//   };
+// };
+
+// const createDatas = (times, schedules, currentDate) => {
+const createDatas = (times) => {
+  // const groupSchedule = groupArrayByKey(
+  //   schedules,
+  //   times.map((time) => time.name),
+  //   "time"
+  // );
+
+  // return Object.keys(groupSchedule).map((time) => {
+  //   return createData(time, groupSchedule[time], currentDate);
+  // });
+
+  return times.map((time) => {
+    const name = time?.name;
+    const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
+    const newRow = Object.keys(row).reduce((result, key) => {
+      const index = Math.floor(Math.random() * 5) + 1;
+      switch (index) {
+        case 2:
+          return {
+            ...result,
+            [key]: BOOKED
+          };
+        case 3:
+          return {
+            ...result,
+            [key]: EMPTY_PAST
+          };
+        case 4:
+          return {
+            ...result,
+            [key]: RESERVED
+          };
+        case 5:
+          return {
+            ...result,
+            [key]: BUSY
+          };
+        case 1:
+        default:
+          return {
+            ...result,
+            [key]: EMPTY
+          };
+      }
+    }, {});
+
+    return {
+      name,
+      ...newRow
+    };
+    // return { name, d1, d2, d3, d4, d5, d6, d7 };
+  });
 };
-
-const rows = [
-  createData("7h30 - 8h"),
-  createData("8h - 8h30"),
-  createData("8h30 - 9h"),
-  createData("9h - 9h30"),
-  createData("9h30 - 10h"),
-  createData("10h - 10h30"),
-  createData("10h30 - 11h"),
-  createData("11h - 11h30"),
-  createData("13h - 13h30"),
-  createData("13h30 - 14h"),
-  createData("14h - 14h30"),
-  createData("14h30 - 15h"),
-  createData("15h - 15h30"),
-  createData("15h30 - 16h"),
-  createData("16h - 16h30")
-];
-
-const heads = getNext7DaysFrom();
-
-function DoctorDetail({ isLiked }) {
+function DoctorDetail() {
+  const [doctor, setDoctor] = useState();
+  const [schedules, setSchedules] = useState([]);
+  const [times, setTimes] = useState([]);
+  const [currentDate, setCurrentDate] = useState(new Date());
   const bookingModal = useCustomModal();
+
+  const params = useParams();
+  const doctorId = useMemo(() => params?.doctorId, [params?.doctorId]);
 
   const renderCell = (variant) => {
     let handleClick;
@@ -96,6 +174,7 @@ function DoctorDetail({ isLiked }) {
       case EMPTY:
         handleClick = () => {
           bookingModal.setShow(true);
+          setCurrentDate((prev) => prev);
         };
         break;
       default:
@@ -104,6 +183,26 @@ function DoctorDetail({ isLiked }) {
 
     return <BookingButton variant={variant} onClick={handleClick} />;
   };
+
+  useEffect(() => {
+    const loadData = async () => {
+      const res1 = await doctorServices.getDoctorDetail(doctorId);
+      const doctorData = res1.doctor;
+      setDoctor(doctorData);
+
+      const res2 = await scheduleServices.getScheduleList();
+      const schedulesData = res2.schedules;
+      setSchedules(schedulesData);
+
+      const res3 = await scheduleServices.getTimeList();
+      const timesData = res3.times;
+      setTimes(timesData);
+    };
+    loadData();
+  }, []);
+
+  const heads = useMemo(() => getNext7DaysFrom(currentDate), [currentDate]);
+  const rows = useMemo(() => createDatas(times, schedules, currentDate), [times, schedules, currentDate]);
 
   return (
     <>
@@ -123,52 +222,25 @@ function DoctorDetail({ isLiked }) {
           >
             <CardHeader
               avatar={<Avatar aria-label="recipe">R</Avatar>}
-              action={
-                <>
-                  <IconButton ariant="contained" size="small">
-                    <RateReviewRounded color="red" />
-                  </IconButton>
-                  <IconButton ariant="contained" size="small">
-                    {isLiked ? <Favorite color="red" /> : <FavoriteBorder color="red" />}
-                  </IconButton>
-                </>
-              }
-              title="Keegan"
+              title={doctor?.name}
+              subheader={`(${doctor?.certificate})`}
             />
             <CardContent sx={{ flexGrow: 1, pt: 0 }}>
               <Box>
-                <Typography>
-                  Hơn 20 năm kinh nghiệm làm việc chuyên sâu trong lĩnh vực trị liệu tâm lý, tham vấn tâm lý và giáo cho trẻ
-                  em và vị thành niên
-                </Typography>
+                <Typography>{doctor?.description}</Typography>
               </Box>
               <Box>
                 <Box>
                   <Typography>Specialties</Typography>
                   <Box>
-                    {["Tâm lý", "Răng hàm mặt", "Tai mũi họng"].map((expertise) => (
-                      <ExpertiseButton key={expertise} label={expertise} />
+                    {doctor?.doctorExpertises?.map((expertise) => (
+                      <ExpertiseButton key={expertise?.id} label={expertise?.name} />
                     ))}
                   </Box>
                 </Box>
               </Box>
               <Box>
-                <Typography>Education</Typography>
-                <Box>
-                  <List>
-                    <ListItem>Đại học y dược</ListItem>
-                    <ListItem>Đại học Harvard</ListItem>
-                  </List>
-                </Box>
-              </Box>
-              <Box>
-                <Typography>Certificate</Typography>
-                <Box>
-                  <List>
-                    <ListItem>Đại học y dược</ListItem>
-                    <ListItem>Đại học Harvard</ListItem>
-                  </List>
-                </Box>
+                <Typography>Education: {doctor?.education}</Typography>
               </Box>
             </CardContent>
           </Card>
@@ -194,9 +266,6 @@ function DoctorDetail({ isLiked }) {
                     <TableCell component="th" scope="row">
                       {row.name}
                     </TableCell>
-
-                    {}
-
                     <TableCell align="center">{renderCell(row.d1)}</TableCell>
                     <TableCell align="center">{renderCell(row.d2)}</TableCell>
                     <TableCell align="center">{renderCell(row.d3)}</TableCell>
@@ -215,9 +284,5 @@ function DoctorDetail({ isLiked }) {
     </>
   );
 }
-
-DoctorDetail.propTypes = {
-  isLiked: PropTypes.bool.isRequired
-};
 
 export default DoctorDetail;
