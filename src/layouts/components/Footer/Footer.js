@@ -3,7 +3,16 @@
 import { Box } from "@mui/material";
 
 function Footer() {
-  return <Box>Footer</Box>;
+  return (
+    <Box
+      sx={{
+        width: "100vw",
+        backgroundColor: "blue"
+      }}
+    >
+      Footer
+    </Box>
+  );
 }
 
 export default Footer;

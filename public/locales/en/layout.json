@@ -3,10 +3,11 @@
     "profile_label": "Profile",
     "change_password_label": "Change password",
     "logout_label": "Logout",
+    "about_label": "About",
     "forum_label": "Forum",
-    "booking_label": "Booking",
-    "online_label": "Online",
     "doctor_label": "Doctor",
+    "history_label": "History",
+    "schedule_label": "Schedule",
     "sign_in_label": "Sign in",
     "sign_up_label": "Sign up"
   }

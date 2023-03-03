@@ -22,9 +22,15 @@ import {
 import MenuIcon from "@mui/icons-material/Menu";
 
 import { Link } from "react-router-dom";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { headerLeftItems, headerRightItems, headerDropdownMenu, drawerWidth } from "./config";
+import {
+  headerRightItems,
+  headerDropdownMenu,
+  drawerWidth,
+  headerLeftItemsLogined,
+  headerLeftItemsNotLogin
+} from "./config";
 
 import images from "../../../assets/images";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
@@ -47,6 +53,11 @@ function Header({ window }) {
   // });
 
   const authStore = useAuthStore();
+
+  const headerLeftItems = useMemo(() => {
+    if (authStore.isLogin) return [...headerLeftItemsLogined];
+    return [...headerLeftItemsNotLogin];
+  }, [authStore.isLogin]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);

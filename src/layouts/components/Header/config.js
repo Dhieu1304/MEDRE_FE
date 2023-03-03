@@ -1,22 +1,51 @@
 import routeConfig from "../../../config/routeConfig";
 import { authRoutes } from "../../../pages/AuthPage";
 
-export const headerLeftItems = [
+export const headerLeftItemsNotLogin = [
   {
-    to: routeConfig.home,
+    to: routeConfig.forum,
     label: "forum_label"
   },
   {
-    to: routeConfig.home,
-    label: "booking_label"
-  },
-  {
-    to: routeConfig.home,
-    label: "online_label"
+    to: routeConfig.about,
+    label: "about_label"
   },
   {
     to: routeConfig.doctor,
     label: "doctor_label"
+  },
+  // ------------ private-------------
+  {
+    to: routeConfig.schedule,
+    label: "schedule_label"
+  },
+  {
+    to: routeConfig.history,
+    label: "history_label"
+  }
+  // ------------ private-------------
+];
+
+export const headerLeftItemsLogined = [
+  {
+    to: routeConfig.forum,
+    label: "forum_label"
+  },
+  {
+    to: routeConfig.about,
+    label: "about_label"
+  },
+  {
+    to: routeConfig.doctor,
+    label: "doctor_label"
+  },
+  {
+    to: routeConfig.schedule,
+    label: "schedule_label"
+  },
+  {
+    to: routeConfig.history,
+    label: "history_label"
   }
 ];
 
