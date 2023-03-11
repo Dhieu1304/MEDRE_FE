@@ -110,18 +110,20 @@ function CustomInput({ control, rules = {}, label, trigger, triggerTo, name, typ
 
 CustomInput.defaultProps = {
   triggerTo: null,
-  children: null
+  children: null,
+  type: "text",
+  placeholder: ""
 };
 
 CustomInput.propTypes = {
-  control: PropTypes.shape({ root: PropTypes.string.isRequired }).isRequired,
-  rules: PropTypes.shape({ root: PropTypes.string.isRequired }).isRequired,
+  control: PropTypes.object.isRequired,
+  rules: PropTypes.object.isRequired,
   label: PropTypes.string.isRequired,
   trigger: PropTypes.func.isRequired,
   triggerTo: PropTypes.string || undefined,
   name: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  placeholder: PropTypes.string.isRequired,
+  type: PropTypes.string,
+  placeholder: PropTypes.string,
   children: PropTypes.node || undefined
 };
 

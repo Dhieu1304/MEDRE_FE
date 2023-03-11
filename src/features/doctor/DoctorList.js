@@ -1,78 +1,69 @@
-import { Box, Checkbox, Grid, ListItemText, MenuItem, Pagination, Select } from "@mui/material";
-import { useEffect, useMemo, useState } from "react";
-import { useForm } from "react-hook-form";
+import { Box, Checkbox, Grid, ListItemText, MenuItem, Select } from "@mui/material";
+import { useMemo, useState } from "react";
+import { useForm, useWatch } from "react-hook-form";
+import formatDate from "date-and-time";
+import { useLocation } from "react-router";
+import qs from "query-string";
 import doctorServices from "../../services/doctorServices";
 import DoctorCard from "./components/DoctorCard";
 import CustomInput from "./components/CustomInput";
+import useSearchFilter from "../../hooks/useSearchFilter";
+
+const doctorTypes = [
+  {
+    label: "Online",
+    value: "online"
+  },
+  {
+    label: "Offline",
+    value: "offline"
+  }
+];
+
+const specialtiesList = [
+  {
+    label: "Tâm lý",
+    value: "psychology"
+  },
+  {
+    label: "Răng hàm mặt",
+    value: "maxillofacial"
+  },
+  {
+    label: "Khoa tai mũi họng",
+    value: "otorhinolaryngology"
+  }
+];
 
 function DoctorList() {
   const [doctors, setDoctors] = useState([]);
 
-  const { control, trigger, watch } = useForm({
+  const location = useLocation();
+
+  const defaultValues = useMemo(() => {
+    const defaultSearchParams = qs.parse(location.search);
+    const { search, types, date, specialties } = defaultSearchParams;
+    return {
+      search: search || "",
+      types: Array.isArray(types) ? types : [],
+      date: date || formatDate.format(new Date(), "YYYY-MM-DD"),
+      specialties: Array.isArray(specialties) ? specialties : []
+    };
+  }, []);
+
+  const { control, trigger, watch, reset } = useForm({
     mode: "onChange",
-    defaultValues: {
-      search: "",
-      types: [],
-      degrees: [],
-      specialties: []
-    },
+    defaultValues,
     criteriaMode: "all"
   });
 
-  const doctorTypes = useMemo(
-    () => [
-      {
-        label: "Online",
-        value: "online"
-      },
-      {
-        label: "Offline",
-        value: "offline"
-      }
-    ],
-    []
-  );
+  const loadData = async () => {
+    const res = await doctorServices.getDoctorList();
+    const doctorsData = res.doctors;
+    setDoctors(doctorsData);
+  };
 
-  const doctorDegrees = useMemo(
-    () => [
-      {
-        label: "Giáo sư",
-        value: "professor"
-      },
-      {
-        label: "Tiến sĩ",
-        value: "doctor"
-      }
-    ],
-    []
-  );
-
-  const specialties = useMemo(
-    () => [
-      {
-        label: "Tâm lý",
-        value: "psychology"
-      },
-      {
-        label: "Răng hàm mặt",
-        value: "maxillofacial"
-      },
-      {
-        label: "Khoa tai mũi họng",
-        value: "otorhinolaryngology"
-      }
-    ],
-    []
-  );
-
-  useEffect(() => {
-    const loadData = async () => {
-      const res = await doctorServices.getDoctorList();
-      const doctorsData = res.doctors;
-      setDoctors(doctorsData);
-    };
-    loadData();
-  }, []);
+  useSearchFilter({ location, watch, useWatch, control, loadData, reset });
 
   return (
     <Box>
@@ -86,13 +77,14 @@ function DoctorList() {
               <Select
                 multiple
                 renderValue={(selected) => {
-                  return selected.join(", ");
+                  if (Array.isArray(selected)) return selected?.join(", ");
+                  return selected;
                 }}
               >
                 {doctorTypes.map((item) => {
                   return (
                     <MenuItem key={item?.value} value={item?.value}>
-                      <Checkbox checked={watch("types").indexOf(item?.value) > -1} />
+                      <Checkbox checked={watch("types")?.indexOf(item?.value) > -1} />
                       <ListItemText primary={item?.label} />
                     </MenuItem>
                   );
@@ -101,36 +93,21 @@ function DoctorList() {
             </CustomInput>
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
-            <CustomInput control={control} rules={{}} label="Degrees" trigger={trigger} name="degrees">
-              <Select
-                multiple
-                renderValue={(selected) => {
-                  return selected.join(", ");
-                }}
-              >
-                {doctorDegrees.map((item) => {
-                  return (
-                    <MenuItem key={item?.value} value={item?.value}>
-                      <Checkbox checked={watch("degrees").indexOf(item?.value) > -1} />
-                      <ListItemText primary={item?.label} />
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </CustomInput>
+            <CustomInput control={control} rules={{}} label="Date" trigger={trigger} name="date" type="date" />
           </Grid>
           <Grid item xs={12} sm={6} md={4} lg={3}>
             <CustomInput control={control} rules={{}} label="Khoa" trigger={trigger} name="specialties">
               <Select
                 multiple
                 renderValue={(selected) => {
-                  return selected.join(", ");
+                  if (Array.isArray(selected)) return selected?.join(", ");
+                  return selected;
                 }}
               >
-                {specialties.map((item) => {
+                {specialtiesList.map((item) => {
                   return (
                     <MenuItem key={item?.value} value={item?.value}>
-                      <Checkbox checked={watch("specialties").indexOf(item?.value) > -1} />
+                      <Checkbox checked={watch("specialties")?.indexOf(item?.value) > -1} />
                       <ListItemText primary={item?.label} />
                     </MenuItem>
                   );
@@ -147,15 +124,6 @@ function DoctorList() {
           </Grid>
         ))}
       </Grid>
-      <Pagination
-        count={10}
-        color="primary"
-        sx={{
-          display: "flex",
-          justifyContent: "end",
-          py: 2
-        }}
-      />
     </Box>
   );
 }

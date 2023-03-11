@@ -150,7 +150,8 @@ function DoctorDetail() {
   const doctorId = useMemo(() => params?.doctorId, [params?.doctorId]);
 
   const renderCell = (cell) => {
-    const variant = cell?.variant;
+    let variant = cell?.variant;
+    variant = EMPTY;
     const data = cell?.data;
     let handleClick;
     switch (variant) {

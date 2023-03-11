@@ -1,5 +1,4 @@
 import { Route, Routes, Navigate } from "react-router";
-import routeConfig from "../../config/routeConfig";
 import { DoctorDetail, DoctorList } from "../../features/doctor";
 import { FetchingApiProvider } from "../../store/FetchingApiStore";
 import routes from "./routes";
@@ -23,7 +22,7 @@ function DoctorPage() {
           </FetchingApiProvider>
         }
       />
-      <Route path={routes.default} element={<Navigate to={routeConfig.doctor + routes.list} />} />
+      <Route path={routes.default} element={<Navigate to={routes.list} />} />
     </Routes>
   );
 }
