@@ -16,12 +16,13 @@ import {
   Container,
   Menu,
   MenuItem,
-  Tooltip
+  Tooltip,
+  Button
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
@@ -54,6 +55,8 @@ function Header({ window }) {
 
   const authStore = useAuthStore();
 
+  const navigate = useNavigate();
+
   const headerLeftItems = useMemo(() => {
     if (authStore.isLogin) return [...headerLeftItemsLogined];
     return [...headerLeftItemsNotLogin];
@@ -85,7 +88,14 @@ function Header({ window }) {
           <ListItem key={item.label} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText>
-                <Link to={item.to}>{t(item.label)}</Link>
+                <Box
+                  key={item.label}
+                  component={Link}
+                  to={item.to}
+                  sx={{ my: 0, px: 2, display: "block", textDecoration: "none", color: "inherit" }}
+                >
+                  {t(item.label)}
+                </Box>
               </ListItemText>
             </ListItemButton>
           </ListItem>
@@ -108,7 +118,7 @@ function Header({ window }) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+              sx={{ mr: 2, display: { md: "none" } }}
             >
               <MenuIcon />
             </IconButton>
@@ -119,7 +129,7 @@ function Header({ window }) {
                 mr: 1
               }}
               src={images.logo}
-              width={40}
+              width={20}
             />
 
             <Typography
@@ -164,7 +174,7 @@ function Header({ window }) {
                   key={item.label}
                   component={Link}
                   to={item.to}
-                  sx={{ my: 2, px: 2, color: "white", display: "block", textDecoration: "none" }}
+                  sx={{ my: 2, px: 2, display: "block", textDecoration: "none", color: "inherit" }}
                 >
                   {t(item.label)}
                 </Box>
@@ -175,7 +185,22 @@ function Header({ window }) {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={authStore.user?.name} src={authStore.user?.image} />
+                    <Typography
+                      variant="caption"
+                      noWrap
+                      component="span"
+                      href=""
+                      sx={{
+                        ml: 1,
+                        display: { xs: "none", md: "flex" },
+                        fontWeight: 700,
+                        color: "inherit",
+                        textDecoration: "none"
+                      }}
+                    >
+                      {authStore.user?.name}
+                    </Typography>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -195,7 +220,13 @@ function Header({ window }) {
                   onClose={handleCloseUserMenu}
                 >
                   {headerDropdownMenu.map((item) => (
-                    <MenuItem key={item.label} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={item.label}
+                      onClick={() => {
+                        navigate(item.to);
+                        handleCloseUserMenu();
+                      }}
+                    >
                       <Typography textAlign="center">{t(item.label)}</Typography>
                     </MenuItem>
                   ))}
@@ -226,14 +257,15 @@ function Header({ window }) {
             ) : (
               <Box sx={{ display: { xs: "flex", md: "flex" } }}>
                 {headerRightItems.map((item) => (
-                  <Box
+                  <Button
                     key={item.label}
-                    component={Link}
+                    LinkComponent={Link}
                     to={item.to}
-                    sx={{ my: 2, px: 2, color: "white", display: "block", textDecoration: "none" }}
+                    variant="contained"
+                    sx={{ mr: 1, my: 2, px: 2, display: "block", textDecoration: "none", borderRadius: 10 }}
                   >
                     {t(item.label)}
-                  </Box>
+                  </Button>
                 ))}
               </Box>
             )}

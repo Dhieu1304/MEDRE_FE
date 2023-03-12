@@ -35,34 +35,7 @@ function App() {
           <CircularProgress color="inherit" />
         </Backdrop>
       )}
-      {authStore?.isLogin ? (
-        <Router>
-          <Routes>
-            {publicRoutes.map((route) => {
-              let Layout = DefaultLayout;
-              if (route.layout) {
-                Layout = route.layout;
-              } else if (route.layout === null) {
-                Layout = Fragment;
-              }
-
-              const Page = route.component;
-              const to = route.props?.to;
-              return (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={
-                    <Layout>
-                      <Page to={to} />
-                    </Layout>
-                  }
-                />
-              );
-            })}
-          </Routes>
-        </Router>
-      ) : (
+      {authStore.isLogin ? (
         <Router>
           <Routes>
             {privateRoutes.map((route) => {
@@ -75,13 +48,44 @@ function App() {
 
               const Page = route.component;
               const to = route.props?.to;
+              const replace = route.props?.replace;
+
               return (
                 <Route
                   key={route.path}
                   path={route.path}
                   element={
                     <Layout>
-                      <Page to={to} />
+                      <Page to={to} replace={replace} />
+                    </Layout>
+                  }
+                />
+              );
+            })}
+          </Routes>
+        </Router>
+      ) : (
+        <Router>
+          <Routes>
+            {publicRoutes.map((route) => {
+              let Layout = DefaultLayout;
+              if (route.layout) {
+                Layout = route.layout;
+              } else if (route.layout === null) {
+                Layout = Fragment;
+              }
+
+              const Page = route.component;
+              const to = route.props?.to;
+              const replace = route.props?.replace;
+
+              return (
+                <Route
+                  key={route.path}
+                  path={route.path}
+                  element={
+                    <Layout>
+                      <Page to={to} replace={replace} />
                     </Layout>
                   }
                 />

@@ -4,7 +4,7 @@ import localStorageUtil from "../utils/localStorageUtil";
 
 const loginByPhoneNumber = async (phoneNumber, password) => {
   try {
-    const res = await axiosClient.post(authApi.loginByPhoneNumber, { phoneNumber, password });
+    const res = await axiosClient.post(authApi.loginByPhoneNumber, { phone_number: phoneNumber, password });
 
     if (res?.status) {
       const user = res?.data?.user;
@@ -21,7 +21,7 @@ const loginByPhoneNumber = async (phoneNumber, password) => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message
     };
   } catch (e) {
     // console.error(e.message);
@@ -54,7 +54,7 @@ const register = async ({ phoneNumber, email, name, gender, dob, address, passwo
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message
     };
   } catch (e) {
     // console.error(e.message);

@@ -62,11 +62,11 @@ export const headerRightItems = [
 
 export const headerDropdownMenu = [
   {
-    to: routeConfig.home,
+    to: routeConfig.profile,
     label: "profile_label"
   },
   {
-    to: routeConfig.home,
+    to: routeConfig.changePassword,
     label: "change_password_label"
   }
 ];
