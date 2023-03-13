@@ -17,7 +17,8 @@ import {
   Menu,
   MenuItem,
   Tooltip,
-  Button
+  Button,
+  useMediaQuery
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
@@ -48,10 +49,7 @@ function Header({ window }) {
 
   const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
-  // console.log({
-  //   t,
-  //   i18n
-  // });
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   const authStore = useAuthStore();
 
@@ -79,7 +77,7 @@ function Header({ window }) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2, mr: "auto" }}>
+      <Typography variant="h4" sx={{ my: 2, mr: "auto" }}>
         Medre
       </Typography>
       <Divider />
@@ -185,14 +183,13 @@ function Header({ window }) {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={authStore.user?.name} src={authStore.user?.image} />
+                    <Avatar alt={authStore.user?.name} src={authStore.user?.image} sx={{ mr: 1 }} />
                     <Typography
                       variant="caption"
                       noWrap
                       component="span"
                       href=""
                       sx={{
-                        ml: 1,
                         display: { xs: "none", md: "flex" },
                         fontWeight: 700,
                         color: "inherit",
@@ -256,17 +253,39 @@ function Header({ window }) {
               </Box>
             ) : (
               <Box sx={{ display: { xs: "flex", md: "flex" } }}>
-                {headerRightItems.map((item) => (
-                  <Button
-                    key={item.label}
-                    LinkComponent={Link}
-                    to={item.to}
-                    variant="contained"
-                    sx={{ mr: 1, my: 2, px: 2, display: "block", textDecoration: "none", borderRadius: 10 }}
-                  >
-                    {t(item.label)}
-                  </Button>
-                ))}
+                {headerRightItems.map((item) =>
+                  isMobile ? (
+                    <Box
+                      key={item.label}
+                      component={Link}
+                      to={item.to}
+                      sx={{
+                        mr: 1,
+                        textDecoration: "none",
+                        borderRadius: 10,
+                        color: "inherit"
+                      }}
+                    >
+                      {t(item.label)}
+                    </Box>
+                  ) : (
+                    <Button
+                      key={item.label}
+                      LinkComponent={Link}
+                      to={item.to}
+                      variant="contained"
+                      sx={{
+                        mr: 1,
+                        my: 2,
+                        px: 2,
+                        textDecoration: "none",
+                        borderRadius: 10
+                      }}
+                    >
+                      {t(item.label)}
+                    </Button>
+                  )
+                )}
               </Box>
             )}
           </Toolbar>
@@ -282,7 +301,7 @@ function Header({ window }) {
             keepMounted: true
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { md: "none", sm: "block" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth }
           }}
         >

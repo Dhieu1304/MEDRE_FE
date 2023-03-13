@@ -1,4 +1,6 @@
 // import formatDate from "date-and-time";
+import en from "date-and-time/locale/en";
+import vi from "date-and-time/locale/vi";
 
 const getNext7DaysFrom = (date = new Date()) => {
   const curDate = new Date(date);
@@ -16,4 +18,6 @@ const getNext7DaysFrom = (date = new Date()) => {
   return arr;
 };
 
-export { getNext7DaysFrom };
+const formatDateLocale = { en, vi };
+
+export { getNext7DaysFrom, formatDateLocale };

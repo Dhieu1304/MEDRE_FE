@@ -1,0 +1,14 @@
+{
+  "header": {
+    "profile_label": "Thông tin cá nhân",
+    "change_password_label": "Đổi mật khẩu",
+    "logout_label": "Đăng xuất",
+    "about_label": "Về chúng tôi",
+    "forum_label": "Diễn đàn",
+    "doctor_label": "Bác sĩ",
+    "history_label": "Lịch sử",
+    "schedule_label": "Lịch khám bệnh",
+    "sign_in_label": "Đăng nhập",
+    "sign_up_label": "Đăng ký"
+  }
+}
