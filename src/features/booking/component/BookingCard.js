@@ -21,6 +21,7 @@ import formatDate from "date-and-time";
 import Countdown from "react-countdown";
 
 import { useMemo, useState } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { formatDateLocale } from "../../../utils/datetimeUtil";
 
@@ -48,6 +49,9 @@ function BookingCard() {
   const appConfigStore = useAppConfigStore();
   const [showFullReason, setShowFullReason] = useState(false);
 
+  const navigate = useNavigate();
+  const location = useLocation();
+
   // const { t } = useTranslation("bookingFeature", { keyPrefix: "booking_list.booking_card" });
 
   useMemo(() => {
@@ -61,6 +65,8 @@ function BookingCard() {
   };
 
   const date = new Date();
+
+  const bookingId = 1;
 
   return (
     <Card
@@ -187,7 +193,16 @@ function BookingCard() {
               </TableContainer>
             </Box>
             <CardActions sx={{ justifyContent: "flex-end" }}>
-              <Button variant="contained" size="small">
+              <Button
+                variant="contained"
+                size="small"
+                onClick={() => {
+                  navigate(`${location.pathname}/${bookingId}`);
+                }}
+              >
+                Chi tiết
+              </Button>
+              {/* <Button variant="contained" size="small">
                 Edit
               </Button>
               <Button variant="contained" size="small">
@@ -195,7 +210,7 @@ function BookingCard() {
               </Button>
               <Button variant="contained" size="small">
                 Thanh toán
-              </Button>
+              </Button> */}
             </CardActions>
           </Box>
         </Grid>

@@ -1,5 +1,6 @@
 const routes = {
   list: "/",
+  detail: "/:bookingId",
   default: "/*"
 };
 

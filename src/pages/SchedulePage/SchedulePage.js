@@ -7,7 +7,8 @@ export default function SchedulePage() {
   return (
     <Routes>
       <Route path={routes.list} element={<BookingList />} />
-      <Route path={routes.default} element={<Navigate to={routeConfig.auth + routes.list} />} />
+      <Route path={routes.detail} element={<BookingList />} />
+      <Route path={routes.default} element={<Navigate to={routeConfig.schedule + routes.list} />} />
     </Routes>
   );
 }
