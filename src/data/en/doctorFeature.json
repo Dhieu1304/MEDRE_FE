@@ -12,6 +12,27 @@
     }
   },
   "doctor_detail": {
-    "title": "Doctor detail"
+    "title": "Doctor detail",
+    "expertise": "Expertise",
+    "education": "Education",
+    "schedule_table": {},
+    "booking_modal": {
+      "date": "Date",
+      "time": "Time",
+      "gender": "Gender",
+      "self": "Self",
+      "other": "Other",
+      "reason": "Reason",
+      "reason_placeholder": "Your reason",
+      "info": {
+        "title": "Info",
+        "name": "Name",
+        "phone": "Phone",
+        "gender": "Gender",
+        "male": "Male",
+        "female": "Female",
+        "birthday": "Birthday"
+      }
+    }
   }
 }

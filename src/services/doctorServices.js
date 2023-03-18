@@ -4,8 +4,11 @@ import axiosClient from "../config/axiosClient";
 // import doctorMockData from "../mockData/doctorMockData";
 
 const getDoctorList = async ({ page, limit, expertise, type, from, to }) => {
+  console.log({ page, limit, expertise, type, from, to });
   try {
     const res = await axiosClient.get(doctorApi.doctorList(), { params: { page, limit, expertise, type, from, to } });
+
+    console.log("res: ", res);
 
     // let res = camelcaseKeys(
     //   {
