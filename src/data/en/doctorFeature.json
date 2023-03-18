@@ -1,5 +1,6 @@
 {
   "doctor_list": {
+    "title": "Find doctor",
     "filter": {
       "search": "Search by name",
       "type": "Type",
@@ -9,5 +10,8 @@
     "card": {
       "book": "Book"
     }
+  },
+  "doctor_detail": {
+    "title": "Doctor detail"
   }
 }

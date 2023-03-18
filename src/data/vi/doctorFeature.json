@@ -1,5 +1,6 @@
 {
   "doctor_list": {
+    "title": "Tìm kiếm bác sĩ",
     "filter": {
       "search": "Tìm kiếm theo tên",
       "type": "Loại khám",
@@ -9,5 +10,8 @@
     "card": {
       "book": "Đặt lịch"
     }
+  },
+  "doctor_detail": {
+    "title": "Thông tin chi tiết bác sĩ"
   }
 }

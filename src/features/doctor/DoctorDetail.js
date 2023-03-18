@@ -17,10 +17,12 @@ import {
 
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import { useCustomModal } from "../../components/CustomModal";
 import doctorServices from "../../services/doctorServices";
 import scheduleServices from "../../services/scheduleServices";
+import { useFetchingStore } from "../../store/FetchingApiStore";
 import { getNext7DaysFrom } from "../../utils/datetimeUtil";
 import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "./components/BookingButton";
 import BookingModal from "./components/BookingModal";
@@ -149,6 +151,10 @@ function DoctorDetail() {
   const params = useParams();
   const doctorId = useMemo(() => params?.doctorId, [params?.doctorId]);
 
+  const { fetchApi } = useFetchingStore();
+
+  const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_detail" });
+
   const renderCell = (cell) => {
     let variant = cell?.variant;
     variant = EMPTY;
@@ -171,9 +177,18 @@ function DoctorDetail() {
 
   useEffect(() => {
     const loadData = async () => {
-      const res1 = await doctorServices.getDoctorDetail(doctorId);
-      const doctorData = res1.doctor;
-      setDoctor(doctorData);
+      await fetchApi(async () => {
+        const res = await doctorServices.getDoctorDetail(doctorId);
+
+        if (res.success) {
+          const doctorData = res.doctor;
+          setDoctor(doctorData);
+
+          return { success: true };
+        }
+        setDoctor({});
+        return { error: res.message };
+      });
 
       const res2 = await scheduleServices.getScheduleList();
       const schedulesData = res2.schedules;
@@ -191,6 +206,10 @@ function DoctorDetail() {
 
   return (
     <>
+      <Typography component="h1" variant="h5" mb={2} fontWeight={600}>
+        {t("title")}
+      </Typography>
+
       <Grid container>
         <Grid item lg={12}>
           <Card
@@ -206,9 +225,9 @@ function DoctorDetail() {
             }}
           >
             <CardHeader
-              avatar={<Avatar aria-label="recipe">R</Avatar>}
+              avatar={<Avatar alt={doctor?.name} src={doctor?.image} />}
               title={doctor?.name}
-              subheader={`(${doctor?.certificate})`}
+              subheader={doctor?.certificate && `(${doctor?.certificate})`}
             />
             <CardContent sx={{ flexGrow: 1, pt: 0 }}>
               <Box>
@@ -218,7 +237,7 @@ function DoctorDetail() {
                 <Box>
                   <Typography>Specialties</Typography>
                   <Box>
-                    {doctor?.doctorExpertises?.map((expertise) => (
+                    {doctor?.idExpertiseExpertises?.map((expertise) => (
                       <ExpertiseButton key={expertise?.id} label={expertise?.name} />
                     ))}
                   </Box>

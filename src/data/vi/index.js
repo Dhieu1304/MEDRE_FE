@@ -5,6 +5,7 @@ import doctorFeature from "./doctorFeature.json";
 // import input from "./input.json";
 import layout from "./layout.json";
 // import paymentPage from "./paymentPage.json";
+import common from "./common.json";
 
 const vi = {
   authFeature,
@@ -12,8 +13,9 @@ const vi = {
   doctorFeature,
   //   homePage,
   //   input,
-  layout
-  //   paymentPage
+  layout,
+  //   paymentPage,
+  common
 };
 
 export default vi;
