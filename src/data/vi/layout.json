@@ -9,9 +9,6 @@
     "history_label": "Lịch sử",
     "schedule_label": "Lịch khám bệnh",
     "sign_in_label": "Đăng nhập",
-    "sign_up_label": "Đăng ký",
-    "filter": {
-      "search_label": "Tìm kiếm theo tên"
-    }
+    "sign_up_label": "Đăng ký"
   }
 }

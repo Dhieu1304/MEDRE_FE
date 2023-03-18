@@ -82,6 +82,14 @@ function CustomInput({ control, rules = {}, label, trigger, triggerTo, name, typ
         error={!!error?.message}
         value={value}
         label={<Box component="span">{label}</Box>}
+        InputLabelProps={
+          // cmt: Khi type === "date" nhưng ko có value, label sẽ đè lên dd/mm/yyyy nên làm vậy để fix lỗi
+          type === "date" || type === "number"
+            ? {
+                shrink: true
+              }
+            : {}
+        }
         type={inputType}
         helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
         variant="outlined"

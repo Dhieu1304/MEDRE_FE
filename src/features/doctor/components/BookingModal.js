@@ -16,6 +16,7 @@ import formatDate from "date-and-time";
 import { Controller, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 import CustomInput from "./CustomInput";
 import CustomModal from "../../../components/CustomModal";
 
@@ -33,14 +34,16 @@ function BookingModal({ show, setShow, data, setData }) {
 
   const handleBooking = () => {};
 
+  const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_detail.booking_modal" });
+
   const genders = useMemo(
     () => [
       {
-        label: "Male",
+        label: t("info.male"),
         value: "male"
       },
       {
-        label: "Female",
+        label: t("info.female"),
         value: "female"
       }
     ],
@@ -60,7 +63,7 @@ function BookingModal({ show, setShow, data, setData }) {
       <Box>
         <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
           <Typography fontWeight={600} mr={2}>
-            Date:
+            {t("date")}:
           </Typography>
           <Typography fontWeight={500} textAlign="center">
             {formatDate.format(new Date(data?.date), "ddd, MMM DD YYYY")} {`(${data?.type})`}
@@ -68,7 +71,7 @@ function BookingModal({ show, setShow, data, setData }) {
         </Box>
         <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
           <Typography fontWeight={600} mr={2}>
-            Time:
+            {t("time")}:
           </Typography>
           <Typography fontWeight={500} textAlign="center">
             {data?.time}
@@ -76,27 +79,34 @@ function BookingModal({ show, setShow, data, setData }) {
         </Box>
 
         <FormControl>
-          <FormLabel>Gender</FormLabel>
+          <FormLabel>{t("gender")}:</FormLabel>
           <RadioGroup row defaultValue="self">
-            <FormControlLabel value="self" control={<Radio onClick={() => setIsSelf(true)} />} label="Self" />
-            <FormControlLabel value="other" control={<Radio onClick={() => setIsSelf(false)} />} label="Other" />
+            <FormControlLabel value="self" control={<Radio onClick={() => setIsSelf(true)} />} label={t("self")} />
+            <FormControlLabel value="other" control={<Radio onClick={() => setIsSelf(false)} />} label={t("other")} />
           </RadioGroup>
         </FormControl>
 
         {!isSelf && (
           <>
             <Typography fontWeight={600} mr={2}>
-              Infor:
+              {t("info.title")}:
             </Typography>
             <Grid container spacing={2}>
               <Grid item lg={6} md={12}>
-                <CustomInput control={control} rules={{}} label="Name" trigger={trigger} name="name" type="text" />
+                <CustomInput control={control} rules={{}} label={t("info.name")} trigger={trigger} name="name" type="text" />
               </Grid>
               <Grid item lg={6} md={12}>
-                <CustomInput control={control} rules={{}} label="Phone" trigger={trigger} name="phone" type="tel" />
+                <CustomInput
+                  control={control}
+                  rules={{}}
+                  label={t("info.phone")}
+                  trigger={trigger}
+                  name="phone"
+                  type="tel"
+                />
               </Grid>
               <Grid item lg={6} md={12}>
-                <CustomInput control={control} rules={{}} label="Gender" trigger={trigger} name="gender">
+                <CustomInput control={control} rules={{}} label={t("info.gender")} trigger={trigger} name="gender">
                   <Select>
                     {genders.map((item) => {
                       return (
@@ -109,14 +119,21 @@ function BookingModal({ show, setShow, data, setData }) {
                 </CustomInput>
               </Grid>
               <Grid item lg={6} md={12}>
-                <CustomInput control={control} rules={{}} label="Birthday" trigger={trigger} name="dob" type="date" />
+                <CustomInput
+                  control={control}
+                  rules={{}}
+                  label={t("info.birthday")}
+                  trigger={trigger}
+                  name="dob"
+                  type="date"
+                />
               </Grid>
             </Grid>
           </>
         )}
 
         <Typography mb={1} fontWeight={600}>
-          Reason:
+          {t("reason")}:
         </Typography>
         <Controller
           control={control}
@@ -127,7 +144,7 @@ function BookingModal({ show, setShow, data, setData }) {
               onChange={onChange}
               onBlur={onBlur}
               value={value}
-              placeholder="Your reasons"
+              placeholder={t("reason_placeholder")}
               multiline
               fullWidth
               rows={4}

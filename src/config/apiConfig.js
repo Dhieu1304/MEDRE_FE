@@ -8,8 +8,9 @@ const userApi = {
 };
 
 const doctorApi = {
-  doctorList: () => "/doctor",
-  doctorDetail: (id) => `/doctor/${id}`
+  doctorList: () => "/staff/all",
+  doctorDetail: (id) => `/staff/detail/${id}`,
+  expertiseList: () => "/expertise/list"
 };
 
 const scheduleApi = {
