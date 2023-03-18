@@ -1,0 +1,13 @@
+{
+  "doctor_list": {
+    "filter": {
+      "search": "Search by name",
+      "type": "Type",
+      "date": "Date",
+      "expertise": "Expertise"
+    },
+    "card": {
+      "book": "Book"
+    }
+  }
+}

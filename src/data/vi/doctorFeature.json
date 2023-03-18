@@ -1,0 +1,13 @@
+{
+  "doctor_list": {
+    "filter": {
+      "search": "Tìm kiếm theo tên",
+      "type": "Loại khám",
+      "date": "Ngày",
+      "expertise": "Chuyên khoa"
+    },
+    "card": {
+      "book": "Đặt lịch"
+    }
+  }
+}
