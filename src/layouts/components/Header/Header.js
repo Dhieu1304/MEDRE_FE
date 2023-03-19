@@ -12,25 +12,33 @@ import {
   ListItemText,
   Toolbar,
   Typography,
-  Button,
   Avatar,
   Container,
   Menu,
   MenuItem,
-  Tooltip
+  Tooltip,
+  Button,
+  useMediaQuery
 } from "@mui/material";
 
 import MenuIcon from "@mui/icons-material/Menu";
 
-import { Link } from "react-router-dom";
-import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { headerLeftItems, headerRightItems, headerDropdownMenu, drawerWidth } from "./config";
+import {
+  headerRightItems,
+  headerDropdownMenu,
+  drawerWidth,
+  headerLeftItemsLogined,
+  headerLeftItemsNotLogin
+} from "./config";
 
 import images from "../../../assets/images";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { DARK, LIGHT } from "../../../config/themeConfig";
+import routeConfig from "../../../config/routeConfig";
 
 function Header({ window }) {
   const [mobileOpen, setMobileOpen] = useState(false);
@@ -41,12 +49,16 @@ function Header({ window }) {
 
   const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
-  // console.log({
-  //   t,
-  //   i18n
-  // });
+  const isMobile = useMediaQuery("(max-width: 600px)");
 
   const authStore = useAuthStore();
+
+  const navigate = useNavigate();
+
+  const headerLeftItems = useMemo(() => {
+    if (authStore.isLogin) return [...headerLeftItemsLogined];
+    return [...headerLeftItemsNotLogin];
+  }, [authStore.isLogin]);
 
   const handleDrawerToggle = () => {
     setMobileOpen((prevState) => !prevState);
@@ -65,7 +77,7 @@ function Header({ window }) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2, mr: "auto" }}>
+      <Typography variant="h4" sx={{ my: 2, mr: "auto" }}>
         Medre
       </Typography>
       <Divider />
@@ -74,7 +86,14 @@ function Header({ window }) {
           <ListItem key={item.label} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
               <ListItemText>
-                <Link to={item.to}>{t(item.label)}</Link>
+                <Box
+                  key={item.label}
+                  component={Link}
+                  to={item.to}
+                  sx={{ my: 0, px: 2, display: "block", textDecoration: "none", color: "inherit" }}
+                >
+                  {t(item.label)}
+                </Box>
               </ListItemText>
             </ListItemButton>
           </ListItem>
@@ -97,7 +116,7 @@ function Header({ window }) {
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+              sx={{ mr: 2, display: { md: "none" } }}
             >
               <MenuIcon />
             </IconButton>
@@ -108,14 +127,14 @@ function Header({ window }) {
                 mr: 1
               }}
               src={images.logo}
-              width={40}
+              width={20}
             />
 
             <Typography
               variant="h6"
               noWrap
-              component="a"
-              href="/"
+              component={Link}
+              to={routeConfig.home}
               sx={{
                 mr: 2,
                 display: { xs: "none", md: "flex" },
@@ -149,9 +168,14 @@ function Header({ window }) {
             </Typography>
             <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
               {headerLeftItems.map((item) => (
-                <Button key={item.label} onClick={handleDrawerToggle} sx={{ my: 2, color: "white", display: "block" }}>
-                  <Link to={item.to}>{t(item.label)}</Link>
-                </Button>
+                <Box
+                  key={item.label}
+                  component={Link}
+                  to={item.to}
+                  sx={{ my: 2, px: 2, display: "block", textDecoration: "none", color: "inherit" }}
+                >
+                  {t(item.label)}
+                </Box>
               ))}
             </Box>
 
@@ -159,7 +183,21 @@ function Header({ window }) {
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                   <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                    <Avatar alt={authStore.user?.name} src={authStore.user?.image} sx={{ mr: 1 }} />
+                    <Typography
+                      variant="caption"
+                      noWrap
+                      component="span"
+                      href=""
+                      sx={{
+                        display: { xs: "none", md: "flex" },
+                        fontWeight: 700,
+                        color: "inherit",
+                        textDecoration: "none"
+                      }}
+                    >
+                      {authStore.user?.name}
+                    </Typography>
                   </IconButton>
                 </Tooltip>
                 <Menu
@@ -179,7 +217,13 @@ function Header({ window }) {
                   onClose={handleCloseUserMenu}
                 >
                   {headerDropdownMenu.map((item) => (
-                    <MenuItem key={item.label} onClick={handleCloseUserMenu}>
+                    <MenuItem
+                      key={item.label}
+                      onClick={() => {
+                        navigate(item.to);
+                        handleCloseUserMenu();
+                      }}
+                    >
                       <Typography textAlign="center">{t(item.label)}</Typography>
                     </MenuItem>
                   ))}
@@ -209,11 +253,39 @@ function Header({ window }) {
               </Box>
             ) : (
               <Box sx={{ display: { xs: "flex", md: "flex" } }}>
-                {headerRightItems.map((item) => (
-                  <Button key={item.label} onClick={handleDrawerToggle} sx={{ my: 2, color: "white", display: "block" }}>
-                    <Link to={item.to}>{t(item.label)}</Link>
-                  </Button>
-                ))}
+                {headerRightItems.map((item) =>
+                  isMobile ? (
+                    <Box
+                      key={item.label}
+                      component={Link}
+                      to={item.to}
+                      sx={{
+                        mr: 1,
+                        textDecoration: "none",
+                        borderRadius: 10,
+                        color: "inherit"
+                      }}
+                    >
+                      {t(item.label)}
+                    </Box>
+                  ) : (
+                    <Button
+                      key={item.label}
+                      LinkComponent={Link}
+                      to={item.to}
+                      variant="contained"
+                      sx={{
+                        mr: 1,
+                        my: 2,
+                        px: 2,
+                        textDecoration: "none",
+                        borderRadius: 10
+                      }}
+                    >
+                      {t(item.label)}
+                    </Button>
+                  )
+                )}
               </Box>
             )}
           </Toolbar>
@@ -229,7 +301,7 @@ function Header({ window }) {
             keepMounted: true
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { md: "none", sm: "block" },
             "& .MuiDrawer-paper": { boxSizing: "border-box", width: drawerWidth }
           }}
         >

@@ -7,4 +7,14 @@ const userApi = {
   userInfo: "/user/info"
 };
 
-export { authApi, userApi };
+const doctorApi = {
+  doctorList: () => "/staff/all",
+  doctorDetail: (id) => `/staff/detail/${id}`,
+  expertiseList: () => "/expertise/list"
+};
+
+const scheduleApi = {
+  schedule: () => "/schedule"
+};
+
+export { authApi, userApi, doctorApi, scheduleApi };

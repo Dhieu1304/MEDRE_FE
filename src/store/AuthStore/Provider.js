@@ -21,8 +21,10 @@ function AuthProvider({ children }) {
           const { user, message } = res;
           dispatch(actions.login(user));
           dispatch(actions.fetchApiSuccess());
-          toast.success(message);
-          return true;
+          return {
+            success: true,
+            message
+          };
         }
         const { message } = res;
         dispatch(actions.fetchApiFailed(message));
@@ -45,9 +47,7 @@ function AuthProvider({ children }) {
         const res = await authServices.register({ phoneNumber, email, name, gender, dob, address, password });
 
         if (res?.success) {
-          const { message } = res;
           dispatch(actions.fetchApiSuccess());
-          toast.success(message);
           return true;
         }
         const { message } = res;
@@ -61,10 +61,9 @@ function AuthProvider({ children }) {
         const res = await userServices.getUserInfo();
 
         if (res?.success) {
-          const { user, message } = res;
+          const { user } = res;
           dispatch(actions.login(user));
           dispatch(actions.fetchApiSuccess());
-          toast.success(message);
           return true;
         }
         const { message } = res;

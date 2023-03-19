@@ -2,11 +2,12 @@ import { Button, Checkbox, FormControlLabel, Grid, Typography, Box } from "@mui/
 
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
+import { useTheme } from "@mui/material/styles";
 
 import routeConfig from "../../config/routeConfig";
 import { authRoutes } from "../../pages/AuthPage";
 import { useAuthStore } from "../../store/AuthStore/hooks";
-import AuthInput from "../components/AuthInput";
+import AuthInput from "./components/AuthInput";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({
@@ -18,12 +19,14 @@ function Login() {
     criteriaMode: "all"
   });
 
+  const theme = useTheme();
+
   const authStore = useAuthStore();
   const navigate = useNavigate();
 
   const onLogin = async ({ phone, password }) => {
     const result = await authStore.loginByPhoneNumber(phone, password);
-    if (result) {
+    if (result.success) {
       navigate(routeConfig.home);
     }
   };
@@ -75,6 +78,12 @@ function Login() {
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
           Sign In
         </Button>
+        {authStore.isFetchApiError && (
+          <Typography component="h3" color={theme.palette.error[theme.palette.mode]}>
+            {authStore.fetchApiError}
+          </Typography>
+        )}
+
         <Grid container>
           <Grid item xs>
             <Link variant="body2" to={routeConfig.auth + authRoutes.forgetPassword}>

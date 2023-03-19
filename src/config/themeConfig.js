@@ -7,6 +7,16 @@ export const getTheme = (theme) => {
       return {
         palette: {
           mode: "dark"
+        },
+        components: {
+          MuiButton: {
+            styleOverrides: {
+              root: {
+                borderRadius: "10px",
+                padding: "10px 20px"
+              }
+            }
+          }
         }
       };
 
@@ -14,7 +24,32 @@ export const getTheme = (theme) => {
     default:
       return {
         palette: {
-          mode: "light"
+          mode: "light",
+          primary: {
+            main: "#4A3AFF"
+          }
+        },
+        components: {
+          MuiAppBar: {
+            styleOverrides: {
+              root: {
+                backgroundColor: "#FFFFFF",
+                borderBottom: "1px solid rgba(0,0,0,0.2)",
+                boxShadow: "none"
+              },
+              colorPrimary: {
+                color: "#000000"
+              }
+            }
+          },
+          MuiDrawer: {
+            styleOverrides: {
+              paper: {
+                backgroundColor: "#FFFFFF",
+                color: "#000000"
+              }
+            }
+          }
         }
       };
   }

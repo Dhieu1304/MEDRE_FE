@@ -9,13 +9,11 @@ import "./config/i18n";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <AppConfigProvider>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </AppConfigProvider>
-  </React.StrictMode>
+  <AppConfigProvider>
+    <AuthProvider>
+      <App />
+    </AuthProvider>
+  </AppConfigProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function
