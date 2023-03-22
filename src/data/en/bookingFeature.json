@@ -1,0 +1,22 @@
+{
+  "booking_card": {
+    "time": "Time",
+    "name": "Full name",
+    "status": "Status",
+    "code": "Code",
+    "detail_btn_label": "Detail"
+  },
+  "booking_detail": {
+    "title": "Detail",
+    "export": "Export",
+    "doctor": "Doctor",
+    "expertise": "Expertise",
+    "time": "Time",
+    "name": "Full name",
+    "phone": "Phone",
+    "status": "Status",
+    "code": "Code",
+    "reason": "Reason",
+    "note": "Doctor's note"
+  }
+}

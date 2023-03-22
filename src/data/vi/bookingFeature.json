@@ -1,0 +1,22 @@
+{
+  "booking_card": {
+    "time": "Ca khám",
+    "name": "Họ tên bệnh nhân",
+    "status": "Tình trạng",
+    "code": "Mã tham gia",
+    "detail_btn_label": "Chi tiết"
+  },
+  "booking_detail": {
+    "title": "Chi tiết lịch khám",
+    "export": "Xuất file",
+    "doctor": "Bác sĩ",
+    "expertise": "Chuyên khoa",
+    "time": "Ca khám",
+    "name": "Họ tên bệnh nhân",
+    "phone": "Số điện thoại",
+    "status": "Tình trạng",
+    "code": "Mã tham gia",
+    "reason": "Lý do khám",
+    "note": "Ghi chú của bác sĩ"
+  }
+}
