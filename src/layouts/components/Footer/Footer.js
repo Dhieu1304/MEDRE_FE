@@ -1,9 +1,11 @@
 import { Grid, Box, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import images from "../../../assets/images";
 import routeConfig from "../../../config/routeConfig";
 
 function Footer() {
+  const { t } = useTranslation("layout", { keyPrefix: "footer" });
   return (
     <Box sx={{ bgcolor: "background.paper", p: 2, borderTop: "1px solid rgba(0,0,0,0.3)" }} component="footer">
       <Grid container justifyContent="center">
@@ -45,7 +47,7 @@ function Footer() {
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Email:
+            {t("email_label")}:
             <Box
               component={Link}
               color="inherit"
@@ -54,11 +56,11 @@ function Footer() {
                 ml: 1
               }}
             >
-              info@example.com
+              {t("email_value")}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Phone:
+            {t("phone_label")}:
             <Box
               component={Link}
               color="inherit"
@@ -67,11 +69,11 @@ function Footer() {
                 ml: 1
               }}
             >
-              +123456789
+              {t("phone_value")}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Website:
+            {t("website_label")}:
             <Box
               component={Link}
               color="inherit"
@@ -80,38 +82,35 @@ function Footer() {
                 ml: 1
               }}
             >
-              https://example.com
+              {t("website_value")}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
-            Address:
+            {t("address_label")}: {t("address_value_p1")}:
             <br />
-            123 Example Street
+            {t("address_value_p2")}:
             <br />
-            Example City, 12345
-            <br />
-            Example Country
           </Typography>
         </Grid>
         <Grid item xs={12} sm={6} md={3}>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             <Box component={Link} to={routeConfig.home} color="inherit" underline="always">
-              Điều khoản dịch vụ
+              {t("terms_of_service")}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             <Box component={Link} to={routeConfig.home} color="inherit" underline="always">
-              Chính sách bảo mật
+              {t("privacy_policy")}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             <Box component={Link} to={routeConfig.home} color="inherit" underline="always">
-              Quy định sử dụng
+              {t("usage_rules")}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
             <Box component={Link} to={routeConfig.home} color="inherit" underline="always">
-              Liên hệ
+              {t("contact")}
             </Box>
           </Typography>
         </Grid>
