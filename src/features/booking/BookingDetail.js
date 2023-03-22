@@ -1,4 +1,5 @@
 import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 
 const reason = `Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus
 at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque
@@ -27,15 +28,16 @@ Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing mol
 at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.`;
 
 function BookingDetail() {
+  const { t } = useTranslation("bookingFeature", { keyPrefix: "booking_detail" });
   return (
     <Box sx={{ display: "flex", flexDirection: "column" }}>
       <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
         <Typography variant="h4" sx={{ mb: 4 }}>
-          Chi tiết lịch khám
+          {t("title")}
         </Typography>
 
         <Button variant="contained" size="small" onClick={() => {}}>
-          Export
+          {t("export")}
         </Button>
       </Box>
 
@@ -45,49 +47,49 @@ function BookingDetail() {
             <TableBody>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Bác sĩ
+                  {t("doctor")}
                 </TableCell>
                 <TableCell align="left">Nguyễn Đình Hiệu</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Chuyên khoa
+                  {t("expertise")}
                 </TableCell>
                 <TableCell align="left">Răng hàm mặt, tiểu phẩu</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Ca khám
+                  {t("time")}
                 </TableCell>
                 <TableCell align="left">10h00-10h20</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Họ tên bệnh nhân
+                  {t("name")}
                 </TableCell>
                 <TableCell align="left">Trần Ngọc Sang</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  012456789
+                  {t("phone")}
                 </TableCell>
                 <TableCell align="left">Sang</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Tình trạng
+                  {t("status")}
                 </TableCell>
                 <TableCell align="left">Online</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Thanh toán
+                  {t("code")}
                 </TableCell>
                 <TableCell align="left">Đã thanh toán</TableCell>
               </TableRow>
               <TableRow>
                 <TableCell component="th" scope="row" width="30%">
-                  Code tham gia
+                  {t("reason")}
                 </TableCell>
                 <TableCell align="left">546456</TableCell>
               </TableRow>
@@ -100,7 +102,7 @@ function BookingDetail() {
                     verticalAlign: "top"
                   }}
                 >
-                  Lý do khám
+                  {t("note")}
                 </TableCell>
                 <TableCell align="left">{reason}</TableCell>
               </TableRow>
