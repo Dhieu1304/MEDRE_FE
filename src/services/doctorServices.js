@@ -8,8 +8,6 @@ const getDoctorList = async ({ page, limit, expertise, type, from, to }) => {
   try {
     const res = await axiosClient.get(doctorApi.doctorList(), { params: { page, limit, expertise, type, from, to } });
 
-    console.log("res: ", res);
-
     // let res = camelcaseKeys(
     //   {
     //     status: true,

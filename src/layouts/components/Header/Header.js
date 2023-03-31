@@ -227,7 +227,7 @@ function Header({ window }) {
                       <Typography textAlign="center">{t(item.label)}</Typography>
                     </MenuItem>
                   ))}
-                  <MenuItem
+                  {/* <MenuItem
                     onClick={() => {
                       setMode((prev) => {
                         return prev === LIGHT ? DARK : LIGHT;
@@ -245,7 +245,7 @@ function Header({ window }) {
                     }}
                   >
                     <Typography textAlign="center">{locale}</Typography>
-                  </MenuItem>
+                  </MenuItem> */}
                   <MenuItem onClick={onLogout}>
                     <Typography textAlign="center">{t("logout_label")}</Typography>
                   </MenuItem>

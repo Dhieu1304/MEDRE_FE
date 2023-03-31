@@ -1,6 +1,7 @@
 {
   "header": {
     "profile_label": "Thông tin cá nhân",
+    "setting_label": "Cài đặt",
     "change_password_label": "Đổi mật khẩu",
     "logout_label": "Đăng xuất",
     "about_label": "Về chúng tôi",
@@ -10,5 +11,20 @@
     "schedule_label": "Lịch khám bệnh",
     "sign_in_label": "Đăng nhập",
     "sign_up_label": "Đăng ký"
+  },
+  "footer": {
+    "email_label": "Email",
+    "phone_label": "Số điện thoại",
+    "website_label": "Website",
+    "address_label": "Địa chỉ",
+    "email_value": "info@example.com",
+    "phone_value": "+0123456789",
+    "website_value": "https://medre-fe.vercel.app",
+    "address_value_p1": "227 Đường Nguyễn Văn Cừ, ",
+    "address_value_p2": "Phường 4, Quận 5, Thành phố Hồ Chí Minh",
+    "terms_of_service": "Điều khoản dịch vụ",
+    "privacy_policy": "Chính sách bảo mật",
+    "usage_rules": "Quy định sử dụng",
+    "contact": "Liên hệ"
   }
 }

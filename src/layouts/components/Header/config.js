@@ -68,6 +68,10 @@ export const headerDropdownMenu = [
   {
     to: routeConfig.changePassword,
     label: "change_password_label"
+  },
+  {
+    to: routeConfig.setting,
+    label: "setting_label"
   }
 ];
 

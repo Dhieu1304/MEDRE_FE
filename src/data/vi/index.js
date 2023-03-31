@@ -5,8 +5,11 @@ import doctorFeature from "./doctorFeature.json";
 // import input from "./input.json";
 import layout from "./layout.json";
 // import paymentPage from "./paymentPage.json";
+import historyPage from "./historyPage.json";
+import schedulePage from "./schedulePage.json";
 import common from "./common.json";
-
+import bookingFeature from "./bookingFeature.json";
+import settingPage from "./settingPage.json";
 const vi = {
   authFeature,
   authPage,
@@ -15,7 +18,11 @@ const vi = {
   //   input,
   layout,
   //   paymentPage,
-  common
+  historyPage,
+  schedulePage,
+  bookingFeature,
+  common,
+  settingPage
 };
 
 export default vi;
