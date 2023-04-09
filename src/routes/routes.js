@@ -10,7 +10,6 @@ import ChangePasswordPage from "../pages/ChangePasswordPage";
 import AboutPage from "../pages/AboutPage";
 import ForumPage from "../pages/ForumPage";
 import PaymentPage from "../pages/PaymentPage";
-import SettingPage from "../pages/SettingPage/SettingPage";
 
 // Public routes
 const publicRoutes = [
@@ -38,7 +37,6 @@ const privateRoutes = [
   { path: `${routeConfig.schedule}/*`, component: SchedulePage },
   { path: `${routeConfig.history}/*`, component: HistoryPage },
   { path: `${routeConfig.profile}/*`, component: ProfilePage },
-  { path: `${routeConfig.setting}/*`, component: SettingPage },
   { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }

@@ -7,7 +7,6 @@ const routeConfig = {
   forum: "/forum",
   about: "/about",
   profile: "/profile",
-  setting: "/setting",
   changePassword: "/change-password",
   payment: "/payment",
   default: "/*"

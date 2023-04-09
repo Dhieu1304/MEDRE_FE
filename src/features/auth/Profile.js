@@ -1,20 +1,48 @@
-import "./demo.css";
+import {
+  Grid,
+  Button,
+  Box,
+  Typography,
+  Avatar,
+  Card,
+  CardHeader,
+  Select,
+  MenuItem,
+  Checkbox,
+  ListItemText,
+  IconButton
+} from "@mui/material";
 
 function Profile() {
   return (
     <div>
-      <div className="header-info"> Tên bệnh nhân ở đây</div>
-      <div className="main-info">
-        <div className="main-info-avatar"> Khu này là khu của Avatar </div>
-        <div className="main-info-text">
-          <div>Thông tin 1</div>
-          <div>Thông tin 1</div>
-          <div>Thông tin 1</div>
-          <div>Thông tin 1</div>
-          <div>Thông tin 1</div>
-          <div>Thông tin 1</div>
-        </div>
-      </div>
+      <Box>
+        <Box>
+          <Card>
+            <CardHeader title="Hello" subheader="world"></CardHeader>
+          </Card>
+        </Box>
+        <Box>
+          <Typography variant="h4">Hi</Typography>
+          <Grid>
+            <Grid></Grid>
+            <Grid></Grid>
+            <Grid></Grid>
+          </Grid>
+        </Box>
+        <Box>
+          <Typography>How are you</Typography>
+          <Grid>
+            <Grid></Grid>
+            <Grid></Grid>
+            <Grid></Grid>
+          </Grid>
+        </Box>
+        <Box>
+          <Button>Button1</Button>
+          <Button>Button2</Button>
+        </Box>
+      </Box>
     </div>
   );
 }

@@ -9,7 +9,7 @@ import historyPage from "./historyPage.json";
 import schedulePage from "./schedulePage.json";
 import common from "./common.json";
 import bookingFeature from "./bookingFeature.json";
-import settingPage from "./settingPage.json";
+
 const vi = {
   authFeature,
   authPage,
@@ -21,8 +21,7 @@ const vi = {
   historyPage,
   schedulePage,
   bookingFeature,
-  common,
-  settingPage
+  common
 };
 
 export default vi;
