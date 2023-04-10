@@ -8,6 +8,7 @@ import routeConfig from "../../config/routeConfig";
 import { authRoutes } from "../../pages/AuthPage";
 import { useAuthStore } from "../../store/AuthStore/hooks";
 import AuthInput from "./components/AuthInput";
+// import { useEffect } from "react";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({
@@ -23,6 +24,10 @@ function Login() {
 
   const authStore = useAuthStore();
   const navigate = useNavigate();
+
+  // useEffect(() => {
+  //   trigger();
+  // }, []);
 
   const onLogin = async ({ phone, password }) => {
     const result = await authStore.loginByPhoneNumber(phone, password);

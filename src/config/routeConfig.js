@@ -9,6 +9,7 @@ const routeConfig = {
   profile: "/profile",
   changePassword: "/change-password",
   payment: "/payment",
+  meeting: "/meeting",
   default: "/*"
 };
 
