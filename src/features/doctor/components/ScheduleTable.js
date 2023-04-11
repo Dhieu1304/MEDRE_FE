@@ -1,8 +1,23 @@
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from "@mui/material";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Typography,
+  IconButton,
+  Box,
+  Button,
+  useTheme
+} from "@mui/material";
 
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
 // import { useTranslation } from "react-i18next";
+import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "@mui/icons-material";
+import { useTranslation } from "react-i18next";
 import { useCustomModal } from "../../../components/CustomModal";
 import scheduleServices from "../../../services/scheduleServices";
 import { getNext7DaysFrom } from "../../../utils/datetimeUtil";
@@ -130,7 +145,9 @@ function ScheduleTable() {
 
   const bookingModal = useCustomModal();
 
-  // const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_detail.schedule_table" });
+  const theme = useTheme();
+
+  const { t } = useTranslation("doctorFeature", { keyPrefix: "ScheduleTable" });
 
   useEffect(() => {
     const loadData = async () => {
@@ -170,6 +187,55 @@ function ScheduleTable() {
 
   return (
     <>
+      <Typography
+        variant="h5"
+        sx={{
+          fontWeight: "600",
+          mb: 4
+        }}
+      >
+        Lịch khám bệnh trong tuấn
+      </Typography>
+      <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+          <Button
+            variant="outlined"
+            type="button"
+            sx={{
+              fontWeight: "600"
+            }}
+          >
+            {formatDate.format(heads[0], "DD/MM")} - {formatDate.format(heads[6], "DD/MM")}
+          </Button>
+        </Box>
+        <IconButton
+          onClick={() => {
+            const newCurrentDate = new Date(currentDate);
+            newCurrentDate.setDate(newCurrentDate.getDate() - 6);
+            setCurrentDate(() => newCurrentDate);
+          }}
+        >
+          <ArrowLeftIcon fontSize="large" />
+        </IconButton>
+        <Button
+          variant="contained"
+          onClick={() => {
+            setCurrentDate(() => new Date());
+          }}
+          size="small"
+        >
+          {t("currentWeek")}
+        </Button>
+        <IconButton
+          onClick={() => {
+            const newCurrentDate = new Date(currentDate);
+            newCurrentDate.setDate(newCurrentDate.getDate() + 6);
+            setCurrentDate(() => newCurrentDate);
+          }}
+        >
+          <ArrowRightIcon fontSize="large" />
+        </IconButton>
+      </Box>
       <TableContainer component={Paper}>
         <Table size="small" aria-label="a dense table">
           <TableHead>
@@ -180,11 +246,15 @@ function ScheduleTable() {
                 }}
               />
               {heads.map((cell) => {
+                const isToday = formatDate.isSameDay(new Date(), cell);
+
                 return (
                   <TableCell
                     sx={{
                       border: "1px solid rgba(0,0,0,0.1)",
-                      fontWeight: "600"
+                      fontWeight: "600",
+                      backgroundColor: isToday && theme.palette.success.light,
+                      color: isToday && theme.palette.success.contrastText
                     }}
                     key={cell}
                     align="center"

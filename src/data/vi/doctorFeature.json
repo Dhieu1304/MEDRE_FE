@@ -21,9 +21,12 @@
   "DoctorDetail": {
     "title": "Thông tin chi tiết bác sĩ",
     "expertise": "Chuyên khoa",
-    "education": "Học vấn"
+    "education": "Học vấn",
+    "description": "Mô tả"
   },
-  "ScheduleTable": {},
+  "ScheduleTable": {
+    "currentWeek": "Tuần hiện tại"
+  },
   "BookingModal": {
     "date": "Ngày",
     "time": "Thời gian",

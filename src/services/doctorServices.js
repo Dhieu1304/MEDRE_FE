@@ -14,7 +14,8 @@ const getDoctorList = async ({ page, limit, name, expertise, type, from, to }) =
       expertise,
       type,
       from,
-      to
+      to,
+      role: "Doctor"
     });
 
     // console.log("params: ", params);

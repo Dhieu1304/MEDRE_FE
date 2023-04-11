@@ -22,7 +22,12 @@
     "title": "Doctor detail",
     "expertise": "Expertise",
     "education": "Education",
+    "description": "Description",
     "scheduleTable": {}
+  },
+
+  "ScheduleTable": {
+    "currentWeek": "Current week"
   },
   "BookingModal": {
     "date": "Date",
