@@ -3,8 +3,9 @@ import { Button, Grid, Typography, Box, TextField } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 
-import routeConfig from "../../../config/routeConfig";
-import { authRoutes } from "../../../pages/AuthPage";
+import routeConfig, { authRoutes } from "../../../config/routeConfig";
+
+// import authRoutes from "../../../pages/AuthPage/routes"
 import { inputErrorFormat } from "../../../utils/stringFormat";
 
 function PhoneNumberForm({ prevStep, nextStep }) {

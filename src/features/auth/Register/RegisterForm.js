@@ -5,8 +5,9 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 import formatDate from "date-and-time";
-import routeConfig from "../../../config/routeConfig";
-import { authRoutes } from "../../../pages/AuthPage";
+import routeConfig, { authRoutes } from "../../../config/routeConfig";
+// import { authRoutes } from "../../../pages/AuthPage";
+// import { authRoutes } from "../../../config/routeConfig";
 
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import AuthInput from "../components/AuthInput";

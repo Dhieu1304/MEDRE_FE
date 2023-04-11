@@ -1,5 +1,4 @@
-import routeConfig from "../../../config/routeConfig";
-import { authRoutes } from "../../../pages/AuthPage";
+import routeConfig, { authRoutes } from "../../../config/routeConfig";
 
 export const headerLeftItemsNotLogin = [
   {
