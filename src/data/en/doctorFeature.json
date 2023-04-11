@@ -1,38 +1,45 @@
 {
-  "doctor_list": {
+  "DoctorList": {
     "title": "Find doctor",
     "filter": {
       "search": "Search by name",
       "type": "Type",
       "date": "Date",
-      "expertise": "Expertise"
+      "expertises": "Expertises",
+      "resetBtn": "Reset"
     },
-    "card": {
-      "book": "Book"
+    "listTitle": "Doctor list",
+    "types": {
+      "online": "Online",
+      "offline": "Offline",
+      "all": "All"
     }
   },
-  "doctor_detail": {
+  "DoctorCard": {
+    "bookBtn": "Book"
+  },
+  "DoctorDetail": {
     "title": "Doctor detail",
     "expertise": "Expertise",
     "education": "Education",
-    "schedule_table": {},
-    "booking_modal": {
-      "date": "Date",
-      "time": "Time",
+    "scheduleTable": {}
+  },
+  "BookingModal": {
+    "date": "Date",
+    "time": "Time",
+    "gender": "Gender",
+    "self": "Self",
+    "other": "Other",
+    "reason": "Reason",
+    "reasonPlaceholder": "Your reason",
+    "info": {
+      "title": "Info",
+      "name": "Name",
+      "phone": "Phone",
       "gender": "Gender",
-      "self": "Self",
-      "other": "Other",
-      "reason": "Reason",
-      "reason_placeholder": "Your reason",
-      "info": {
-        "title": "Info",
-        "name": "Name",
-        "phone": "Phone",
-        "gender": "Gender",
-        "male": "Male",
-        "female": "Female",
-        "birthday": "Birthday"
-      }
+      "male": "Male",
+      "female": "Female",
+      "birthday": "Birthday"
     }
   }
 }

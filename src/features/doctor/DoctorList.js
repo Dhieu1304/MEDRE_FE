@@ -1,4 +1,15 @@
-import { Box, Checkbox, Grid, ListItemText, MenuItem, Pagination, Select, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Checkbox,
+  CircularProgress,
+  Grid,
+  ListItemText,
+  MenuItem,
+  Pagination,
+  Select,
+  Typography
+} from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
@@ -6,10 +17,18 @@ import qs from "query-string";
 import { useTranslation } from "react-i18next";
 import doctorServices from "../../services/doctorServices";
 import DoctorCard from "./components/DoctorCard";
-import CustomInput from "./components/CustomInput";
+
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import CustomOverlay from "../../components/CustomOverlay";
 import NoDataBox from "../components/NoDataBox";
+import CustomInput from "../../components/CustomInput";
+import {
+  normalizeStrToArray,
+  normalizeStrToDateStr,
+  normalizeStrToInt,
+  normalizeStrToStr
+} from "../../utils/standardizedForForm";
+import useObjDebounce from "../../hooks/useObjDebounce";
 
 function DoctorList() {
   const [expertisesList, setExpertisesList] = useState([]);
@@ -19,7 +38,9 @@ function DoctorList() {
 
   const location = useLocation();
 
-  const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_list" });
+  const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorList" });
+  const { t: tfilter } = useTranslation("doctorFeature", { keyPrefix: "DoctorList.filter" });
+  const { t: tTypes } = useTranslation("doctorFeature", { keyPrefix: "DoctorList.types" });
 
   const [isFetchConfigSuccess, setIsFetchConfigSuccess] = useState(false);
 
@@ -28,12 +49,16 @@ function DoctorList() {
   const doctorTypesList = useMemo(() => {
     return [
       {
-        label: "Online",
+        label: "online",
         value: "Online"
       },
       {
-        label: "Offline",
+        label: "offline",
         value: "Offline"
+      },
+      {
+        label: "all",
+        value: ""
       }
     ];
   }, []);
@@ -47,47 +72,44 @@ function DoctorList() {
     }, {});
   }, [expertisesList]);
 
+  const createDefaultValues = ({ search, type, date, expertises, page, limit } = {}) => {
+    return {
+      search: normalizeStrToStr(search),
+      type: normalizeStrToStr(type),
+      date: normalizeStrToDateStr(date),
+      expertises: normalizeStrToArray(expertises),
+      page: normalizeStrToInt(page, 1),
+      limit: normalizeStrToInt(limit, 10)
+    };
+  };
+
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
-
-    const { search, type, date, expertise, page, limit } = defaultSearchParams;
-
-    return {
-      search: search || "",
-      type: Array.isArray(type) ? type : [],
-      // date: date || formatDate.format(new Date(2023, 2, 12), "YYYY-MM-DD"),
-      date,
-      // from: from || formatDate.format(new Date(2023, 2, 12), "YYYY-MM-DD"),
-      // to: formatDate.format(new Date(2023, 2, 14), "YYYY-MM-DD"),
-      expertise: Array.isArray(expertise) ? expertise : [],
-      page: parseInt(page, 10) || 1,
-      limit: limit || 1
-    };
+    const result = createDefaultValues(defaultSearchParams);
+    return result;
   }, []);
 
-  const { control, trigger, watch, setValue } = useForm({
+  const { control, trigger, watch, setValue, reset } = useForm({
     mode: "onChange",
     defaultValues,
     criteriaMode: "all"
   });
 
+  const { debouncedObj: searchDebounce, isWaiting: isSearchWaiting } = useObjDebounce({ search: watch().search }, 1000);
+
   const navigate = useNavigate();
 
   const loadData = async ({ page }) => {
-    // console.log("Load: ");
-    // const expertise = [];
     const paramsObj = {
       ...watch(),
       from: watch().date,
       to: watch().date,
+      name: watch().search,
+      expertise: watch().expertises,
       page
     };
-    if (!paramsObj.from) {
-      delete paramsObj.from;
-    }
-    if (!paramsObj.to) {
-      delete paramsObj.to;
-    }
+
+    // console.log("paramsObj: ", paramsObj);
 
     await fetchApi(async () => {
       const res = await doctorServices.getDoctorList(paramsObj);
@@ -129,27 +151,67 @@ function DoctorList() {
     loadConfig();
   }, []);
 
+  const getWatchedValues = () => {
+    const returnValues = Object.keys(watch()).reduce((values, key) => {
+      if (key !== "search" && key !== "page") {
+        values.push(watch()[key]);
+      }
+      return values;
+    }, []);
+
+    return returnValues;
+  };
+
   useEffect(() => {
     const page = 1;
     const params = { ...watch(), page };
 
     const searchParams = qs.stringify(params);
+    setValue("page", page);
     navigate(`?${searchParams}`);
-
     loadData({ page });
-  }, [watch().expertise, watch().type, watch().date]);
+  }, [...getWatchedValues(), ...Object.values(searchDebounce)]);
 
   return (
     isFetchConfigSuccess && (
       <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <CustomOverlay open={isLoading} />
-        <Typography component="h1" variant="h5" mb={2} fontWeight={600}>
-          {t("title")}
-        </Typography>
-        <Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            mb: 4
+          }}
+        >
+          <Typography
+            component="h1"
+            variant="h4"
+            fontWeight={600}
+            sx={{
+              mr: 2
+            }}
+          >
+            {t("title")}
+          </Typography>
+          {isSearchWaiting && <CircularProgress color="primary" size={24} thickness={3} />}
+        </Box>
+
+        <Box
+          sx={{
+            mb: 2
+          }}
+        >
           <Grid container spacing={{ xs: 2, md: 3 }}>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <CustomInput control={control} rules={{}} label={t("filter.expertise")} trigger={trigger} name="expertise">
+              <CustomInput control={control} label={tfilter("date")} trigger={trigger} name="date" type="date" />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <CustomInput control={control} label={tfilter("search")} trigger={trigger} name="search" type="text" />
+            </Grid>
+            <Grid item xs={12} sm={6} md={4} lg={3}>
+              <CustomInput control={control} label={tfilter("expertises")} trigger={trigger} name="expertises">
                 <Select
                   multiple
                   renderValue={(selected) => {
@@ -165,7 +227,7 @@ function DoctorList() {
                   {expertisesList.map((item) => {
                     return (
                       <MenuItem key={item?.id} value={item?.id}>
-                        <Checkbox checked={watch().expertise?.indexOf(item?.id) > -1} />
+                        <Checkbox checked={watch().expertises?.indexOf(item?.id) > -1} />
                         <ListItemText primary={item?.name} />
                       </MenuItem>
                     );
@@ -174,42 +236,53 @@ function DoctorList() {
               </CustomInput>
             </Grid>
             <Grid item xs={12} sm={6} md={4} lg={3}>
-              <CustomInput
-                control={control}
-                rules={{}}
-                label={t("filter.search")}
-                trigger={trigger}
-                name="search"
-                type="text"
-              />
-            </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-              <CustomInput control={control} rules={{}} label={t("filter.type")} trigger={trigger} name="type">
+              <CustomInput control={control} label={tfilter("type")} trigger={trigger} name="type">
                 <Select
-                  multiple
+                  // multiple
                   renderValue={(selected) => {
-                    if (Array.isArray(selected)) return selected?.join(", ");
                     return selected;
                   }}
                 >
                   {doctorTypesList.map((item) => {
                     return (
                       <MenuItem key={item?.value} value={item?.value}>
-                        {/* type không lấy theo ID nên để
-                      checked={watch("type")?.indexOf(item?.value) > -1}   */}
-                        <Checkbox checked={watch("type")?.indexOf(item?.value) > -1} />
-                        <ListItemText primary={item?.label} />
+                        <Checkbox checked={watch().type === item?.value} />
+                        <ListItemText primary={tTypes(item?.label)} />
                       </MenuItem>
                     );
                   })}
                 </Select>
               </CustomInput>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
-              <CustomInput control={control} rules={{}} label={t("filter.date")} trigger={trigger} name="date" type="date" />
-            </Grid>
           </Grid>
         </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            mb: 4
+          }}
+        >
+          <Button
+            variant="outlined"
+            onClick={() => {
+              reset(createDefaultValues());
+            }}
+          >
+            {tfilter("resetBtn")}
+          </Button>
+        </Box>
+
+        {count > 0 ? (
+          <Typography variant="h5" sx={{ fontWeight: "600" }}>
+            {t("listTitle")}
+          </Typography>
+        ) : (
+          <NoDataBox />
+        )}
+
         <Grid container spacing={4} px={0} py={4}>
           {doctors.map((doctor) => (
             <Grid item key={doctor?.id} xs={12} sm={6} md={4} p={0}>
@@ -217,8 +290,6 @@ function DoctorList() {
             </Grid>
           ))}
         </Grid>
-
-        {count === 0 && <NoDataBox />}
 
         {!!count && (
           <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
@@ -232,6 +303,9 @@ function DoctorList() {
               }}
               onChange={(event, newPage) => {
                 setValue("page", newPage);
+                const params = { ...watch(), page: newPage };
+                const searchParams = qs.stringify(params);
+                navigate(`?${searchParams}`);
                 loadData({ page: newPage });
               }}
             />

@@ -8,6 +8,7 @@
     "doctor_label": "Doctor",
     "history_label": "History",
     "schedule_label": "Schedule",
+    "meeting_label": "Demo",
     "sign_in_label": "Sign in",
     "sign_up_label": "Sign up",
     "filter": {

@@ -10,6 +10,7 @@ import ChangePasswordPage from "../pages/ChangePasswordPage";
 import AboutPage from "../pages/AboutPage";
 import ForumPage from "../pages/ForumPage";
 import PaymentPage from "../pages/PaymentPage";
+import MeetingPage from "../pages/MeetingPage";
 
 // Public routes
 const publicRoutes = [
@@ -25,6 +26,7 @@ const publicRoutes = [
   { path: `${routeConfig.profile}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
   { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
+  { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   //---------------------------------
   { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
 ];
@@ -39,6 +41,7 @@ const privateRoutes = [
   { path: `${routeConfig.profile}/*`, component: ProfilePage },
   { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
+  { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
 ];
 

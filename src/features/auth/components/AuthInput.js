@@ -94,6 +94,9 @@ const AuthInput = ({
                 <Box
                   component={TextField}
                   InputProps={InputProps}
+                  InputLabelProps={{
+                    shrink: !!value
+                  }}
                   sx={{ mb: 2 }}
                   required={!!rules?.required}
                   error={!!error?.message}
