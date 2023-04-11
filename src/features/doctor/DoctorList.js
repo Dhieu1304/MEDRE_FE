@@ -86,6 +86,7 @@ function DoctorList() {
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
     const result = createDefaultValues(defaultSearchParams);
+    // console.log("result: ", result);
     return result;
   }, []);
 

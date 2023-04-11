@@ -28,9 +28,9 @@ export const normalizeStrToInt = (str, defaultNumber = 0) => {
 };
 
 export const normalizeStrToDateStr = (dateStr) => {
-  const date = new Date(dateStr);
+  const date = Date.parse(dateStr);
   if (Number.isNaN(date)) {
     return formatDate.format(new Date(), "YYYY-MM-DD");
   }
-  return formatDate.format(date, "YYYY-MM-DD");
+  return formatDate.format(new Date(date), "YYYY-MM-DD");
 };
