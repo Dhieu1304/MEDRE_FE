@@ -1,5 +1,5 @@
 {
-  "custom_modal": {
-    "cancel": "Cancel"
+  "CustomModal": {
+    "cancelBtn": "Cancel"
   }
 }

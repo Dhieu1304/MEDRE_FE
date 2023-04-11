@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
 function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, onSubmit }) {
-  const { t } = useTranslation("components", { keyPrefix: "custom_modal" });
+  const { t } = useTranslation("components", { keyPrefix: "customModal" });
 
   const handleClose = () => {
     if (setData) setData(null);

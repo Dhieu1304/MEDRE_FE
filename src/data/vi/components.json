@@ -1,5 +1,5 @@
 {
-  "custom_modal": {
-    "cancel": "Thoát"
+  "CustomModal": {
+    "cancelBtn": "Thoát"
   }
 }

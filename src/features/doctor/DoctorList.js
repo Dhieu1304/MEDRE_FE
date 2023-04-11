@@ -6,10 +6,11 @@ import qs from "query-string";
 import { useTranslation } from "react-i18next";
 import doctorServices from "../../services/doctorServices";
 import DoctorCard from "./components/DoctorCard";
-import CustomInput from "./components/CustomInput";
+
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import CustomOverlay from "../../components/CustomOverlay";
 import NoDataBox from "../components/NoDataBox";
+import CustomInput from "../../components/CustomInput";
 
 function DoctorList() {
   const [expertisesList, setExpertisesList] = useState([]);
