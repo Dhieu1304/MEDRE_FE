@@ -1,8 +1,11 @@
 import { Close } from "@mui/icons-material";
 import { Modal, Typography, Box, Button, Grid, IconButton } from "@mui/material";
 import PropTypes from "prop-types";
+import { useTranslation } from "react-i18next";
 
 function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, onSubmit }) {
+  const { t } = useTranslation("components", { keyPrefix: "custom_modal" });
+
   const handleClose = () => {
     if (setData) setData(null);
     setShow(false);
@@ -35,11 +38,20 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
             <Close />
           </IconButton>
         </Box>
-        <Box py={2}>{children}</Box>
+        <Box
+          py={2}
+          sx={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+          }}
+        >
+          {children}
+        </Box>
         <Grid container spacing={2} justifyContent="flex-end">
           <Grid item columns={2}>
             <Button variant="outlined" onClick={handleClose}>
-              Cancel
+              {t("cancel")}
             </Button>
           </Grid>
           <Grid item columns={2}>
@@ -56,17 +68,18 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
 }
 
 CustomModal.defaultProps = {
-  setData: null,
-  title: null,
-  submitBtnLabel: null,
-  onSubmit: null
+  setData: undefined,
+  children: undefined,
+  title: undefined,
+  submitBtnLabel: undefined,
+  onSubmit: undefined
 };
 
 CustomModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   setData: PropTypes.func,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.node,
   title: PropTypes.string,
   submitBtnLabel: PropTypes.string,
   onSubmit: PropTypes.func
