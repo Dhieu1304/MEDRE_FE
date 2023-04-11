@@ -9,7 +9,7 @@ import ExpertiseButton from "./ExpertiseButton";
 function DoctorCard({ doctor }) {
   const navigate = useNavigate();
 
-  const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_list.card" });
+  const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorCard" });
 
   return (
     <Card sx={{ height: "100%", maxWidth: 500, display: "flex", flexDirection: "column", p: 0, cursor: "pointer" }}>
@@ -28,7 +28,7 @@ function DoctorCard({ doctor }) {
       </CardContent>
       <CardActions sx={{ justifyContent: "flex-end" }}>
         <Button variant="contained" size="small" onClick={() => navigate(`${routeConfig.doctor}/${doctor?.id}`)}>
-          {t("book")}
+          {t("bookBtn")}
         </Button>
       </CardActions>
     </Card>

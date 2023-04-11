@@ -5,7 +5,16 @@ import Header from "../components/Header";
 
 function DefaultLayout({ children }) {
   return (
-    <Box sx={{ width: "100vw", minHeight: "100vh", display: "flex", flexDirection: "column" }}>
+    <Box
+      sx={{
+        width: "100vw",
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        maxWidth: "100%",
+        overflow: "hidden"
+      }}
+    >
       <Header />
       <Box
         sx={{
@@ -18,7 +27,8 @@ function DefaultLayout({ children }) {
             md: 12,
             sm: 8,
             xs: 4
-          }
+          },
+          overflow: "hidden"
         }}
         py={4}
       >

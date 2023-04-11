@@ -5,7 +5,14 @@
       "search": "Tìm kiếm theo tên",
       "type": "Loại khám",
       "date": "Ngày",
-      "expertises": "Chuyên khoa"
+      "expertises": "Chuyên khoa",
+      "resetBtn": "Đặt lại"
+    },
+    "listTitle": "Danh sách bác sĩ",
+    "types": {
+      "online": "Online",
+      "offline": "Offline",
+      "all": "All"
     }
   },
   "DoctorCard": {

@@ -1,12 +1,26 @@
 import camelcaseKeys from "camelcase-keys";
 import { doctorApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
+import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 // import doctorMockData from "../mockData/doctorMockData";
 
-const getDoctorList = async ({ page, limit, expertise, type, from, to }) => {
+const getDoctorList = async ({ page, limit, name, expertise, type, from, to }) => {
+  // console.log({ page, limit, expertise, type, from, to });
   try {
-    const res = await axiosClient.get(doctorApi.doctorList(), { params: { page, limit, expertise, type, from, to } });
+    const params = cleanUndefinedAndEmptyStrValueObject({
+      page,
+      limit,
+      name,
+      expertise,
+      type,
+      from,
+      to
+    });
 
+    // console.log("params: ", params);
+    const res = await axiosClient.get(doctorApi.doctorList(), { params });
+
+    // console.log("res: ", res);
     // let res = camelcaseKeys(
     //   {
     //     status: true,

@@ -5,7 +5,14 @@
       "search": "Search by name",
       "type": "Type",
       "date": "Date",
-      "expertises": "Expertises"
+      "expertises": "Expertises",
+      "resetBtn": "Reset"
+    },
+    "listTitle": "Doctor list",
+    "types": {
+      "online": "Online",
+      "offline": "Offline",
+      "all": "All"
     }
   },
   "DoctorCard": {
