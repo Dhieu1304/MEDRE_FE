@@ -1,0 +1,18 @@
+{
+  "title": {
+    "login": "Thông tin đăng nhập",
+    "auth": "Thông tin xác thực",
+    "information": "Thông tin cá nhân"
+  },
+  "subtitle": {
+    "email": "Email",
+    "username": "Tên đăng nhập",
+    "phone": "Số điện thoại",
+    "author": "Phân quyền",
+    "status": "Tình trạng",
+    "fullname": "Họ và tên",
+    "dob": "Ngày sinh",
+    "gender": "Giới tính",
+    "address": "Địa chỉ"
+  }
+}

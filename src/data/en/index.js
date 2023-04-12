@@ -9,7 +9,7 @@ import historyPage from "./historyPage.json";
 import schedulePage from "./schedulePage.json";
 import common from "./common.json";
 import bookingFeature from "./bookingFeature.json";
-
+import profilePage from "./profilePage.json";
 const en = {
   authFeature,
   authPage,
@@ -19,6 +19,7 @@ const en = {
   layout,
   //   paymentPage,
   historyPage,
+  profilePage,
   schedulePage,
   bookingFeature,
   common

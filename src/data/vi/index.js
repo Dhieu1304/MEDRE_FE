@@ -9,7 +9,7 @@ import historyPage from "./historyPage.json";
 import schedulePage from "./schedulePage.json";
 import common from "./common.json";
 import bookingFeature from "./bookingFeature.json";
-
+import profilePage from "./profilePage.json";
 const vi = {
   authFeature,
   authPage,
@@ -18,7 +18,9 @@ const vi = {
   //   input,
   layout,
   //   paymentPage,
+
   historyPage,
+  profilePage,
   schedulePage,
   bookingFeature,
   common
