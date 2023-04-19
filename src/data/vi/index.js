@@ -11,6 +11,8 @@ import common from "./common.json";
 import bookingFeature from "./bookingFeature.json";
 import components from "./components.json";
 
+import profilePage from "./profilePage.json";
+
 const vi = {
   authFeature,
   authPage,
@@ -19,7 +21,9 @@ const vi = {
   //   input,
   layout,
   //   paymentPage,
+
   historyPage,
+  profilePage,
   schedulePage,
   bookingFeature,
   common,
