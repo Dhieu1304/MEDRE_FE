@@ -107,5 +107,9 @@
     + VD: AuthPage.js, AuthPage.module.scss
 
 
-
 ## MEDRE_FE
+
+
+## Start with docker
+
+### `docker compose up` to run
