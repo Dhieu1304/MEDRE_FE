@@ -15,20 +15,20 @@ import { useForm } from "react-hook-form";
 import { useLocation, useNavigate } from "react-router";
 import qs from "query-string";
 import { useTranslation } from "react-i18next";
-import doctorServices from "../../services/doctorServices";
-import DoctorCard from "./components/DoctorCard";
+import doctorServices from "../../../services/doctorServices";
+import DoctorCard from "./DoctorCard";
 
-import { useFetchingStore } from "../../store/FetchingApiStore";
-import CustomOverlay from "../../components/CustomOverlay";
-import NoDataBox from "../components/NoDataBox";
-import CustomInput from "../../components/CustomInput";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
+import CustomOverlay from "../../../components/CustomOverlay";
+import NoDataBox from "../../../components/NoDataBox";
+import CustomInput from "../../../components/CustomInput";
 import {
   normalizeStrToArray,
   normalizeStrToDateStr,
   normalizeStrToInt,
   normalizeStrToStr
-} from "../../utils/standardizedForForm";
-import useObjDebounce from "../../hooks/useObjDebounce";
+} from "../../../utils/standardizedForForm";
+import useObjDebounce from "../../../hooks/useObjDebounce";
 
 function DoctorList() {
   const [expertisesList, setExpertisesList] = useState([]);
@@ -39,8 +39,9 @@ function DoctorList() {
   const location = useLocation();
 
   const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorList" });
+
   const { t: tfilter } = useTranslation("doctorFeature", { keyPrefix: "DoctorList.filter" });
-  const { t: tTypes } = useTranslation("doctorFeature", { keyPrefix: "DoctorList.types" });
+  const { t: tSelectType } = useTranslation("doctorFeature", { keyPrefix: "DoctorList.select.types" });
 
   const [isFetchConfigSuccess, setIsFetchConfigSuccess] = useState(false);
 
@@ -76,7 +77,7 @@ function DoctorList() {
     return {
       search: normalizeStrToStr(search),
       type: normalizeStrToStr(type),
-      date: normalizeStrToDateStr(date),
+      date: normalizeStrToDateStr(date, new Date()),
       expertises: normalizeStrToArray(expertises),
       page: normalizeStrToInt(page, 1),
       limit: normalizeStrToInt(limit, 10)
@@ -86,7 +87,6 @@ function DoctorList() {
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
     const result = createDefaultValues(defaultSearchParams);
-    // console.log("result: ", result);
     return result;
   }, []);
 
@@ -109,8 +109,6 @@ function DoctorList() {
       expertise: watch().expertises,
       page
     };
-
-    // console.log("paramsObj: ", paramsObj);
 
     await fetchApi(async () => {
       const res = await doctorServices.getDoctorList(paramsObj);
@@ -205,13 +203,13 @@ function DoctorList() {
           }}
         >
           <Grid container spacing={{ xs: 2, md: 3 }}>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <CustomInput control={control} label={tfilter("date")} trigger={trigger} name="date" type="date" />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <CustomInput control={control} label={tfilter("search")} trigger={trigger} name="search" type="text" />
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <CustomInput control={control} label={tfilter("expertises")} trigger={trigger} name="expertises">
                 <Select
                   multiple
@@ -236,7 +234,7 @@ function DoctorList() {
                 </Select>
               </CustomInput>
             </Grid>
-            <Grid item xs={12} sm={6} md={4} lg={3}>
+            <Grid item xs={12} sm={6} md={6} lg={3}>
               <CustomInput control={control} label={tfilter("type")} trigger={trigger} name="type">
                 <Select
                   // multiple
@@ -248,7 +246,7 @@ function DoctorList() {
                     return (
                       <MenuItem key={item?.value} value={item?.value}>
                         <Checkbox checked={watch().type === item?.value} />
-                        <ListItemText primary={tTypes(item?.label)} />
+                        <ListItemText primary={tSelectType(item?.label)} />
                       </MenuItem>
                     );
                   })}
@@ -272,13 +270,13 @@ function DoctorList() {
               reset(createDefaultValues());
             }}
           >
-            {tfilter("resetBtn")}
+            {tfilter("button.reset")}
           </Button>
         </Box>
 
         {count > 0 ? (
           <Typography variant="h5" sx={{ fontWeight: "600" }}>
-            {t("listTitle")}
+            {t("subTitle.list")}
           </Typography>
         ) : (
           <NoDataBox />
@@ -286,7 +284,7 @@ function DoctorList() {
 
         <Grid container spacing={4} px={0} py={4}>
           {doctors.map((doctor) => (
-            <Grid item key={doctor?.id} xs={12} sm={6} md={4} p={0}>
+            <Grid item key={doctor?.id} xs={12} sm={12} md={6} lg={4} p={0}>
               <DoctorCard doctor={doctor} />
             </Grid>
           ))}

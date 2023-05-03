@@ -27,10 +27,14 @@ export const normalizeStrToInt = (str, defaultNumber = 0) => {
   return Number.isNaN(num) ? defaultNumber : num;
 };
 
-export const normalizeStrToDateStr = (dateStr) => {
+export const normalizeStrToDateStr = (dateStr, defaultDate) => {
   const date = Date.parse(dateStr);
   if (Number.isNaN(date)) {
-    return formatDate.format(new Date(), "YYYY-MM-DD");
+    if (defaultDate) {
+      return formatDate.format(new Date(defaultDate), "YYYY-MM-DD");
+    }
+
+    return "";
   }
   return formatDate.format(new Date(date), "YYYY-MM-DD");
 };

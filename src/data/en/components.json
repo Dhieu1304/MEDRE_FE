@@ -1,5 +1,10 @@
 {
   "CustomModal": {
-    "cancelBtn": "Cancel"
+    "button": {
+      "cancel": "Cancel"
+    }
+  },
+  "NoDataBox": {
+    "title": "No relevant data available"
   }
 }

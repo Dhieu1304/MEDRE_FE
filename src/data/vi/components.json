@@ -1,5 +1,10 @@
 {
   "CustomModal": {
-    "cancelBtn": "Thoát"
+    "button": {
+      "cancel": "Thoát"
+    }
+  },
+  "NoDataBox": {
+    "title": "Không có dữ liệu phù hợp"
   }
 }

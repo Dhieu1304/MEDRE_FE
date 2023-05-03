@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "id": "ID",
+    "username": "Username",
+    "phoneNumber": "Số điện thoại",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "name": "Họ tên",
+    "image": "Ảnh",
+    "address": "Địa chỉ",
+    "gender": "Giới tính",
+    "dob": "Ngày sinh",
+    "role": "Phân quyền",
+    "healthInsurance": "Bảo hiểm y tế",
+    "description": "Mô tả",
+    "education": "Học vấn",
+    "certificate": "Chứng nhận",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhập",
+    "deletedAt": "Ngày xóa",
+    "status": "Tình trạng",
+    "expertises": "Chuyên môn"
+  }
+}

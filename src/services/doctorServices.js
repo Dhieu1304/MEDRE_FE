@@ -18,20 +18,7 @@ const getDoctorList = async ({ page, limit, name, expertise, type, from, to }) =
       role: "Doctor"
     });
 
-    // console.log("params: ", params);
     const res = await axiosClient.get(doctorApi.doctorList(), { params });
-
-    // console.log("res: ", res);
-    // let res = camelcaseKeys(
-    //   {
-    //     status: true,
-    //     message: "",
-    //     data: {
-    //       doctors: doctorMockData.list()
-    //     }
-    //   },
-    //   { deep: true }
-    // );
 
     if (res?.status) {
       const doctors = camelcaseKeys(res?.data?.results, { deep: true });
@@ -47,7 +34,7 @@ const getDoctorList = async ({ page, limit, name, expertise, type, from, to }) =
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);

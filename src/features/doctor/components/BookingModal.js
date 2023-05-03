@@ -17,7 +17,7 @@ import { Controller, useForm } from "react-hook-form";
 import { useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import CustomInput from "./CustomInput";
+import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomModal from "../../../components/CustomModal";
 
 function BookingModal({ show, setShow, data, setData }) {
