@@ -22,7 +22,7 @@ import { useTranslation } from "react-i18next";
 import { useCustomModal } from "../../../components/CustomModal";
 import scheduleServices from "../../../services/scheduleServices";
 import { formatDateLocale, getNext7DaysFrom, isEqualDateWithoutTime } from "../../../utils/datetimeUtil";
-import BookingModal from "../components/BookingModal";
+
 import WithTimesLoaderWrapper from "../../time/hocs/WithTimesLoaderWrapper";
 
 import { findBookingsByDate, groupSchedulesDayOfWeekAndSession, isTimeOffAtThisScheduleTime } from "./utils";
@@ -32,6 +32,7 @@ import timeOffServices from "../../../services/timeOffServices";
 import { scheduleSessions } from "../../../entities/Schedule";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import { bookingStatuses } from "../../../entities/Booking";
+import BookingModal from "../../booking/component/BookingModal";
 
 function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -116,7 +117,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     return groupSchedulesDayOfWeekAndSession(schedules);
   }, [schedules]);
 
-  const renderBookingButton = (booking) => {
+  const renderBookingButton = (schedule, booking, colDate, time) => {
     if (!booking) {
       return (
         <Button
@@ -124,6 +125,14 @@ function DoctorScheduleTable({ timesList, doctorId }) {
           sx={{
             backgroundColor: "#009dff",
             color: "white"
+          }}
+          onClick={() => {
+            bookingModal.setShow(true);
+            bookingModal.setData({
+              schedule,
+              date: colDate,
+              time
+            });
           }}
         >
           {t("button.book")}
@@ -224,7 +233,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
                   cursor: booking && "pointer"
                 }}
               >
-                {renderBookingButton(booking)}
+                {renderBookingButton(schedule, booking, colDate, time)}
               </Box>
             </>
           )}

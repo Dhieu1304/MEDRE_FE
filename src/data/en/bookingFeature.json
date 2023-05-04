@@ -18,5 +18,17 @@
     "code": "Code",
     "reason": "Reason",
     "note": "Doctor's note"
+  },
+
+  "BookingModal": {
+    "title": "Booking",
+    "form": {
+      "bookingFor": "Booking for",
+      "self": "Self",
+      "patient": "Patient"
+    },
+    "button": {
+      "book": "Book"
+    }
   }
 }

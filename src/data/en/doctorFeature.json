@@ -38,24 +38,5 @@
         "reserved": "Reserved"
       }
     }
-  },
-
-  "BookingModal": {
-    "date": "Date",
-    "time": "Time",
-    "gender": "Gender",
-    "self": "Self",
-    "other": "Other",
-    "reason": "Reason",
-    "reasonPlaceholder": "Your reason",
-    "info": {
-      "title": "Info",
-      "name": "Name",
-      "phone": "Phone",
-      "gender": "Gender",
-      "male": "Male",
-      "female": "Female",
-      "birthday": "Birthday"
-    }
   }
 }

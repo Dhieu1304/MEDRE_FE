@@ -34,7 +34,9 @@ function BookingModal({ show, setShow, data, setData }) {
 
   const handleBooking = () => {};
 
-  const { t } = useTranslation("doctorFeature", { keyPrefix: "doctor_detail.booking_modal" });
+  const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingModal" });
+  const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
   const genders = useMemo(
     () => [
@@ -56,33 +58,43 @@ function BookingModal({ show, setShow, data, setData }) {
       setShow={setShow}
       data={data}
       setData={setData}
-      title="Booking details"
-      submitBtnLabel="Book"
+      title={t("title")}
+      submitBtnLabel={t("button.book")}
       onSubmit={handleSubmit(handleBooking)}
     >
-      <Box>
+      <Box
+        sx={{
+          width: "100%",
+          px: 2
+        }}
+      >
         <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
           <Typography fontWeight={600} mr={2}>
-            {t("date")}:
+            {tBooking("date")}:
           </Typography>
           <Typography fontWeight={500} textAlign="center">
-            {formatDate.format(new Date(data?.date), "ddd, MMM DD YYYY")} {`(${data?.type})`}
+            {formatDate.format(new Date(data?.date), "ddd, DD/MM/YYYY")} {`(${data?.schedule?.type})`}
           </Typography>
         </Box>
         <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
           <Typography fontWeight={600} mr={2}>
-            {t("time")}:
+            {tBooking("time")}:
           </Typography>
           <Typography fontWeight={500} textAlign="center">
-            {data?.time}
+            {`${data?.time?.timeStart?.split(":")[0]}:${data?.time?.timeStart?.split(":")[1]}`} -{" "}
+            {`${data?.time?.timeEnd?.split(":")[0]}:${data?.time?.timeEnd?.split(":")[1]}`}
           </Typography>
         </Box>
 
         <FormControl>
-          <FormLabel>{t("gender")}:</FormLabel>
+          <FormLabel>{t("form.bookingFor")}:</FormLabel>
           <RadioGroup row defaultValue="self">
-            <FormControlLabel value="self" control={<Radio onClick={() => setIsSelf(true)} />} label={t("self")} />
-            <FormControlLabel value="other" control={<Radio onClick={() => setIsSelf(false)} />} label={t("other")} />
+            <FormControlLabel value="self" control={<Radio onClick={() => setIsSelf(true)} />} label={t("form.self")} />
+            <FormControlLabel
+              value="patient"
+              control={<Radio onClick={() => setIsSelf(false)} />}
+              label={t("form.patient")}
+            />
           </RadioGroup>
         </FormControl>
 
@@ -133,18 +145,17 @@ function BookingModal({ show, setShow, data, setData }) {
         )}
 
         <Typography mb={1} fontWeight={600}>
-          {t("reason")}:
+          {tBooking("reason")}:
         </Typography>
         <Controller
           control={control}
-          rules={{ require: "This field is required" }}
+          rules={{ require: tInputValidate("required") }}
           name="reason"
           render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
             <TextField
               onChange={onChange}
               onBlur={onBlur}
               value={value}
-              placeholder={t("reason_placeholder")}
               multiline
               fullWidth
               rows={4}
