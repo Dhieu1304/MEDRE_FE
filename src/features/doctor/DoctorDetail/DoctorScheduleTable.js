@@ -12,6 +12,7 @@ import {
   Button,
   useTheme
 } from "@mui/material";
+import PropTypes from "prop-types";
 
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
@@ -23,6 +24,7 @@ import scheduleServices from "../../../services/scheduleServices";
 import { getNext7DaysFrom } from "../../../utils/datetimeUtil";
 import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "../components/BookingButton";
 import BookingModal from "../components/BookingModal";
+import WithTimesLoaderWrapper from "../../time/hocs/WithTimesLoaderWrapper";
 
 const groupArrayByKey = (arr, keys, key) => {
   const defaultGroups = keys.reduce((group, keyi) => ({ ...group, [keyi]: [] }), {});
@@ -138,9 +140,11 @@ const createDatas = (times, schedules, currentDate) => {
   // });
 };
 
-function DoctorScheduleTable() {
+function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
-  const [times, setTimes] = useState([]);
+
+  const times = [...timesList];
+
   const [currentDate, setCurrentDate] = useState(new Date());
 
   const bookingModal = useCustomModal();
@@ -151,13 +155,9 @@ function DoctorScheduleTable() {
 
   useEffect(() => {
     const loadData = async () => {
-      const res2 = await scheduleServices.getScheduleList();
+      const res2 = await scheduleServices.getScheduleListByDoctorId(doctorId);
       const schedulesData = res2.schedules;
       setSchedules(schedulesData);
-
-      const res3 = await scheduleServices.getTimeList();
-      const timesData = res3.times;
-      setTimes(timesData);
     };
     loadData();
   }, []);
@@ -346,4 +346,9 @@ function DoctorScheduleTable() {
   );
 }
 
-export default DoctorScheduleTable;
+DoctorScheduleTable.propTypes = {
+  timesList: PropTypes.array.isRequired,
+  doctorId: PropTypes.string.isRequired
+};
+
+export default WithTimesLoaderWrapper(DoctorScheduleTable);

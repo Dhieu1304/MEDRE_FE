@@ -14,7 +14,8 @@ const doctorApi = {
 };
 
 const scheduleApi = {
-  schedule: () => "/schedule"
+  scheduleList: () => "/schedule/list-all",
+  timeList: () => "/time-schedule/time"
 };
 
 export { authApi, userApi, doctorApi, scheduleApi };

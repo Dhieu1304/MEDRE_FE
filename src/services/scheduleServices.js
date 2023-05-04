@@ -1,24 +1,27 @@
-// import { userApi, scheduleApi } from "../config/apiConfig";
-// import axiosClient from "../config/axiosClient";
 import camelcaseKeys from "camelcase-keys";
-import scheduleMockData from "../mockData/scheduleMockData";
+import { scheduleApi } from "../config/apiConfig";
+import axiosClient from "../config/axiosClient";
 
-const getScheduleList = async () => {
+const getScheduleListByDoctorId = async (doctorId, from, to) => {
+  // console.log({ from, to });
+
+  const params = {
+    id_doctor: doctorId,
+    from,
+    to
+  };
+
+  // console.log("params: ", params);
   try {
-    // const res = await axiosClient.get(scheduleApi.scheduleList());
-    const res = camelcaseKeys(
-      {
-        status: true,
-        message: "",
-        data: {
-          schedules: scheduleMockData.list()
-        }
-      },
-      { deep: true }
-    );
+    const res = await axiosClient.get(scheduleApi.scheduleList(), {
+      params
+    });
+    // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
+
+    // console.log("res: ", res);
 
     if (res?.status) {
-      const schedules = res?.data?.schedules;
+      const schedules = camelcaseKeys(res?.data, { deep: true });
 
       return {
         success: true,
@@ -28,7 +31,7 @@ const getScheduleList = async () => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -41,20 +44,10 @@ const getScheduleList = async () => {
 
 const getTimeList = async () => {
   try {
-    // const res = await axiosClient.get(scheduleApi.scheduleList());
-    const res = camelcaseKeys(
-      {
-        status: true,
-        message: "",
-        data: {
-          times: scheduleMockData.times()
-        }
-      },
-      { deep: true }
-    );
+    const res = await axiosClient.get(scheduleApi.timeList());
 
     if (res?.status) {
-      const times = res?.data?.times;
+      const times = camelcaseKeys(res?.data, { deep: true });
 
       return {
         success: true,
@@ -64,7 +57,7 @@ const getTimeList = async () => {
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
     // console.error(e.message);
@@ -76,6 +69,6 @@ const getTimeList = async () => {
 };
 
 export default {
-  getScheduleList,
+  getScheduleListByDoctorId,
   getTimeList
 };

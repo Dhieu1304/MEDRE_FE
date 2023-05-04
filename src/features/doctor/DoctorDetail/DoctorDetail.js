@@ -199,7 +199,7 @@ function DoctorDetail() {
           </Box>
         </Grid>
         <Grid item lg={12}>
-          <DoctorScheduleTable />
+          <DoctorScheduleTable doctorId={doctorId} />
         </Grid>
       </Grid>
     </>
