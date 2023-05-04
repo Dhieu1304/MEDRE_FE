@@ -2,6 +2,7 @@ import authFeature from "./authFeature.json";
 import authPage from "./authPage.json";
 import doctorFeature from "./doctorFeature.json";
 import doctorEntity from "./doctorEntity.json";
+import scheduleEntity from "./scheduleEntity.json";
 // import homePage from "./homePage.json";
 // import input from "./input.json";
 import layout from "./layout.json";
@@ -18,6 +19,7 @@ const vi = {
   authPage,
   doctorFeature,
   doctorEntity,
+  scheduleEntity,
   //   homePage,
   //   input,
   layout,

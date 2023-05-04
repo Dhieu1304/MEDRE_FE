@@ -32,7 +32,10 @@
     "DoctorScheduleTable": {
       "title": "Doctor schedule",
       "button": {
-        "currentWeek": "Current week"
+        "currentWeek": "Current week",
+        "book": "Book",
+        "booked": "Booked",
+        "reserved": "Reserved"
       }
     }
   },
