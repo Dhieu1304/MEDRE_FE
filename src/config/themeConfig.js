@@ -6,14 +6,36 @@ export const getTheme = (theme) => {
     case DARK:
       return {
         palette: {
-          mode: "dark"
+          mode: "dark",
+          primary: {
+            main: "#13c147"
+          }
         },
         components: {
-          MuiButton: {
+          MuiAppBar: {
             styleOverrides: {
               root: {
-                borderRadius: "10px",
-                padding: "10px 20px"
+                backgroundColor: "#000000",
+                borderBottom: "1px solid rgba(255,255,255,0.2)",
+                boxShadow: "none"
+              },
+              colorPrimary: {
+                color: "#FFFFFF"
+              }
+            }
+          },
+          MuiDrawer: {
+            styleOverrides: {
+              paper: {
+                backgroundColor: "#000000",
+                color: "#FFFFFF"
+              }
+            }
+          },
+          MuiInputLabel: {
+            styleOverrides: {
+              root: {
+                color: "rgba(255,255,255)"
               }
             }
           }
@@ -47,6 +69,13 @@ export const getTheme = (theme) => {
               paper: {
                 backgroundColor: "#FFFFFF",
                 color: "#000000"
+              }
+            }
+          },
+          MuiInputLabel: {
+            styleOverrides: {
+              root: {
+                color: "rgba(0,0,0)"
               }
             }
           }

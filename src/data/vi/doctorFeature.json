@@ -1,32 +1,42 @@
 {
   "DoctorList": {
     "title": "Tìm kiếm bác sĩ",
+    "subTitle": {
+      "list": "Danh sách bác sĩ"
+    },
     "filter": {
       "search": "Tìm kiếm theo tên",
       "type": "Loại khám",
       "date": "Ngày",
       "expertises": "Chuyên khoa",
-      "resetBtn": "Đặt lại"
+      "button": {
+        "reset": "Đặt lại"
+      }
     },
-    "listTitle": "Danh sách bác sĩ",
-    "types": {
-      "online": "Online",
-      "offline": "Offline",
-      "all": "All"
+    "select": {
+      "types": {
+        "online": "Trực tuyến",
+        "offline": "Trực tiếp",
+        "all": "Tất cả"
+      }
+    },
+    "DoctorCard": {
+      "button": {
+        "book": "Đặt lịch"
+      }
     }
   },
-  "DoctorCard": {
-    "bookBtn": "Đặt lịch"
-  },
+
   "DoctorDetail": {
     "title": "Thông tin chi tiết bác sĩ",
-    "expertise": "Chuyên khoa",
-    "education": "Học vấn",
-    "description": "Mô tả"
+    "DoctorScheduleTable": {
+      "title": "Lịch khám bệnh bác sĩ",
+      "button": {
+        "currentWeek": "Tuần hiện tại"
+      }
+    }
   },
-  "ScheduleTable": {
-    "currentWeek": "Tuần hiện tại"
-  },
+
   "BookingModal": {
     "date": "Ngày",
     "time": "Thời gian",

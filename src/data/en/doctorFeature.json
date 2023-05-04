@@ -1,34 +1,42 @@
 {
   "DoctorList": {
     "title": "Find doctor",
+    "subTitle": {
+      "list": "Doctor list"
+    },
     "filter": {
       "search": "Search by name",
       "type": "Type",
       "date": "Date",
       "expertises": "Expertises",
-      "resetBtn": "Reset"
+      "button": {
+        "reset": "Reset"
+      }
     },
-    "listTitle": "Doctor list",
-    "types": {
-      "online": "Online",
-      "offline": "Offline",
-      "all": "All"
+    "select": {
+      "types": {
+        "online": "Online",
+        "offline": "Offline",
+        "all": "All"
+      }
+    },
+    "DoctorCard": {
+      "button": {
+        "book": "Book"
+      }
     }
   },
-  "DoctorCard": {
-    "bookBtn": "Book"
-  },
+
   "DoctorDetail": {
     "title": "Doctor detail",
-    "expertise": "Expertise",
-    "education": "Education",
-    "description": "Description",
-    "scheduleTable": {}
+    "DoctorScheduleTable": {
+      "title": "Doctor schedule",
+      "button": {
+        "currentWeek": "Current week"
+      }
+    }
   },
 
-  "ScheduleTable": {
-    "currentWeek": "Current week"
-  },
   "BookingModal": {
     "date": "Date",
     "time": "Time",

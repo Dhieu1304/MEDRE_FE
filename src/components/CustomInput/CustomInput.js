@@ -10,6 +10,7 @@ import {
   InputLabel,
   TextField,
   Typography,
+  alpha,
   useTheme
 } from "@mui/material";
 import { Children, cloneElement, isValidElement, useState } from "react";
@@ -51,25 +52,25 @@ function CustomInput({
       "&:first-of-type": {
         fontSize: labelShinkFontSize,
         fontWeight: "600",
-        color: "rgba(0,0,0,0.8)"
+        color: alpha(theme.components.MuiInputLabel.styleOverrides.root.color, 0.8)
       }
     },
     "&.MuiInputLabel-outlined:not(.MuiInputLabel-shrink) span": {
       "&:first-of-type": {
         fontSize: 16,
         fontWeight: "400",
-        color: "rgba(0,0,0,0.5)"
+        color: alpha(theme.components.MuiInputLabel.styleOverrides.root.color, 0.5)
       }
-    },
-    "& .MuiInputLabel-asterisk": {
-      color: "red",
-      fontSize: 25
-    },
-    "& .MuiOutlinedInput-notchedOutline legend": {
-      fontSize: 20,
-      fontWeight: "600",
-      color: "yellow"
     }
+    // "& .MuiInputLabel-asterisk": {
+    //   color: "red",
+    //   fontSize: 25
+    // },
+    // "& .MuiOutlinedInput-notchedOutline legend": {
+    //   fontSize: 20,
+    //   fontWeight: "600",
+    //   color: "yellow"
+    // }
   };
 
   const renderLabel = () => (

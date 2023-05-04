@@ -3,12 +3,12 @@ import { Avatar, Box, Grid, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
-import doctorServices from "../../services/doctorServices";
+import doctorServices from "../../../services/doctorServices";
 
-import { useFetchingStore } from "../../store/FetchingApiStore";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
 
-import ExpertiseButton from "./components/ExpertiseButton";
-import ScheduleTable from "./components/ScheduleTable";
+import ExpertiseButton from "../components/ExpertiseButton";
+import DoctorScheduleTable from "./DoctorScheduleTable";
 
 function DoctorDetail() {
   const [doctor, setDoctor] = useState();
@@ -19,6 +19,7 @@ function DoctorDetail() {
   const { fetchApi } = useFetchingStore();
 
   const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorDetail" });
+  const { t: tDoctor } = useTranslation("doctorEntity", { keyPrefix: "properties" });
 
   useEffect(() => {
     const loadData = async () => {
@@ -40,7 +41,14 @@ function DoctorDetail() {
 
   return (
     <>
-      <Typography component="h1" variant="h5" mb={2} fontWeight={600}>
+      <Typography
+        component="h1"
+        variant="h4"
+        fontWeight={600}
+        sx={{
+          mb: 4
+        }}
+      >
         {t("title")}
       </Typography>
 
@@ -106,7 +114,7 @@ function DoctorDetail() {
                   </Typography>
                 </Box>
                 <Box>
-                  {doctor?.idExpertiseExpertises?.length > 0 && (
+                  {doctor?.expertises?.length > 0 && (
                     <Box
                       sx={{
                         display: "flex",
@@ -120,10 +128,16 @@ function DoctorDetail() {
                           fontWeight: "600"
                         }}
                       >
-                        {t("expertise")}
+                        {tDoctor("expertises")}
                       </Typography>
-                      <Box>
-                        {doctor?.idExpertiseExpertises?.map((expertise) => (
+                      <Box
+                        sx={
+                          {
+                            // ml: 2
+                          }
+                        }
+                      >
+                        {doctor?.expertises?.map((expertise) => (
                           <ExpertiseButton key={expertise?.id} label={expertise?.name} />
                         ))}
                       </Box>
@@ -143,9 +157,17 @@ function DoctorDetail() {
                       fontWeight: "600"
                     }}
                   >
-                    {t("description")}
+                    {tDoctor("description")}
                   </Typography>
-                  <Typography>{doctor?.description}</Typography>
+                  <Typography
+                    sx={
+                      {
+                        // ml: 2
+                      }
+                    }
+                  >
+                    {doctor?.description}
+                  </Typography>
                 </Box>
                 <Box
                   sx={{
@@ -160,16 +182,24 @@ function DoctorDetail() {
                       fontWeight: "600"
                     }}
                   >
-                    {t("education")}
+                    {tDoctor("education")}
                   </Typography>
-                  <Typography> {doctor?.education}</Typography>
+                  <Typography
+                    sx={
+                      {
+                        // ml: 2
+                      }
+                    }
+                  >
+                    {doctor?.education}
+                  </Typography>
                 </Box>
               </Box>
             </Box>
           </Box>
         </Grid>
         <Grid item lg={12}>
-          <ScheduleTable />
+          <DoctorScheduleTable />
         </Grid>
       </Grid>
     </>

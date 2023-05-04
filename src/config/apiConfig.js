@@ -4,7 +4,7 @@ const authApi = {
 };
 
 const userApi = {
-  userInfo: "/user/info"
+  userInfo: "/user/my-profile"
 };
 
 const doctorApi = {

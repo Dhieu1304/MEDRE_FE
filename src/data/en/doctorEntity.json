@@ -1,0 +1,24 @@
+{
+  "properties": {
+    "id": "ID",
+    "username": "Username",
+    "phoneNumber": "Phone Number",
+    "email": "Email",
+    "password": "Password",
+    "name": "Name",
+    "image": "Image",
+    "address": "Address",
+    "gender": "Gender",
+    "dob": "Date of Birth",
+    "role": "Role",
+    "healthInsurance": "Health Insurance",
+    "description": "Description",
+    "education": "Education",
+    "certificate": "Certificate",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "deletedAt": "Deleted at",
+    "status": "Status",
+    "expertises": "Expertises"
+  }
+}

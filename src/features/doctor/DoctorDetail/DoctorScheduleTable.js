@@ -21,8 +21,8 @@ import { useTranslation } from "react-i18next";
 import { useCustomModal } from "../../../components/CustomModal";
 import scheduleServices from "../../../services/scheduleServices";
 import { getNext7DaysFrom } from "../../../utils/datetimeUtil";
-import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "./BookingButton";
-import BookingModal from "./BookingModal";
+import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "../components/BookingButton";
+import BookingModal from "../components/BookingModal";
 
 const groupArrayByKey = (arr, keys, key) => {
   const defaultGroups = keys.reduce((group, keyi) => ({ ...group, [keyi]: [] }), {});
@@ -138,7 +138,7 @@ const createDatas = (times, schedules, currentDate) => {
   // });
 };
 
-function ScheduleTable() {
+function DoctorScheduleTable() {
   const [schedules, setSchedules] = useState([]);
   const [times, setTimes] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
@@ -147,7 +147,7 @@ function ScheduleTable() {
 
   const theme = useTheme();
 
-  const { t } = useTranslation("doctorFeature", { keyPrefix: "ScheduleTable" });
+  const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorDetail.DoctorScheduleTable" });
 
   useEffect(() => {
     const loadData = async () => {
@@ -187,14 +187,8 @@ function ScheduleTable() {
 
   return (
     <>
-      <Typography
-        variant="h5"
-        sx={{
-          fontWeight: "600",
-          mb: 4
-        }}
-      >
-        Lịch khám bệnh trong tuấn
+      <Typography variant="h5" sx={{ fontWeight: "600" }}>
+        {t("title")}
       </Typography>
       <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
         <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
@@ -205,7 +199,7 @@ function ScheduleTable() {
               fontWeight: "600"
             }}
           >
-            {formatDate.format(heads[0], "DD/MM")} - {formatDate.format(heads[6], "DD/MM")}
+            {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
           </Button>
         </Box>
         <IconButton
@@ -224,7 +218,7 @@ function ScheduleTable() {
           }}
           size="small"
         >
-          {t("currentWeek")}
+          {t("button.currentWeek")}
         </Button>
         <IconButton
           onClick={() => {
@@ -352,4 +346,4 @@ function ScheduleTable() {
   );
 }
 
-export default ScheduleTable;
+export default DoctorScheduleTable;
