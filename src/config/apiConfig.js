@@ -18,4 +18,8 @@ const scheduleApi = {
   timeList: () => "/time-schedule/time"
 };
 
-export { authApi, userApi, doctorApi, scheduleApi };
+const timeOffApi = {
+  timeOffList: () => "/doctor-time-off/time-off"
+};
+
+export { authApi, userApi, doctorApi, scheduleApi, timeOffApi };
