@@ -9,6 +9,7 @@ import { useFetchingStore } from "../../../store/FetchingApiStore";
 
 import ExpertiseButton from "../components/ExpertiseButton";
 import DoctorScheduleTable from "./DoctorScheduleTable";
+import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
 
 function DoctorDetail() {
   const [doctor, setDoctor] = useState();
@@ -16,7 +17,7 @@ function DoctorDetail() {
   const params = useParams();
   const doctorId = useMemo(() => params?.doctorId, [params?.doctorId]);
 
-  const { fetchApi } = useFetchingStore();
+  const { isLoading, fetchApi } = useFetchingStore();
 
   const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorDetail" });
   const { t: tDoctor } = useTranslation("doctorEntity", { keyPrefix: "properties" });
@@ -41,6 +42,7 @@ function DoctorDetail() {
 
   return (
     <>
+      <CustomOverlay open={isLoading} />
       <Typography
         component="h1"
         variant="h4"
