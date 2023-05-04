@@ -1,4 +1,4 @@
-import { Avatar, Box, Grid, Typography } from "@mui/material";
+import { Avatar, Box, Typography } from "@mui/material";
 
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -45,6 +45,10 @@ function DoctorDetail() {
         component="h1"
         variant="h4"
         fontWeight={600}
+        fontSize={{
+          sm: 30,
+          xs: 25
+        }}
         sx={{
           mb: 4
         }}
@@ -52,156 +56,136 @@ function DoctorDetail() {
         {t("title")}
       </Typography>
 
-      <Grid container>
-        <Grid
-          item
-          lg={12}
-          // sx={{
-          //   display: "flex",
-          //   justifyContent: "center"
-          // }}
+      <Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "flex-start",
+              xs: "center"
+            },
+            mb: 4
+          }}
         >
           <Box
             sx={{
-              height: "100%",
-              maxWidth: 800,
               display: "flex",
-              flexDirection: "column",
-
-              p: 0,
-              cursor: "pointer",
-              border: "none",
-              mb: 8
+              justifyContent: "center",
+              alignItems: "center"
             }}
           >
+            <Avatar alt={doctor?.name} src={doctor?.image} sx={{ width: 200, height: 200 }} />
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "flex-start",
+              alignItems: "flex-start",
+              ml: {
+                sm: 4,
+                xs: 0
+              },
+              flexGrow: 1
+            }}
+          >
+            <Typography variant="h6">{doctor?.name}</Typography>
+            <Typography variant="body2">({doctor?.certificate})</Typography>
+
+            <Box>
+              {doctor?.expertises?.length > 0 && (
+                <Box
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    justifyContent: "flex-start"
+                  }}
+                >
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      fontWeight: "600"
+                    }}
+                  >
+                    {tDoctor("expertises")}
+                  </Typography>
+                  <Box
+                    sx={
+                      {
+                        // ml: 2
+                      }
+                    }
+                  >
+                    {doctor?.expertises?.map((expertise) => (
+                      <ExpertiseButton key={expertise?.id} label={expertise?.name} />
+                    ))}
+                  </Box>
+                </Box>
+              )}
+            </Box>
             <Box
               sx={{
                 display: "flex",
-                justifyContent: "flex-start",
-                alignItems: "flex-start"
+                flexDirection: "column",
+                justifyContent: "flex-start"
               }}
             >
-              <Box
+              <Typography
+                variant="body1"
                 sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "center"
+                  fontWeight: "600"
                 }}
               >
-                <Avatar alt={doctor?.name} src={doctor?.image} sx={{ width: 200, height: 200 }} />
-              </Box>
-
-              <Box
+                {tDoctor("description")}
+              </Typography>
+              <Typography
+                sx={
+                  {
+                    // ml: 2
+                  }
+                }
+              >
+                {doctor?.description}
+              </Typography>
+            </Box>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "flex-start"
+              }}
+            >
+              <Typography
+                variant="body1"
                 sx={{
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "flex-start",
-                  alignItems: "flex-start",
-                  ml: 4
+                  fontWeight: "600"
                 }}
               >
-                <Box
-                  sx={{
-                    display: "flex",
-                    justifyContent: "flex-start",
-                    alignItems: "center",
-                    fontWeight: "500"
-                  }}
-                >
-                  <Typography variant="h6">{doctor?.certificate}</Typography>
-                  <Typography variant="h6" sx={{ ml: 1 }}>
-                    {doctor?.name}
-                  </Typography>
-                </Box>
-                <Box>
-                  {doctor?.expertises?.length > 0 && (
-                    <Box
-                      sx={{
-                        display: "flex",
-                        flexDirection: "column",
-                        justifyContent: "flex-start"
-                      }}
-                    >
-                      <Typography
-                        variant="body1"
-                        sx={{
-                          fontWeight: "600"
-                        }}
-                      >
-                        {tDoctor("expertises")}
-                      </Typography>
-                      <Box
-                        sx={
-                          {
-                            // ml: 2
-                          }
-                        }
-                      >
-                        {doctor?.expertises?.map((expertise) => (
-                          <ExpertiseButton key={expertise?.id} label={expertise?.name} />
-                        ))}
-                      </Box>
-                    </Box>
-                  )}
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start"
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: "600"
-                    }}
-                  >
-                    {tDoctor("description")}
-                  </Typography>
-                  <Typography
-                    sx={
-                      {
-                        // ml: 2
-                      }
-                    }
-                  >
-                    {doctor?.description}
-                  </Typography>
-                </Box>
-                <Box
-                  sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    justifyContent: "flex-start"
-                  }}
-                >
-                  <Typography
-                    variant="body1"
-                    sx={{
-                      fontWeight: "600"
-                    }}
-                  >
-                    {tDoctor("education")}
-                  </Typography>
-                  <Typography
-                    sx={
-                      {
-                        // ml: 2
-                      }
-                    }
-                  >
-                    {doctor?.education}
-                  </Typography>
-                </Box>
-              </Box>
+                {tDoctor("education")}
+              </Typography>
+              <Typography
+                sx={
+                  {
+                    // ml: 2
+                  }
+                }
+              >
+                {doctor?.education}
+              </Typography>
             </Box>
           </Box>
-        </Grid>
-        <Grid item lg={12}>
+        </Box>
+
+        <Box>
           <DoctorScheduleTable doctorId={doctorId} />
-        </Grid>
-      </Grid>
+        </Box>
+      </Box>
     </>
   );
 }

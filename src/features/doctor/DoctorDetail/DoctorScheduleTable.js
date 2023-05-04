@@ -370,7 +370,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
         component={Paper}
         sx={{
           overflow: "auto",
-          height: 750
+          height: 600
           // minWidth: 1000
         }}
       >
