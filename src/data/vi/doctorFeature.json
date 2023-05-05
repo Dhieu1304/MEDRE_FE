@@ -35,7 +35,8 @@
         "currentWeek": "Tuần hiện tại",
         "book": "Đặt lịch",
         "booked": "Đã đặt",
-        "reserved": "Hết chỗ"
+        "reserved": "Hết chỗ",
+        "waiting": "Đang đợi"
       }
     }
   },

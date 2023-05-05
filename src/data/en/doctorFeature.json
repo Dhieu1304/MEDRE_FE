@@ -35,7 +35,8 @@
         "currentWeek": "Current week",
         "book": "Book",
         "booked": "Booked",
-        "reserved": "Reserved"
+        "reserved": "Reserved",
+        "waiting": "Waiting"
       }
     }
   }

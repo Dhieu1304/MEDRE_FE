@@ -193,7 +193,6 @@ function DoctorList() {
               xs: 25
             }}
             sx={{
-              mb: 2,
               mr: 2
             }}
           >

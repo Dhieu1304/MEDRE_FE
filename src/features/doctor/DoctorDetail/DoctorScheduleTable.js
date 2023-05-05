@@ -178,9 +178,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   };
 
   const renderCell = (schedule, colDate, time) => {
-    // console.log("schedule: ", schedule);
     const booking = findBookingsByDate(schedule?.bookings, colDate, time);
-
     const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, colDate, time);
 
     return (
@@ -245,9 +243,15 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   const renderCols = (time) => {
     // Group các schedules lại theo dayOfWeek => để dựa trên dayOfWeek truy xuất schedule của ngày đó
 
-    const cols = Array.from({ length: 7 }, (_, index) => {
+    // const cols = Array.from({ length: 7 }, (_, index) => {
+
+    const cols = heads.map((head) => {
       // schedulesBySession là 1 obj có 2 key morning và afternoon
-      const schedulesBySession = schedulesDayOfWeekAndSession[index];
+      const dayOfWeek = head.getDay();
+      // console.log("dayOfWeek: ", dayOfWeek);
+      // const schedulesBySession = schedulesDayOfWeekAndSession[index];
+      const schedulesBySession = schedulesDayOfWeekAndSession[dayOfWeek];
+      // console.log("schedulesBySession: ", schedulesBySession);
       let schedule;
       const { session } = time;
 
@@ -264,7 +268,11 @@ function DoctorScheduleTable({ timesList, doctorId }) {
           break;
       }
 
-      const colDate = heads[index];
+      // console.log("schedule: ", schedule);
+
+      // const colDate = heads[index];
+      const colDate = new Date(head);
+
       return renderCell(schedule, colDate, time);
     });
 

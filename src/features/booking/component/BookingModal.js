@@ -1,6 +1,7 @@
 import {
   Box,
   Checkbox,
+  CircularProgress,
   FormControl,
   FormControlLabel,
   FormLabel,
@@ -26,16 +27,27 @@ import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
 import { patientGenders, patientInputValidate } from "../../../entities/Patient/constant";
 import { scheduleTypes } from "../../../entities/Schedule";
 import { bookingInputValidate } from "../../../entities/Booking";
+import WithPatientsLoaderWrapper from "../../patient/hocs/WithPatientsLoaderWrapper";
+import useDebounce from "../../../hooks/useDebounce";
+import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
+import patientServices from "../../../services/patientServices";
 
-function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
+const findItemByName = (data, name) => {
+  // console.log("data: ", data);
+  const formattedName = name.trim().toLowerCase();
+  return data.find((item) => item.name.toLowerCase() === formattedName);
+};
+
+function BookingModal({ show, setShow, data, setData, handleAfterBooking, patients }) {
   const [isSelf, setIsSelf] = useState(true);
+  const [patient, setPatient] = useState();
+
   const bookingForm = useForm({
     defaultValues: {
       scheduleId: data?.schedule?.id,
       timeId: data?.time?.id,
       date: data?.date,
-      reason: "",
-      patientId: ""
+      reason: ""
     }
   });
 
@@ -53,11 +65,37 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
   const { fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
 
-  useEffect(() => {
-    bookingForm.trigger();
-  }, []);
+  // console.log("data: ", data);
 
-  const handleBooking = async ({ scheduleId, timeId, date, reason, patientId }) => {
+  const { debouncedValue: nameDebounce, isWaiting: isNameWaiting } = useDebounce(addPatientForm.watch().name, 1000);
+
+  // console.log({ nameDebounce, isNameWaiting });
+
+  useEffect(() => {
+    const patientData = findItemByName(patients, nameDebounce);
+    if (patientData) {
+      const { phoneNumber, name, gender, address, dob, healthInsurance } = patientData;
+      const patientFormData = cleanUndefinedAndNullValueObjectToStrObj({
+        phoneNumber,
+        name,
+        gender,
+        address,
+        dob,
+        healthInsurance
+      });
+      addPatientForm.reset(patientFormData);
+
+      // Các giá trị undefined null thì ghi đè thành ""
+      setPatient(() => ({
+        ...patientData,
+        ...patientFormData
+      }));
+    }
+  }, [nameDebounce]);
+
+  // console.log("patient: ", patient);
+
+  const book = async ({ scheduleId, timeId, date, reason }, patientId = "") => {
     await fetchApi(async () => {
       const res = await bookingServices.book({ scheduleId, timeId, date, reason, patientId });
       if (res?.success) {
@@ -71,9 +109,46 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
     });
   };
 
-  // const handleAddPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
-  const handleAddPatient = async () => {
+  const addPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
+    let newPatient;
+    await fetchApi(async () => {
+      const res = await patientServices.createPatient({ phoneNumber, name, gender, address, dob, healthInsurance });
+      if (res?.success) {
+        newPatient = res?.patient;
+        return { success: true };
+      }
+      toast(res.message);
+      return { error: res.message };
+    });
+    return newPatient;
+  };
+
+  const handleBooking = async ({ scheduleId, timeId, date, reason }) => {
+    await book({ scheduleId, timeId, date, reason });
+  };
+
+  const handleAddPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
     // console.log("handleAddPatient: ", { phoneNumber, name, gender, address, dob, healthInsurance });
+    const patientFormData = { phoneNumber, name, gender, address, dob, healthInsurance };
+
+    const isPatientDataChanged = Object.keys(patientFormData).some((key) => {
+      return patientFormData[key] !== patient?.[key];
+    });
+
+    // console.log("isPatientDataChanged: ", isPatientDataChanged);
+
+    // Nếu thay đổi thì tạo patient mới
+    if (isPatientDataChanged) {
+      const newPatient = await addPatient({ phoneNumber, name, gender, address, dob, healthInsurance });
+      if (newPatient?.id) {
+        // console.log("newPatient?.id: ", newPatient?.id);
+        await book({ ...bookingForm.watch() }, newPatient?.id);
+      }
+    }
+    // Nếu ko thay đổi thì tạo lấy patientId đó
+    else {
+      await book({ ...bookingForm.watch() }, patient?.id);
+    }
   };
 
   const handleBeforeBookingSubmit = () => {
@@ -153,7 +228,21 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
           px: 2
         }}
       >
-        <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "center",
+              xs: "flex-start"
+            },
+            mb: 2
+          }}
+        >
           <Typography fontWeight={600} mr={2}>
             {tBooking("date")}:
           </Typography>
@@ -162,7 +251,21 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
             {`(${scheduleTypeListObj?.[data?.schedule?.type]?.label})`}
           </Typography>
         </Box>
-        <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "center",
+              xs: "flex-start"
+            },
+            mb: 2
+          }}
+        >
           <Typography fontWeight={600} mr={2}>
             {tBooking("time")}:
           </Typography>
@@ -190,9 +293,27 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
               mb: 2
             }}
           >
-            <Typography fontWeight={600} mb={2}>
-              {t("subTitle.bookingForOther")}:
-            </Typography>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "flex-start",
+                alignItems: "center",
+                mb: 2
+              }}
+            >
+              <Typography fontWeight={600}>{t("subTitle.bookingForOther")}:</Typography>
+              {isNameWaiting && (
+                <CircularProgress
+                  sx={{
+                    ml: 2
+                  }}
+                  color="primary"
+                  size={24}
+                  thickness={3}
+                />
+              )}
+            </Box>
+
             <Grid container spacing={2}>
               <Grid item lg={6} xs={12}>
                 <CustomInput
@@ -231,7 +352,7 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
               <Grid item lg={6} xs={12}>
                 <CustomInput
                   control={addPatientForm.control}
-                  rules={{}}
+                  rules={{ required: tInputValidate("required") }}
                   label={tPatient("gender")}
                   trigger={addPatientForm.trigger}
                   name="gender"
@@ -286,6 +407,7 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
                 <CustomInput
                   control={addPatientForm.control}
                   rules={{
+                    required: tInputValidate("required"),
                     maxLength: {
                       value: patientInputValidate.ADDRESS_MAX_LENGTH,
                       message: tInputValidate("maxLength", {
@@ -332,7 +454,8 @@ BookingModal.propTypes = {
   setShow: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
   setData: PropTypes.func.isRequired,
-  handleAfterBooking: PropTypes.func.isRequired
+  handleAfterBooking: PropTypes.func.isRequired,
+  patients: PropTypes.array.isRequired
 };
 
-export default BookingModal;
+export default WithPatientsLoaderWrapper(BookingModal);
