@@ -32,7 +32,11 @@
     "DoctorScheduleTable": {
       "title": "Lịch khám bệnh bác sĩ",
       "button": {
-        "currentWeek": "Tuần hiện tại"
+        "currentWeek": "Tuần hiện tại",
+        "book": "Đặt lịch",
+        "booked": "Đã đặt",
+        "reserved": "Hết chỗ",
+        "waiting": "Đang đợi"
       }
     }
   },

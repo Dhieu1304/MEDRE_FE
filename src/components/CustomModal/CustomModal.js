@@ -4,7 +4,7 @@ import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 
 function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, onSubmit }) {
-  const { t } = useTranslation("components", { keyPrefix: "customModal" });
+  const { t } = useTranslation("components", { keyPrefix: "CustomModal" });
 
   const handleClose = () => {
     if (setData) setData(null);
@@ -27,7 +27,8 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
           border: "1px solid rgba(0,0,0,0.2)",
           borderRadius: 1,
           boxShadow: 24,
-          p: 2
+          p: 2,
+          maxWidth: "80vw"
         }}
       >
         <Box display="flex" flexDirection="row" justifyContent="space-between" alignItems="center">
@@ -51,7 +52,7 @@ function CustomModal({ show, setShow, setData, children, title, submitBtnLabel, 
         <Grid container spacing={2} justifyContent="flex-end">
           <Grid item columns={2}>
             <Button variant="outlined" onClick={handleClose}>
-              {t("cancel")}
+              {t("button.cancel")}
             </Button>
           </Grid>
           <Grid item columns={2}>

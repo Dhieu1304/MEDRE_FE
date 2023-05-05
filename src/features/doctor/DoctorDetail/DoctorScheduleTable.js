@@ -12,6 +12,7 @@ import {
   Button,
   useTheme
 } from "@mui/material";
+import PropTypes from "prop-types";
 
 import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
@@ -20,178 +21,324 @@ import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "@mui/i
 import { useTranslation } from "react-i18next";
 import { useCustomModal } from "../../../components/CustomModal";
 import scheduleServices from "../../../services/scheduleServices";
-import { getNext7DaysFrom } from "../../../utils/datetimeUtil";
-import BookingButton, { EMPTY, BOOKED, EMPTY_PAST, RESERVED, BUSY } from "../components/BookingButton";
-import BookingModal from "../components/BookingModal";
+import { formatDateLocale, getNext7DaysFrom, isEqualDateWithoutTime } from "../../../utils/datetimeUtil";
 
-const groupArrayByKey = (arr, keys, key) => {
-  const defaultGroups = keys.reduce((group, keyi) => ({ ...group, [keyi]: [] }), {});
+import WithTimesLoaderWrapper from "../../time/hocs/WithTimesLoaderWrapper";
 
-  return arr.reduce(
-    (groups, item) => {
-      const value = item[key];
-      if (groups[value]) {
-        groups[value].push(item);
-      }
-      return groups;
-    },
-    { ...defaultGroups }
-  );
-};
+import { findBookingsByDate, groupSchedulesDayOfWeekAndSession, isTimeOffAtThisScheduleTime } from "./utils";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
+import timeOffServices from "../../../services/timeOffServices";
+import { scheduleSessions } from "../../../entities/Schedule";
+import { useAuthStore } from "../../../store/AuthStore/hooks";
+import { bookingStatuses } from "../../../entities/Booking";
+import BookingModal from "../../booking/component/BookingModal";
 
-const createData = (name, schedules, currentDate) => {
-  const row = schedules.reduce(
-    (newRow, schedule) => {
-      const count = Math.ceil(formatDate.subtract(new Date(schedule?.date), currentDate).toDays());
-      const key = `d${count}`;
-      const index = Math.floor(Math.random() * 5) + 1;
-      switch (index) {
-        case 2:
-          return {
-            ...newRow,
-            [key]: { variant: BOOKED, data: schedule }
-          };
-        case 3:
-          return {
-            ...newRow,
-            [key]: { variant: EMPTY_PAST, data: schedule }
-          };
-        case 4:
-          return {
-            ...newRow,
-            [key]: { variant: RESERVED, data: schedule }
-          };
-        case 5:
-          return {
-            ...newRow,
-            [key]: { variant: BUSY, data: schedule }
-          };
-        case 1:
-        default:
-          return {
-            ...newRow,
-            [key]: { variant: EMPTY, data: schedule }
-          };
-      }
-    },
-    { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null }
-  );
-
-  return {
-    name,
-    ...row
-  };
-};
-
-const createDatas = (times, schedules, currentDate) => {
-  // const createDatas = (times) => {
-  const groupSchedule = groupArrayByKey(
-    schedules,
-    times.map((time) => time.name),
-    "time"
-  );
-
-  return Object.keys(groupSchedule).map((time) => {
-    return createData(time, groupSchedule[time], currentDate);
-  });
-
-  // return times.map((time) => {
-  //   const name = time?.name;
-  //   const row = { d1: null, d2: null, d3: null, d4: null, d5: null, d6: null, d7: null };
-  //   const newRow = Object.keys(row).reduce((result, key) => {
-  //     const index = Math.floor(Math.random() * 5) + 1;
-  //     switch (index) {
-  //       case 2:
-  //         return {
-  //           ...result,
-  //           [key]: BOOKED
-  //         };
-  //       case 3:
-  //         return {
-  //           ...result,
-  //           [key]: EMPTY_PAST
-  //         };
-  //       case 4:
-  //         return {
-  //           ...result,
-  //           [key]: RESERVED
-  //         };
-  //       case 5:
-  //         return {
-  //           ...result,
-  //           [key]: BUSY
-  //         };
-  //       case 1:
-  //       default:
-  //         return {
-  //           ...result,
-  //           [key]: EMPTY
-  //         };
-  //     }
-  //   }, {});
-
-  //   return {
-  //     name,
-  //     ...newRow
-  //   };
-  //   // return { name, d1, d2, d3, d4, d5, d6, d7 };
-  // });
-};
-
-function DoctorScheduleTable() {
+function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
-  const [times, setTimes] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
+  const [timeOffs, setTimeOffs] = useState([]);
 
   const bookingModal = useCustomModal();
 
   const theme = useTheme();
 
-  const { t } = useTranslation("doctorFeature", { keyPrefix: "DoctorDetail.DoctorScheduleTable" });
-
-  useEffect(() => {
-    const loadData = async () => {
-      const res2 = await scheduleServices.getScheduleList();
-      const schedulesData = res2.schedules;
-      setSchedules(schedulesData);
-
-      const res3 = await scheduleServices.getTimeList();
-      const timesData = res3.times;
-      setTimes(timesData);
-    };
-    loadData();
-  }, []);
-
-  const renderCell = (cell) => {
-    let variant = cell?.variant;
-    variant = EMPTY;
-    const data = cell?.data;
-    let handleClick;
-    switch (variant) {
-      case EMPTY:
-        handleClick = () => {
-          bookingModal.setShow(true);
-          bookingModal.setData(data);
-          setCurrentDate((prev) => prev);
-        };
-        break;
-      default:
-        break;
-    }
-
-    return <BookingButton variant={variant} onClick={handleClick} />;
-  };
+  const { t } = useTranslation("doctorFeature", {
+    keyPrefix: "DoctorDetail.DoctorScheduleTable"
+  });
+  const { t: tScheduleConstants } = useTranslation("scheduleEntity", {
+    keyPrefix: "constants.types"
+  });
+  const { fetchApi } = useFetchingStore();
+  const { locale } = useAppConfigStore();
+  const authStore = useAuthStore();
 
   const heads = useMemo(() => getNext7DaysFrom(currentDate), [currentDate]);
-  const rows = useMemo(() => createDatas(times, schedules, currentDate), [times, schedules, currentDate]);
+
+  const scheduleTypes = useMemo(() => {
+    return {
+      ONLINE: {
+        label: tScheduleConstants("online"),
+        color: "green"
+      },
+      OFFLINE: {
+        label: tScheduleConstants("offline"),
+        color: "red"
+      }
+    };
+  }, [locale]);
+
+  const loadData = async () => {
+    await fetchApi(async () => {
+      const res = await scheduleServices.getScheduleListByDoctorId(doctorId, heads[0], heads[6]);
+
+      if (res.success) {
+        const schedulesData = res.schedules;
+        // console.log("res: ", res);
+        setSchedules(schedulesData);
+        return { success: true, error: "" };
+      }
+      setSchedules([]);
+      return { success: false, error: res.message };
+    });
+  };
+
+  const loadTimeOffs = async () => {
+    await fetchApi(async () => {
+      const res = await timeOffServices.getTimeOffByDoctorId(doctorId, {
+        from: heads[0],
+        to: heads[6]
+      });
+
+      if (res.success) {
+        const timeOffsData = res.timeOffs;
+        setTimeOffs(timeOffsData);
+        return { success: true, error: "" };
+      }
+      setTimeOffs([]);
+      return { success: false, error: res.message };
+    });
+  };
+
+  useEffect(() => {
+    loadData();
+  }, [heads]);
+
+  useEffect(() => {
+    loadTimeOffs();
+  }, [heads]);
+
+  useMemo(() => {
+    const code = locale?.slice(0, 2) || "vi";
+    formatDate.locale(formatDateLocale[code]);
+  }, [locale]);
+
+  const schedulesDayOfWeekAndSession = useMemo(() => {
+    return groupSchedulesDayOfWeekAndSession(schedules);
+  }, [schedules]);
+
+  const renderBookingButton = (schedule, booking, colDate, time) => {
+    if (!booking) {
+      return (
+        <Button
+          variant="contained"
+          sx={{
+            backgroundColor: "#009dff",
+            color: "white"
+          }}
+          onClick={() => {
+            bookingModal.setShow(true);
+            bookingModal.setData({
+              schedule,
+              date: colDate,
+              time
+            });
+          }}
+        >
+          {t("button.book")}
+        </Button>
+      );
+    }
+
+    if (booking?.idUser === authStore?.user?.id) {
+      if (booking?.bookingStatus === bookingStatuses.BOOKED)
+        return (
+          <Button
+            variant="text"
+            sx={{
+              color: theme.palette.success.light
+            }}
+          >
+            {t("button.booked")}
+          </Button>
+        );
+      if (booking?.bookingStatus === bookingStatuses.WAITING)
+        return (
+          <Button
+            variant="text"
+            sx={{
+              color: theme.palette.warning.light
+            }}
+          >
+            {t("button.waiting")}
+          </Button>
+        );
+      return null;
+    }
+    return (
+      <Button
+        variant="text"
+        sx={{
+          color: theme.palette.success.light
+        }}
+      >
+        {t("button.reserved")}
+      </Button>
+    );
+  };
+
+  const renderCell = (schedule, colDate, time) => {
+    const booking = findBookingsByDate(schedule?.bookings, colDate, time);
+    const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, colDate, time);
+
+    return (
+      <TableCell
+        key={colDate}
+        sx={{
+          border: "1px solid rgba(0,0,0,0.2)",
+          p: 0,
+          position: "relative",
+          minWidth: 120,
+          borderCollapse: "collapse"
+        }}
+        align="center"
+      >
+        <Box
+          sx={{
+            width: "100%",
+            height: "100%",
+            display: "flex",
+            flexDirection: "column",
+            minHeight: 75,
+            position: "relative"
+          }}
+        >
+          {schedule && !isTimeOff && (
+            <>
+              {/* Hiển thị loại khám Online - Offline */}
+              <Box
+                sx={{
+                  width: "100%",
+                  height: 4,
+                  backgroundColor: schedule?.type === "Online" ? scheduleTypes.ONLINE.color : scheduleTypes.OFFLINE.color,
+                  color: theme.palette.info.contrastText,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center"
+                }}
+              />
+
+              {/* Hiển thị trạng thái booking trong schedule */}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  flexGrow: 1,
+                  // bgcolor: isCurrentTime ? theme.palette.info.light : booking && theme.palette.success.light,
+                  // bgcolor: isCurrentTime ? "red" : "inherit",
+                  position: "relative",
+                  cursor: booking && "pointer"
+                }}
+              >
+                {renderBookingButton(schedule, booking, colDate, time)}
+              </Box>
+            </>
+          )}
+        </Box>
+      </TableCell>
+    );
+  };
+
+  const renderCols = (time) => {
+    // Group các schedules lại theo dayOfWeek => để dựa trên dayOfWeek truy xuất schedule của ngày đó
+
+    // const cols = Array.from({ length: 7 }, (_, index) => {
+
+    const cols = heads.map((head) => {
+      // schedulesBySession là 1 obj có 2 key morning và afternoon
+      const dayOfWeek = head.getDay();
+      // console.log("dayOfWeek: ", dayOfWeek);
+      // const schedulesBySession = schedulesDayOfWeekAndSession[index];
+      const schedulesBySession = schedulesDayOfWeekAndSession[dayOfWeek];
+      // console.log("schedulesBySession: ", schedulesBySession);
+      let schedule;
+      const { session } = time;
+
+      switch (session) {
+        case scheduleSessions.MORNING:
+          schedule = schedulesBySession.morning || schedulesBySession.wholeDay;
+          break;
+
+        case scheduleSessions.AFFTERNOON:
+          schedule = schedulesBySession.afternoon || schedulesBySession.wholeDay;
+          break;
+
+        default:
+          break;
+      }
+
+      // console.log("schedule: ", schedule);
+
+      // const colDate = heads[index];
+      const colDate = new Date(head);
+
+      return renderCell(schedule, colDate, time);
+    });
+
+    return cols;
+  };
+
+  const handleAfterBooking = async () => {
+    await loadData();
+  };
 
   return (
     <>
       <Typography variant="h5" sx={{ fontWeight: "600" }}>
         {t("title")}
       </Typography>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
-        <Box sx={{ display: "flex", justifyContent: "flex-end", alignItems: "center" }}>
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: {
+            sm: "row",
+            xs: "column-reverse"
+          },
+          justifyContent: {
+            sm: "flex-end",
+            xs: "flex-start"
+          },
+          alignItems: "center",
+          mb: 4
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            mb: { sm: 0, xs: 2 }
+          }}
+        >
+          {Object.keys(scheduleTypes).map((key) => {
+            return (
+              <Box
+                key={key}
+                sx={{
+                  mr: 2
+                }}
+              >
+                <Typography>{scheduleTypes[key].label} </Typography>
+                <Box
+                  sx={{
+                    width: "100%",
+                    height: 2,
+                    backgroundColor: scheduleTypes[key].color
+                  }}
+                />
+              </Box>
+            );
+          })}
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            mb: { sm: 0, xs: 2 }
+          }}
+        >
           <Button
             variant="outlined"
             type="button"
@@ -202,134 +349,138 @@ function DoctorScheduleTable() {
             {formatDate.format(heads[0], "DD/MM/YYYY")} - {formatDate.format(heads[6], "DD/MM/YYYY")}
           </Button>
         </Box>
-        <IconButton
-          onClick={() => {
-            const newCurrentDate = new Date(currentDate);
-            newCurrentDate.setDate(newCurrentDate.getDate() - 6);
-            setCurrentDate(() => newCurrentDate);
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end",
+            alignItems: "center",
+            mb: { sm: 0, xs: 2 }
           }}
         >
-          <ArrowLeftIcon fontSize="large" />
-        </IconButton>
-        <Button
-          variant="contained"
-          onClick={() => {
-            setCurrentDate(() => new Date());
-          }}
-          size="small"
-        >
-          {t("button.currentWeek")}
-        </Button>
-        <IconButton
-          onClick={() => {
-            const newCurrentDate = new Date(currentDate);
-            newCurrentDate.setDate(newCurrentDate.getDate() + 6);
-            setCurrentDate(() => newCurrentDate);
-          }}
-        >
-          <ArrowRightIcon fontSize="large" />
-        </IconButton>
+          <IconButton
+            onClick={() => {
+              const newCurrentDate = new Date(currentDate);
+              newCurrentDate.setDate(newCurrentDate.getDate() - 7);
+              setCurrentDate(() => newCurrentDate);
+            }}
+            disabled={isEqualDateWithoutTime(currentDate, new Date())}
+          >
+            <ArrowLeftIcon fontSize="large" />
+          </IconButton>
+          <Button
+            variant="contained"
+            onClick={() => {
+              setCurrentDate(() => new Date());
+            }}
+            size="small"
+          >
+            {t("button.currentWeek")}
+          </Button>
+          <IconButton
+            onClick={() => {
+              const newCurrentDate = new Date(currentDate);
+              newCurrentDate.setDate(newCurrentDate.getDate() + 7);
+              setCurrentDate(() => newCurrentDate);
+            }}
+          >
+            <ArrowRightIcon fontSize="large" />
+          </IconButton>
+        </Box>
       </Box>
-      <TableContainer component={Paper}>
-        <Table size="small" aria-label="a dense table">
+
+      <TableContainer
+        component={Paper}
+        sx={{
+          overflow: "auto",
+          height: 600
+          // minWidth: 1000
+        }}
+      >
+        <Table
+          size="small"
+          aria-label="a dense table"
+          stickyHeader
+          sx={{
+            borderSpacing: 0
+          }}
+        >
           <TableHead>
-            <TableRow>
+            <TableRow
+              sx={{
+                position: "sticky",
+                top: 0,
+                zIndex: 2,
+
+                border: "1px solid rgba(0,0,0,0.2)"
+              }}
+            >
               <TableCell
                 sx={{
-                  border: "1px solid rgba(0,0,0,0.1)"
+                  border: "1px solid rgba(0,0,0,0.2)",
+                  position: "sticky",
+                  left: 0,
+                  zIndex: 2,
+                  minWidth: 120,
+                  backgroundColor: theme.palette.background.paper
                 }}
               />
               {heads.map((cell) => {
                 const isToday = formatDate.isSameDay(new Date(), cell);
-
                 return (
                   <TableCell
                     sx={{
-                      border: "1px solid rgba(0,0,0,0.1)",
+                      border: "1px solid rgba(0,0,0,0.2)",
                       fontWeight: "600",
-                      backgroundColor: isToday && theme.palette.success.light,
-                      color: isToday && theme.palette.success.contrastText
+                      backgroundColor: isToday && theme.palette.primary.main,
+                      color: isToday && "white",
+                      zIndex: 1
                     }}
                     key={cell}
                     align="center"
                   >
-                    {formatDate.format(cell, "DD/MM")}
+                    {formatDate.format(cell, "DD/MM (ddd)")}
                   </TableCell>
                 );
               })}
             </TableRow>
           </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <TableRow key={row.name} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                <TableCell
+          <TableBody
+            sx={{
+              borderCollapse: "collapse"
+            }}
+          >
+            {timesList?.map((row, index) => {
+              return (
+                <TableRow
+                  key={timesList[index]?.id}
+                  // sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                   sx={{
-                    border: "1px solid rgba(0,0,0,0.1)",
-                    fontWeight: "600"
+                    borderCollapse: "collapse"
                   }}
-                  component="th"
-                  scope="row"
                 >
-                  {row.name}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d1)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d2)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d3)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d4)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d5)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d6)}
-                </TableCell>
-                <TableCell
-                  sx={{
-                    border: "1px solid rgba(0,0,0,0.1)"
-                  }}
-                  align="center"
-                >
-                  {renderCell(row.d7)}
-                </TableCell>
-              </TableRow>
-            ))}
+                  <TableCell
+                    sx={{
+                      border: "1px solid rgba(0,0,0,0.2)",
+                      fontWeight: "600",
+                      position: "sticky",
+                      left: 0,
+                      zIndex: 1,
+                      minWidth: 120,
+                      borderCollapse: "collapse",
+                      backgroundColor: theme.palette.background.paper
+                    }}
+                    component="th"
+                    scope="row"
+                  >
+                    {/* {row?.timeStart} - {row?.timeEnd} */}
+                    {`${timesList[index]?.timeStart?.split(":")[0]}:${timesList[index]?.timeStart?.split(":")[1]}`} -{" "}
+                    {`${timesList[index]?.timeEnd?.split(":")[0]}:${timesList[index]?.timeEnd?.split(":")[1]}`}
+                  </TableCell>
+
+                  {renderCols(timesList[index])}
+                </TableRow>
+              );
+            })}
           </TableBody>
         </Table>
       </TableContainer>
@@ -340,10 +491,16 @@ function DoctorScheduleTable() {
           setShow={bookingModal.setShow}
           data={bookingModal.data}
           setData={bookingModal.setData}
+          handleAfterBooking={handleAfterBooking}
         />
       )}
     </>
   );
 }
 
-export default DoctorScheduleTable;
+DoctorScheduleTable.propTypes = {
+  timesList: PropTypes.array.isRequired,
+  doctorId: PropTypes.string.isRequired
+};
+
+export default WithTimesLoaderWrapper(DoctorScheduleTable);

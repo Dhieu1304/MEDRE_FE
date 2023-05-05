@@ -188,6 +188,10 @@ function DoctorList() {
             component="h1"
             variant="h4"
             fontWeight={600}
+            fontSize={{
+              sm: 30,
+              xs: 25
+            }}
             sx={{
               mr: 2
             }}

@@ -14,7 +14,21 @@ const doctorApi = {
 };
 
 const scheduleApi = {
-  schedule: () => "/schedule"
+  scheduleList: () => "/schedule/list-all",
+  timeList: () => "/time-schedule/time"
 };
 
-export { authApi, userApi, doctorApi, scheduleApi };
+const timeOffApi = {
+  timeOffList: () => "/doctor-time-off/time-off"
+};
+
+const bookingApi = {
+  book: () => "/booking/new-booking"
+};
+
+const patientApi = {
+  patientList: () => "/patient/list",
+  createPatient: () => "/patient/create"
+};
+
+export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi, patientApi };

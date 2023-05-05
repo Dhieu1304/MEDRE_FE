@@ -1,31 +1,31 @@
 import camelcaseKeys from "camelcase-keys";
-import { scheduleApi } from "../config/apiConfig";
+import { patientApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
+import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
-const getScheduleListByDoctorId = async (doctorId, from, to) => {
-  // console.log({ from, to });
+const createPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    phone_number: phoneNumber,
+    name,
+    gender,
+    address,
+    dob,
+    health_insurance: healthInsurance
+  });
 
-  const params = {
-    id_doctor: doctorId,
-    from,
-    to
-  };
+  // console.log("dataBody: ", dataBody);
 
-  // console.log("params: ", params);
   try {
-    const res = await axiosClient.get(scheduleApi.scheduleList(), {
-      params
-    });
-    // const res = camelcaseKeys(scheduleMockData.list(), { deep: true });
+    const res = await axiosClient.post(patientApi.createPatient(), dataBody);
 
     // console.log("res: ", res);
 
     if (res?.status) {
-      const schedules = camelcaseKeys(res?.data, { deep: true });
+      const patient = camelcaseKeys(res?.data, { deep: true });
 
       return {
         success: true,
-        schedules,
+        patient,
         message: res?.message
       };
     }
@@ -42,16 +42,16 @@ const getScheduleListByDoctorId = async (doctorId, from, to) => {
   }
 };
 
-const getTimeList = async () => {
+const getPatients = async () => {
   try {
-    const res = await axiosClient.get(scheduleApi.timeList());
+    const res = await axiosClient.get(patientApi.patientList());
 
     if (res?.status) {
-      const times = camelcaseKeys(res?.data, { deep: true });
+      const patients = camelcaseKeys(res?.data?.results, { deep: true });
 
       return {
         success: true,
-        times,
+        patients,
         message: res?.message
       };
     }
@@ -69,6 +69,6 @@ const getTimeList = async () => {
 };
 
 export default {
-  getScheduleListByDoctorId,
-  getTimeList
+  createPatient,
+  getPatients
 };

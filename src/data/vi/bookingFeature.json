@@ -18,5 +18,20 @@
     "code": "Mã tham gia",
     "reason": "Lý do khám",
     "note": "Ghi chú của bác sĩ"
+  },
+
+  "BookingModal": {
+    "title": "Đặt lịch",
+    "subTitle": {
+      "bookingForOther": "Đặt lịch cho người khác"
+    },
+    "form": {
+      "bookingFor": "Đặt lịch cho",
+      "self": "Bản thân",
+      "other": "Người khác"
+    },
+    "button": {
+      "book": "Đặt lịch"
+    }
   }
 }

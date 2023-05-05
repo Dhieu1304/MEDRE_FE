@@ -6,13 +6,16 @@ import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { AppConfigProvider } from "./store/AppConfigStore";
 import "./config/i18n";
+import { FetchingApiProvider } from "./store/FetchingApiStore";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AppConfigProvider>
-    <AuthProvider>
-      <App />
-    </AuthProvider>
+    <FetchingApiProvider>
+      <AuthProvider>
+        <App />
+      </AuthProvider>
+    </FetchingApiProvider>
   </AppConfigProvider>
 );
 
