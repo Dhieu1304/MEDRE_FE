@@ -22,6 +22,9 @@
 
   "BookingModal": {
     "title": "Đặt lịch",
+    "subTitle": {
+      "bookingForOther": "Đặt lịch cho người khác"
+    },
     "form": {
       "bookingFor": "Đặt lịch cho",
       "self": "Bản thân",

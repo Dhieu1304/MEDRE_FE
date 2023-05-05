@@ -14,6 +14,8 @@ import bookingFeature from "./bookingFeature.json";
 import bookingEntity from "./bookingEntity.json";
 import profilePage from "./profilePage.json";
 import components from "./components.json";
+import userEntity from "./userEntity.json";
+import patientEntity from "./patientEntity.json";
 
 const en = {
   authFeature,
@@ -31,7 +33,9 @@ const en = {
   bookingFeature,
   bookingEntity,
   common,
-  components
+  components,
+  userEntity,
+  patientEntity
 };
 
 export default en;

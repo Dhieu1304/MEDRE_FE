@@ -22,6 +22,9 @@
 
   "BookingModal": {
     "title": "Booking",
+    "subTitle": {
+      "bookingForOther": "Booking for other"
+    },
     "form": {
       "bookingFor": "Booking for",
       "self": "Self",

@@ -1,19 +1,19 @@
 import {
   Box,
+  Checkbox,
   FormControl,
   FormControlLabel,
   FormLabel,
-  // Grid,
-  // ListItemText,
-  // MenuItem,
+  Grid,
+  ListItemText,
+  MenuItem,
   Radio,
   RadioGroup,
-  // Select,
-  // TextField,
+  Select,
   Typography
 } from "@mui/material";
 import formatDate from "date-and-time";
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
 import { toast } from "react-toastify";
@@ -22,6 +22,9 @@ import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomModal from "../../../components/CustomModal";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import bookingServices from "../../../services/bookingServices";
+import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
+import { patientGenders } from "../../../entities/Patient/constant";
+import { scheduleTypes } from "../../../entities/Schedule";
 
 function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
   const [isSelf, setIsSelf] = useState(true);
@@ -35,7 +38,23 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
     }
   });
 
+  const addPatientForm = useForm({
+    defaultValues: {
+      phoneNumber: "",
+      name: "",
+      gender: "",
+      address: "",
+      dob: "",
+      healthInsurance: ""
+    }
+  });
+
   const { fetchApi } = useFetchingStore();
+  const { locale } = useAppConfigStore();
+
+  useEffect(() => {
+    bookingForm.trigger();
+  }, []);
 
   const handleBooking = async ({ scheduleId, timeId, date, reason, patientId }) => {
     await fetchApi(async () => {
@@ -51,8 +70,9 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
     });
   };
 
+  // const handleAddPatient = async ({ phoneNumber, name, gender, address, dob, healthInsurance }) => {
   const handleAddPatient = async () => {
-    // console.log("handleAddPatient");
+    // console.log("handleAddPatient: ", { phoneNumber, name, gender, address, dob, healthInsurance });
   };
 
   const handleBeforeBookingSubmit = () => {
@@ -60,27 +80,59 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
       // console.log("Booking Self");
       return bookingForm.handleSubmit(handleBooking);
     }
-    // console.log("Booking Other");
-    return handleAddPatient;
+    return bookingForm.handleSubmit(addPatientForm.handleSubmit(handleAddPatient));
   };
 
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingModal" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
+  const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
+  const { t: tPatient } = useTranslation("patientEntity", { keyPrefix: "properties" });
+  const { t: tPatientConstants } = useTranslation("patientEntity", { keyPrefix: "constants" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  // const genders = useMemo(
-  //   () => [
-  //     {
-  //       label: t("info.male"),
-  //       value: "male"
-  //     },
-  //     {
-  //       label: t("info.female"),
-  //       value: "female"
-  //     }
-  //   ],
-  //   []
-  // );
+  const scheduleTypeListObj = useMemo(() => {
+    return [
+      {
+        label: tScheduleConstants("types.offline"),
+        value: scheduleTypes.TYPE_OFFLINE
+      },
+      {
+        label: tScheduleConstants("types.online"),
+        value: scheduleTypes.TYPE_ONLINE
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
+
+  const genderListObj = useMemo(() => {
+    return [
+      {
+        label: tPatientConstants("genders.male"),
+        value: patientGenders.MALE
+      },
+      {
+        label: tPatientConstants("genders.female"),
+        value: patientGenders.FEMALE
+      },
+      {
+        label: tPatientConstants("genders.other"),
+        value: patientGenders.OTHER
+      },
+      {
+        label: tPatientConstants("genders.none"),
+        value: ""
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
 
   return (
     <CustomModal
@@ -95,6 +147,8 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
       <Box
         sx={{
           width: "100%",
+          maxHeight: 500,
+          overflow: "scroll",
           px: 2
         }}
       >
@@ -103,7 +157,8 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
             {tBooking("date")}:
           </Typography>
           <Typography fontWeight={500} textAlign="center">
-            {formatDate.format(new Date(data?.date), "ddd, DD/MM/YYYY")} {`(${data?.schedule?.type})`}
+            {formatDate.format(new Date(data?.date), "ddd, DD/MM/YYYY")}{" "}
+            {`(${scheduleTypeListObj?.[data?.schedule?.type]?.label})`}
           </Typography>
         </Box>
         <Box mb={2} display="flex" flexDirection="row" justifyContent="flex-start" alignItems="center">
@@ -129,30 +184,54 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
         </FormControl>
 
         {!isSelf && (
-          <Box>
-            {/* <Typography fontWeight={600} mr={2}>
-              {t("info.title")}:
+          <Box
+            sx={{
+              mb: 2
+            }}
+          >
+            <Typography fontWeight={600} mb={2}>
+              {t("subTitle.bookingForOther")}:
             </Typography>
             <Grid container spacing={2}>
-              <Grid item lg={6} md={12}>
-                <CustomInput control={control} rules={{}} label={t("info.name")} trigger={trigger} name="name" type="text" />
-              </Grid>
-              <Grid item lg={6} md={12}>
+              <Grid item lg={6} xs={12}>
                 <CustomInput
-                  control={control}
-                  rules={{}}
-                  label={t("info.phone")}
-                  trigger={trigger}
-                  name="phone"
+                  control={addPatientForm.control}
+                  rules={{ required: tInputValidate("required") }}
+                  label={tPatient("name")}
+                  trigger={addPatientForm.trigger}
+                  name="name"
+                  type="text"
+                />
+              </Grid>
+              <Grid item lg={6} xs={12}>
+                <CustomInput
+                  control={addPatientForm.control}
+                  rules={{ required: tInputValidate("required") }}
+                  label={tPatient("phoneNumber")}
+                  trigger={addPatientForm.trigger}
+                  name="phoneNumber"
                   type="tel"
                 />
               </Grid>
-              <Grid item lg={6} md={12}>
-                <CustomInput control={control} rules={{}} label={t("info.gender")} trigger={trigger} name="gender">
-                  <Select>
-                    {genders.map((item) => {
+              <Grid item lg={6} xs={12}>
+                <CustomInput
+                  control={addPatientForm.control}
+                  rules={{}}
+                  label={tPatient("gender")}
+                  trigger={addPatientForm.trigger}
+                  name="gender"
+                >
+                  <Select
+                    renderValue={(selected) => {
+                      return genderListObj[selected].label;
+                    }}
+                  >
+                    {Object.keys(genderListObj).map((key) => {
+                      const item = genderListObj[key];
+
                       return (
                         <MenuItem key={item?.value} value={item?.value}>
+                          <Checkbox checked={addPatientForm.watch().gender === item?.value} />
                           <ListItemText primary={item?.label} />
                         </MenuItem>
                       );
@@ -160,17 +239,39 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
                   </Select>
                 </CustomInput>
               </Grid>
-              <Grid item lg={6} md={12}>
+              <Grid item lg={6} xs={12}>
                 <CustomInput
-                  control={control}
-                  rules={{}}
-                  label={t("info.birthday")}
-                  trigger={trigger}
+                  control={addPatientForm.control}
+                  rules={{ required: tInputValidate("required") }}
+                  label={tPatient("dob")}
+                  trigger={addPatientForm.trigger}
                   name="dob"
                   type="date"
                 />
               </Grid>
-            </Grid> */}
+
+              <Grid item xs={12}>
+                <CustomInput
+                  control={addPatientForm.control}
+                  rules={{}}
+                  label={tPatient("healthInsurance")}
+                  trigger={addPatientForm.trigger}
+                  name="healthInsurance"
+                />
+              </Grid>
+
+              <Grid item xs={12}>
+                <CustomInput
+                  control={addPatientForm.control}
+                  rules={{}}
+                  label={tPatient("address")}
+                  trigger={addPatientForm.trigger}
+                  name="address"
+                  multiline
+                  rows={5}
+                />
+              </Grid>
+            </Grid>
           </Box>
         )}
 
@@ -184,23 +285,6 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
           fullWidth
           rows={4}
         />
-        {/* <Controller
-          control={bookingForm.control}
-          rules={{ required: tInputValidate("required") }}
-          name="reason"
-          trigger={bookingForm.trigger}
-          render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
-            <TextField
-              onChange={onChange}
-              onBlur={onBlur}
-              value={value}
-              multiline
-              fullWidth
-              rows={4}
-              helperText={error?.message}
-            />
-          )}
-        /> */}
       </Box>
     </CustomModal>
   );
