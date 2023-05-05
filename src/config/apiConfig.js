@@ -23,6 +23,7 @@ const timeOffApi = {
 };
 
 const bookingApi = {
+  bookingList: () => "/booking/list",
   book: () => "/booking/new-booking"
 };
 
