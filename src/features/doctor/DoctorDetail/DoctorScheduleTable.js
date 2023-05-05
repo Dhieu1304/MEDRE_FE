@@ -270,6 +270,11 @@ function DoctorScheduleTable({ timesList, doctorId }) {
 
     return cols;
   };
+
+  const handleAfterBooking = async () => {
+    await loadData();
+  };
+
   return (
     <>
       <Typography variant="h5" sx={{ fontWeight: "600" }}>
@@ -478,6 +483,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
           setShow={bookingModal.setShow}
           data={bookingModal.data}
           setData={bookingModal.setData}
+          handleAfterBooking={handleAfterBooking}
         />
       )}
     </>

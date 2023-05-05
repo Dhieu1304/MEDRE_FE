@@ -22,4 +22,8 @@ const timeOffApi = {
   timeOffList: () => "/doctor-time-off/time-off"
 };
 
-export { authApi, userApi, doctorApi, scheduleApi, timeOffApi };
+const bookingApi = {
+  book: () => "/booking/new-booking"
+};
+
+export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi };

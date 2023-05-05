@@ -25,7 +25,7 @@
     "form": {
       "bookingFor": "Đặt lịch cho",
       "self": "Bản thân",
-      "patient": "Người thân"
+      "other": "Người khác"
     },
     "button": {
       "book": "Đặt lịch"

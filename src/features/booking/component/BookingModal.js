@@ -3,54 +3,84 @@ import {
   FormControl,
   FormControlLabel,
   FormLabel,
-  Grid,
-  ListItemText,
-  MenuItem,
+  // Grid,
+  // ListItemText,
+  // MenuItem,
   Radio,
   RadioGroup,
-  Select,
-  TextField,
+  // Select,
+  // TextField,
   Typography
 } from "@mui/material";
 import formatDate from "date-and-time";
-import { Controller, useForm } from "react-hook-form";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
+import { toast } from "react-toastify";
+import { useForm } from "react-hook-form";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomModal from "../../../components/CustomModal";
+import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
+import bookingServices from "../../../services/bookingServices";
 
-function BookingModal({ show, setShow, data, setData }) {
+function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
   const [isSelf, setIsSelf] = useState(true);
-  const { control, handleSubmit, trigger } = useForm({
+  const bookingForm = useForm({
     defaultValues: {
+      scheduleId: data?.schedule?.id,
+      timeId: data?.time?.id,
+      date: data?.date,
       reason: "",
-      name: "",
-      phone: "",
-      gender: "",
-      dob: new Date()
+      patientId: ""
     }
   });
 
-  const handleBooking = () => {};
+  const { fetchApi } = useFetchingStore();
+
+  const handleBooking = async ({ scheduleId, timeId, date, reason, patientId }) => {
+    await fetchApi(async () => {
+      const res = await bookingServices.book({ scheduleId, timeId, date, reason, patientId });
+      if (res?.success) {
+        setShow(false);
+        setData({});
+        if (handleAfterBooking) await handleAfterBooking();
+        return { success: true };
+      }
+      toast(res.message);
+      return { error: res.message };
+    });
+  };
+
+  const handleAddPatient = async () => {
+    // console.log("handleAddPatient");
+  };
+
+  const handleBeforeBookingSubmit = () => {
+    if (isSelf) {
+      // console.log("Booking Self");
+      return bookingForm.handleSubmit(handleBooking);
+    }
+    // console.log("Booking Other");
+    return handleAddPatient;
+  };
 
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingModal" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const genders = useMemo(
-    () => [
-      {
-        label: t("info.male"),
-        value: "male"
-      },
-      {
-        label: t("info.female"),
-        value: "female"
-      }
-    ],
-    []
-  );
+  // const genders = useMemo(
+  //   () => [
+  //     {
+  //       label: t("info.male"),
+  //       value: "male"
+  //     },
+  //     {
+  //       label: t("info.female"),
+  //       value: "female"
+  //     }
+  //   ],
+  //   []
+  // );
 
   return (
     <CustomModal
@@ -60,7 +90,7 @@ function BookingModal({ show, setShow, data, setData }) {
       setData={setData}
       title={t("title")}
       submitBtnLabel={t("button.book")}
-      onSubmit={handleSubmit(handleBooking)}
+      onSubmit={handleBeforeBookingSubmit()}
     >
       <Box
         sx={{
@@ -86,21 +116,21 @@ function BookingModal({ show, setShow, data, setData }) {
           </Typography>
         </Box>
 
-        <FormControl>
+        <FormControl
+          sx={{
+            mb: 2
+          }}
+        >
           <FormLabel>{t("form.bookingFor")}:</FormLabel>
           <RadioGroup row defaultValue="self">
             <FormControlLabel value="self" control={<Radio onClick={() => setIsSelf(true)} />} label={t("form.self")} />
-            <FormControlLabel
-              value="patient"
-              control={<Radio onClick={() => setIsSelf(false)} />}
-              label={t("form.patient")}
-            />
+            <FormControlLabel value="other" control={<Radio onClick={() => setIsSelf(false)} />} label={t("form.other")} />
           </RadioGroup>
         </FormControl>
 
         {!isSelf && (
-          <>
-            <Typography fontWeight={600} mr={2}>
+          <Box>
+            {/* <Typography fontWeight={600} mr={2}>
               {t("info.title")}:
             </Typography>
             <Grid container spacing={2}>
@@ -140,17 +170,25 @@ function BookingModal({ show, setShow, data, setData }) {
                   type="date"
                 />
               </Grid>
-            </Grid>
-          </>
+            </Grid> */}
+          </Box>
         )}
 
-        <Typography mb={1} fontWeight={600}>
-          {tBooking("reason")}:
-        </Typography>
-        <Controller
-          control={control}
-          rules={{ require: tInputValidate("required") }}
+        <CustomInput
+          control={bookingForm.control}
+          label={tBooking("reason")}
+          rules={{ required: tInputValidate("required") }}
           name="reason"
+          trigger={bookingForm.trigger}
+          multiline
+          fullWidth
+          rows={4}
+        />
+        {/* <Controller
+          control={bookingForm.control}
+          rules={{ required: tInputValidate("required") }}
+          name="reason"
+          trigger={bookingForm.trigger}
           render={({ field: { onChange, onBlur, value }, fieldState: { error } }) => (
             <TextField
               onChange={onChange}
@@ -162,7 +200,7 @@ function BookingModal({ show, setShow, data, setData }) {
               helperText={error?.message}
             />
           )}
-        />
+        /> */}
       </Box>
     </CustomModal>
   );
@@ -172,7 +210,8 @@ BookingModal.propTypes = {
   show: PropTypes.bool.isRequired,
   setShow: PropTypes.func.isRequired,
   data: PropTypes.object.isRequired,
-  setData: PropTypes.func.isRequired
+  setData: PropTypes.func.isRequired,
+  handleAfterBooking: PropTypes.func.isRequired
 };
 
 export default BookingModal;

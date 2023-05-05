@@ -25,7 +25,7 @@
     "form": {
       "bookingFor": "Booking for",
       "self": "Self",
-      "patient": "Patient"
+      "other": "Other"
     },
     "button": {
       "book": "Book"
