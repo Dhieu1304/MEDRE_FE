@@ -23,8 +23,9 @@ import CustomModal from "../../../components/CustomModal";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import bookingServices from "../../../services/bookingServices";
 import { useAppConfigStore } from "../../../store/AppConfigStore/hooks";
-import { patientGenders } from "../../../entities/Patient/constant";
+import { patientGenders, patientInputValidate } from "../../../entities/Patient/constant";
 import { scheduleTypes } from "../../../entities/Schedule";
+import { bookingInputValidate } from "../../../entities/Booking";
 
 function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
   const [isSelf, setIsSelf] = useState(true);
@@ -196,7 +197,15 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
               <Grid item lg={6} xs={12}>
                 <CustomInput
                   control={addPatientForm.control}
-                  rules={{ required: tInputValidate("required") }}
+                  rules={{
+                    required: tInputValidate("required"),
+                    maxLength: {
+                      value: patientInputValidate.NAME_MAX_LENGTH,
+                      message: tInputValidate("maxLength", {
+                        maxLength: patientInputValidate.NAME_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={tPatient("name")}
                   trigger={addPatientForm.trigger}
                   name="name"
@@ -206,7 +215,13 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
               <Grid item lg={6} xs={12}>
                 <CustomInput
                   control={addPatientForm.control}
-                  rules={{ required: tInputValidate("required") }}
+                  rules={{
+                    required: tInputValidate("required"),
+                    pattern: {
+                      value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                      message: tInputValidate("format")
+                    }
+                  }}
                   label={tPatient("phoneNumber")}
                   trigger={addPatientForm.trigger}
                   name="phoneNumber"
@@ -253,7 +268,14 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
               <Grid item xs={12}>
                 <CustomInput
                   control={addPatientForm.control}
-                  rules={{}}
+                  rules={{
+                    maxLength: {
+                      value: patientInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
+                      message: tInputValidate("maxLength", {
+                        maxLength: patientInputValidate.HEALTH_INSURANCE_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={tPatient("healthInsurance")}
                   trigger={addPatientForm.trigger}
                   name="healthInsurance"
@@ -263,7 +285,14 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
               <Grid item xs={12}>
                 <CustomInput
                   control={addPatientForm.control}
-                  rules={{}}
+                  rules={{
+                    maxLength: {
+                      value: patientInputValidate.ADDRESS_MAX_LENGTH,
+                      message: tInputValidate("maxLength", {
+                        maxLength: patientInputValidate.ADDRESS_MAX_LENGTH
+                      })
+                    }
+                  }}
                   label={tPatient("address")}
                   trigger={addPatientForm.trigger}
                   name="address"
@@ -278,7 +307,15 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking }) {
         <CustomInput
           control={bookingForm.control}
           label={tBooking("reason")}
-          rules={{ required: tInputValidate("required") }}
+          rules={{
+            required: tInputValidate("required"),
+            maxLength: {
+              value: bookingInputValidate.REASON_MAX_LENGTH,
+              message: tInputValidate("maxLength", {
+                maxLength: bookingInputValidate.REASON_MAX_LENGTH
+              })
+            }
+          }}
           name="reason"
           trigger={bookingForm.trigger}
           multiline
