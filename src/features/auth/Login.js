@@ -4,18 +4,19 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import { useTheme } from "@mui/material/styles";
 
+import { useTranslation } from "react-i18next";
 import routeConfig, { authRoutes } from "../../config/routeConfig";
 // import { authRoutes } from "../../pages/AuthPage";
 
 import { useAuthStore } from "../../store/AuthStore/hooks";
-import AuthInput from "./components/AuthInput";
+import CustomInput from "../../components/CustomInput/CustomInput";
 // import { useEffect } from "react";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({
     mode: "onChange",
     defaultValues: {
-      phone: "",
+      phoneNumber: "",
       password: ""
     },
     criteriaMode: "all"
@@ -26,63 +27,81 @@ function Login() {
   const authStore = useAuthStore();
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //   trigger();
-  // }, []);
+  const { t } = useTranslation("authFeature", { keyPrefix: "Login" });
+  const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const onLogin = async ({ phone, password }) => {
-    const result = await authStore.loginByPhoneNumber(phone, password);
+  const onLogin = async ({ phoneNumber, password }) => {
+    const result = await authStore.loginByPhoneNumber(phoneNumber, password);
     if (result.success) {
       navigate(routeConfig.home);
     }
   };
 
-  const requireErrorMessage = "field can not empty";
-
   return (
-    <>
+    <Box
+      sx={{
+        minWidth: 250,
+        width: "100%",
+        // px: {
+        //   sm: 4,
+        //   xs: 0
+        // },
+        px: 2,
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
       <Typography
         component="h1"
         variant="h2"
         sx={{
-          fontSize: 18,
+          fontSize: 25,
           fontWeight: 600,
-          mb: 2
+          mb: 2,
+          textAlign: "center"
         }}
       >
-        Sign in
+        {t("title")}
       </Typography>
       <Box component="form" noValidate onSubmit={handleSubmit(onLogin)} sx={{ marginTop: 1 }}>
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage,
-            // https://ihateregex.io/expr/phone/
-            pattern: {
-              value: /^[+]?[(]?[0-9]{3}[)]?[-\s.]?[0-9]{3}[-\s.]?[0-9]{4,6}$/,
-              message: "is wrong format"
-            }
+        <Box
+          sx={{
+            mb: 2
           }}
-          label="Phone"
-          trigger={trigger}
-          name="phone"
-          type="tel"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required")
+            }}
+            label={tUser("phoneNumber")}
+            trigger={trigger}
+            name="phoneNumber"
+            type="tel"
+          />
+        </Box>
 
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage
+        <Box
+          sx={{
+            mb: 2
           }}
-          label="Password"
-          trigger={trigger}
-          name="password"
-          type="password"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required")
+            }}
+            label={tUser("password")}
+            trigger={trigger}
+            name="password"
+            type="password"
+          />
+        </Box>
 
-        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label="Remember me" />
+        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label={t("subTitle.remember")} />
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
-          Sign In
+          {t("button.login")}
         </Button>
         {authStore.isFetchApiError && (
           <Typography component="h3" color={theme.palette.error[theme.palette.mode]}>
@@ -92,21 +111,19 @@ function Login() {
 
         <Grid container>
           <Grid item xs>
-            <Link variant="body2" to={routeConfig.auth + authRoutes.forgetPassword}>
-              Forgot password?
-            </Link>
+            <Link to={routeConfig.auth + authRoutes.forgetPassword}>{t("link.forgotPassword")}</Link>
           </Grid>
           <Grid item>
-            <Link variant="body2" to={routeConfig.auth + authRoutes.register}>
-              Dont have an account?
+            <Link to={routeConfig.auth + authRoutes.register}>
+              {t("link.dontHaveAnAccount")}
               <Box component="span" sx={{ color: "blue", ml: 1 }}>
-                Sign up
+                {t("link.signUp")}
               </Box>
             </Link>
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
 

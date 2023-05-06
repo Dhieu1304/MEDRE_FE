@@ -15,16 +15,27 @@ export default function AuthPage() {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       <CssBaseline />
-      <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
+      <Grid
+        item
+        xs={12}
+        sm={8}
+        md={5}
+        component={Paper}
+        elevation={6}
+        square
+        sx={{
+          overflow: "scroll"
+        }}
+      >
         <Box
           sx={{
-            my: 8,
-            mx: 4,
-            px: 4,
+            px: 2,
+            py: 4,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
-            fontSize: 14
+            fontSize: 14,
+            overflow: "scroll"
           }}
         >
           <Box
