@@ -41,5 +41,17 @@
         "signUp": "Sign up"
       }
     }
+  },
+
+  "Profile": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information"
+    },
+    "button": {
+      "reset": "Reset",
+      "save": "Save"
+    }
   }
 }

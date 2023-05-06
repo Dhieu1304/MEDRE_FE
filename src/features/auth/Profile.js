@@ -15,59 +15,122 @@ import {
   TextField,
   useTheme
 } from "@mui/material";
+import { RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
+
+import userServices from "../../services/userServices";
+import { useAuthStore } from "../../store/AuthStore/hooks";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import { useForm } from "react-hook-form";
+import { userGenders, userInputValidate } from "../../entities/User/constant";
+import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
+import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
+import { toast } from "react-toastify";
+
 function Profile() {
-  const { t } = useTranslation("profilePage");
+  const [defaultValues, setDefaultValues] = useState({
+    phoneNumber: "",
+    email: "",
+    name: "",
+    address: "",
+    gender: "",
+    dob: "",
+    healthInsurance: ""
+  });
+
+  const { control, trigger, watch, reset, handleSubmit } = useForm({
+    mode: "onChange",
+    defaultValues,
+    criteriaMode: "all"
+  });
+
+  const authStore = useAuthStore();
+  const theme = useTheme();
+  const { fetchApi } = useFetchingStore();
+
+  const user = useMemo(() => {
+    return { ...authStore.user };
+  }, [authStore]);
+
+  // console.log("user: ", user);
+
+  const loadData = async () => {
+    const userData = await authStore.loadUserInfo();
+
+    // console.log("userData: ", userData);
+
+    if (userData) {
+      const newDefaultValues = {
+        ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData)
+      };
+
+      setDefaultValues(newDefaultValues);
+      reset(newDefaultValues);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const { t } = useTranslation("authFeature", { keyPrefix: "Profile" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
+  const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
+  const { t: tUserGender } = useTranslation("userEntity", { keyPrefix: "constants.genders" });
+  const { t: tUserMessage } = useTranslation("userEntity", { keyPrefix: "messages" });
+
+  const [userGendersList, userGendersListObj] = useMemo(() => {
+    const gendersList = [
+      {
+        value: userGenders.MALE,
+        label: "male"
+      },
+      {
+        value: userGenders.FEMALE,
+        label: "female"
+      },
+      {
+        value: userGenders.OTHER,
+        label: "other"
+      }
+    ];
+
+    const gendersListObj = gendersList.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [gendersList, gendersListObj];
+  }, []);
+
+  const handleSaveDetail = async ({ phoneNumber, email, name, address, gender, dob, healthInsurance }) => {
+    const data = {
+      phoneNumber,
+      email,
+      name,
+      address,
+      gender,
+      dob,
+      healthInsurance
+    };
+
+    // console.log("save: ", { phoneNumber, email, name, address, gender, dob, healthInsurance });
+
+    await fetchApi(async () => {
+      const res = await userServices.editUserInfo(data);
+      if (res?.success) {
+        await loadData();
+        return { success: true };
+      }
+
+      toast(res.message);
+      return { error: res.message };
+    });
+  };
+
   return (
-    <div>
-      {/* <Box
-        component="form"
-        sx={{
-          "& .MuiTextField-root": { m: 1, width: "25ch" }
-        }}
-        noValidate
-        autoComplete="off"
-      >
-        <Box>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.login")}
-          </Typography>
-          <TextField required id="email" label={t("subtitle.email")} defaultValue="dh1304@gmail.com" />
-          <TextField required id="username" label={t("subtitle.username")} defaultValue="dh1304" />
-          <TextField required id="phone" label={t("subtitle.phone")} defaultValue="0962143156" />
-        </Box>
-        <Box>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.auth")}
-          </Typography>
-          <TextField
-            id="outlined-read-only-input"
-            label={t("subtitle.author")}
-            defaultValue="User"
-            InputProps={{
-              readOnly: true
-            }}
-          />
-          <TextField
-            id="outlined-read-only-input2"
-            label={t("subtitle.status")}
-            defaultValue="OK"
-            InputProps={{
-              readOnly: true
-            }}
-          />
-        </Box>
-        <Box>
-          <Typography variant="h4" sx={{ mb: 4 }}>
-            {t("title.information")}
-          </Typography>
-          <div>
-            <TextField required id="Fullname" label={t("subtitle.fullname")} defaultValue="Nguyễn Đình Hiệu" />
-            <TextField required id="DOB" label={t("subtitle.dob")} defaultValue="13/04/2001" />
-            <TextField required id="Gender" label={t("subtitle.gender")} defaultValue="Nam" />
-          </div>
-          <TextField id="outlined-multiline-static" label={t("subtitle.address")} multiline rows={4} defaultValue="" />
-        </Box>
-      </Box> */}
+    <>
       <Box
         sx={{
           border: "1px solid rgba(0,0,0,0.1)",
@@ -95,136 +158,230 @@ function Profile() {
             }}
           >
             <CardHeader
-              avatar={<Avatar sx={{ width: 150, height: 150, cursor: "pointer" }} alt="" src="" />}
-              title=""
-              subheader=""
+              avatar={<Avatar sx={{ width: 150, height: 150, cursor: "pointer" }} alt={user?.name} src={user?.image} />}
+              title={user?.name}
+              subheader={user?.id}
             />
           </Card>
         </Box>
-
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" sx={{ mb: 4 }}>
             {t("title.account")}
           </Typography>
           <Grid container spacing={3}>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <TextField required id="email" label={t("subtitle.email")} defaultValue="dh1304@gmail.com" />
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <CustomInput
+                disabled
+                control={control}
+                rules={{
+                  required: tInputValidate("required"),
+                  pattern: {
+                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                    message: tInputValidate("format")
+                  },
+                  maxLength: {
+                    value: userInputValidate.EMAIL_MAX_LENGTH,
+                    message: tInputValidate("maxLength", {
+                      maxLength: userInputValidate.EMAIL_MAX_LENGTH
+                    })
+                  }
+                }}
+                label={tUser("email")}
+                trigger={trigger}
+                name="email"
+                type="email"
+                message={
+                  user?.emailVerified && user?.email === watch().email
+                    ? {
+                        type: "success",
+                        text: tUserMessage("emailVerifiedSuccess")
+                      }
+                    : {
+                        type: "error",
+                        text: tUserMessage("emailVerifiedFailed")
+                      }
+                }
+              />
             </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <TextField required id="username" label={t("subtitle.username")} defaultValue="dh1304" />
-            </Grid>
-            <Grid item xs={12} sm={12} md={4} lg={4}>
-              <TextField required id="phone" label={t("subtitle.phone")} defaultValue="0962143156" />
+            <Grid item xs={12} sm={12} md={6} lg={6}>
+              <CustomInput
+                disabled
+                control={control}
+                rules={{
+                  required: tInputValidate("required"),
+                  pattern: {
+                    value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                    message: tInputValidate("format")
+                  }
+                }}
+                label={tUser("phoneNumber")}
+                trigger={trigger}
+                name="phoneNumber"
+                type="phone"
+                message={
+                  user?.phoneVerified && user?.phoneNumber === watch().phoneNumber
+                    ? {
+                        type: "success",
+                        text: tUserMessage("phoneVerifiedSuccess")
+                      }
+                    : {
+                        type: "error",
+                        text: tUserMessage("phoneVerifiedFailed")
+                      }
+                }
+              />
             </Grid>
           </Grid>
         </Box>
-
         <Box sx={{ mb: 4 }}>
           <Typography variant="h4" sx={{ mb: 4 }}>
             {t("title.personality")}
           </Typography>
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={12} lg={6}>
-              <TextField
-                id="outlined-read-only-input"
-                label={t("subtitle.author")}
-                defaultValue="User"
-                InputProps={{
-                  readOnly: true
+              <CustomInput
+                showCanEditIcon
+                control={control}
+                rules={{
+                  required: tInputValidate("required"),
+                  maxLength: {
+                    value: userInputValidate.NAME_MAX_LENGTH,
+                    message: tInputValidate("maxLength", {
+                      maxLength: userInputValidate.NAME_MAX_LENGTH
+                    })
+                  }
                 }}
+                label={tUser("name")}
+                trigger={trigger}
+                name="name"
+                type="text"
               />
             </Grid>
 
             <Grid item xs={12} sm={12} md={12} lg={6}>
-              <TextField
-                id="outlined-read-only-input2"
-                label={t("subtitle.status")}
-                defaultValue="OK"
-                InputProps={{
-                  readOnly: true
+              <CustomInput
+                showCanEditIcon
+                control={control}
+                rules={{
+                  maxLength: {
+                    value: userInputValidate.HEALTH_INSURANCE_MAX_LENGTH,
+                    message: tInputValidate("maxLength", {
+                      maxLength: userInputValidate.HEALTH_INSURANCE_MAX_LENGTH
+                    })
+                  }
                 }}
+                label={tUser("healthInsurance")}
+                trigger={trigger}
+                name="healthInsurance"
+                type="text"
               />
             </Grid>
 
             <Grid item xs={12} sm={12} md={6} lg={6}>
-              <TextField required id="DOB" label={t("subtitle.dob")} defaultValue="13/04/2001" />
+              <CustomInput
+                showCanEditIcon
+                control={control}
+                rules={{
+                  required: tInputValidate("required")
+                }}
+                label={tUser("dob")}
+                trigger={trigger}
+                name="dob"
+                type="date"
+              />
             </Grid>
 
             <Grid item xs={12} sm={12} md={6} lg={6}>
-              <TextField required id="Gender" label={t("subtitle.gender")} defaultValue="Nam" />
+              <CustomInput
+                showCanEditIcon
+                control={control}
+                rules={{
+                  required: tInputValidate("required"),
+                  maxLength: {
+                    value: userInputValidate.GENDER_MAX_LENGTH,
+                    message: tInputValidate("maxLength", {
+                      maxLength: userInputValidate.GENDER_MAX_LENGTH
+                    })
+                  }
+                }}
+                label={tUser("gender")}
+                trigger={trigger}
+                name="gender"
+                childrenType="select"
+              >
+                <Select
+                  renderValue={(selected) => {
+                    return tUserGender(userGendersListObj[selected]?.label);
+                  }}
+                >
+                  {userGendersList.map((item) => {
+                    return (
+                      <MenuItem key={item?.value} value={item?.value}>
+                        <ListItemText primary={tUserGender(item?.label)} />
+                      </MenuItem>
+                    );
+                  })}
+                </Select>
+              </CustomInput>
             </Grid>
 
             <Grid item xs={12} sm={12} md={12} lg={12}>
-              <TextField id="outlined-multiline-static" label={t("subtitle.address")} multiline rows={4} defaultValue="" />
+              <CustomInput
+                showCanEditIcon
+                control={control}
+                rules={{
+                  maxLength: {
+                    value: userInputValidate.ADDRESS_MAX_LENGTH,
+                    message: tInputValidate("maxLength", {
+                      maxLength: userInputValidate.ADDRESS_MAX_LENGTH
+                    })
+                  }
+                }}
+                label={tUser("address")}
+                trigger={trigger}
+                name="address"
+                type="text"
+                multiline
+                rows={6}
+              />
             </Grid>
           </Grid>
         </Box>
 
-        {/* {canUpdateUser && (
-          <Box
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end"
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "flex-end"
+          }}
+        >
+          <Button
+            variant="contained"
+            onClick={() => {
+              reset(defaultValues);
             }}
+            sx={{
+              ml: 2,
+              bgcolor: theme.palette.warning.light
+            }}
+            startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
           >
-            <Button
-              variant="contained"
-              onClick={() => {
-                reset(defaultValues);
-              }}
-              sx={{
-                ml: 2,
-                bgcolor: theme.palette.warning.light
-              }}
-              startIcon={<RestartAltIcon color={theme.palette.warning.contrastText} />}
-            >
-              {tBtn("reset")}
-            </Button>
+            {t("button.reset")}
+          </Button>
 
-            <Button
-              variant="contained"
-              onClick={handleSubmit(handleSaveDetail)}
-              sx={{
-                ml: 2,
-                bgcolor: theme.palette.success.light
-              }}
-              startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
-            >
-              {tBtn("save")}
-            </Button>
-          </Box>
-            )} */}
+          <Button
+            variant="contained"
+            onClick={handleSubmit(handleSaveDetail)}
+            sx={{
+              ml: 2,
+              bgcolor: theme.palette.success.light
+            }}
+            startIcon={<SaveIcon color={theme.palette.success.contrastText} />}
+          >
+            {t("button.save")}
+          </Button>
+        </Box>
       </Box>
-
-      {/* {blockUserModal.show && (
-        <BlockUserModal
-          show={blockUserModal.show}
-          setShow={blockUserModal.setShow}
-          data={blockUserModal.data}
-          setData={blockUserModal.setData}
-          handleAfterBlockUser={handleAfterBlockUser}
-        />
-      )}
-
-      {unblockUserModal.show && (
-        <UnblockUserModal
-          show={unblockUserModal.show}
-          setShow={unblockUserModal.setShow}
-          data={unblockUserModal.data}
-          setData={unblockUserModal.setData}
-          handleAfterUnblockUser={handleAfterUnblockUser}
-        />
-      )}
-
-      {notHaveAccessModal.show && (
-        <NotHaveAccessModal
-          show={notHaveAccessModal.show}
-          setShow={notHaveAccessModal.setShow}
-          data={notHaveAccessModal.data}
-          setData={notHaveAccessModal.setData}
-        />
-      )} */}
-    </div>
+    </>
   );
 }
 
