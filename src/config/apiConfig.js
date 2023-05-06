@@ -1,5 +1,6 @@
 const authApi = {
   loginByPhoneNumber: () => "/auth/login-by-phone-number",
+  loginByEmail: () => "/auth/login-by-email",
   register: () => "/auth/register",
   registerVerifyOtp: () => ""
 };

@@ -31,6 +31,26 @@ function AuthProvider({ children }) {
         toast.success(message);
         return false;
       },
+
+      loginByEmail: async (email, password) => {
+        dispatch(actions.fetchApi());
+        const res = await authServices.loginByEmail(email, password);
+
+        if (res?.success) {
+          const { user, message } = res;
+          dispatch(actions.login(user));
+          dispatch(actions.fetchApiSuccess());
+          return {
+            success: true,
+            message
+          };
+        }
+        const { message } = res;
+        dispatch(actions.fetchApiFailed(message));
+        toast.success(message);
+        return false;
+      },
+
       logout: async () => {
         dispatch(actions.fetchApi());
         const res = await authServices.logout();

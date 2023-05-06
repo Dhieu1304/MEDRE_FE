@@ -1,8 +1,9 @@
 {
   "properties": {
     "id": "ID",
-    "phoneNumber": "Phone Number",
+    "phoneNumber": "Phone number",
     "email": "Email",
+    "phoneNumberOrEmail": "Email or phone number",
     "password": "Password",
     "confirmPassword": "Confirm password",
     "name": "Name",

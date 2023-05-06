@@ -10,13 +10,14 @@ import routeConfig, { authRoutes } from "../../config/routeConfig";
 
 import { useAuthStore } from "../../store/AuthStore/hooks";
 import CustomInput from "../../components/CustomInput/CustomInput";
+import patternConfig from "../../config/patternConfig";
 // import { useEffect } from "react";
 
 function Login() {
   const { handleSubmit, control, trigger } = useForm({
     mode: "onChange",
     defaultValues: {
-      phoneNumber: "",
+      phoneNumberOrEmail: "",
       password: ""
     },
     criteriaMode: "all"
@@ -31,9 +32,19 @@ function Login() {
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const handleLogin = async ({ phoneNumber, password }) => {
-    const result = await authStore.loginByPhoneNumber(phoneNumber, password);
-    if (result.success) {
+  const handleLogin = async ({ phoneNumberOrEmail, password }) => {
+    let result;
+    if (patternConfig.phonePattern.test(phoneNumberOrEmail)) {
+      // console.log("Login by phone");
+      const phoneNumber = phoneNumberOrEmail;
+      result = await authStore.loginByPhoneNumber(phoneNumber, password);
+    } else {
+      // console.log("Login by email");
+      const email = phoneNumberOrEmail;
+      result = await authStore.loginByEmail(email, password);
+    }
+
+    if (result?.success) {
       navigate(routeConfig.home);
     }
   };
@@ -73,12 +84,16 @@ function Login() {
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidate("required")
+              required: tInputValidate("required"),
+              pattern: {
+                value: patternConfig.phoneOrEmailPattern,
+                message: tInputValidate("format")
+              }
             }}
-            label={tUser("phoneNumber")}
+            label={tUser("phoneNumberOrEmail")}
             trigger={trigger}
-            name="phoneNumber"
-            type="tel"
+            name="phoneNumberOrEmail"
+            type="text"
           />
         </Box>
 

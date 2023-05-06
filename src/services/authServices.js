@@ -33,6 +33,36 @@ const loginByPhoneNumber = async (phoneNumber, password) => {
   }
 };
 
+const loginByEmail = async (email, password) => {
+  try {
+    const res = await axiosClient.post(authApi.loginByEmail(), { email, password });
+
+    if (res?.status) {
+      const user = res?.data?.user;
+      const tokens = res?.data?.tokens;
+
+      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
+      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
+
+      return {
+        success: true,
+        user,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 const logout = async () => {
   localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
   localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
@@ -111,6 +141,7 @@ const registerVerifyOtp = async ({ otp }) => {
 
 export default {
   loginByPhoneNumber,
+  loginByEmail,
   logout,
   register,
   registerVerifyOtp
