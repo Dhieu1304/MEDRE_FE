@@ -14,5 +14,20 @@
       "dontHaveAnAccount": "Don't have an account?",
       "signUp": "Sign up"
     }
+  },
+
+  "Register": {
+    "registerForm": {
+      "title": "Sign up",
+      "button": {
+        "login": "Register"
+      },
+
+      "link": {
+        "forgotPassword": "Forgot password",
+        "dontHaveAnAccount": "Don't have an account?",
+        "signIn": "Sign in"
+      }
+    }
   }
 }

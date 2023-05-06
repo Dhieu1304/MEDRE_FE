@@ -31,7 +31,7 @@ function Login() {
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const onLogin = async ({ phoneNumber, password }) => {
+  const handleLogin = async ({ phoneNumber, password }) => {
     const result = await authStore.loginByPhoneNumber(phoneNumber, password);
     if (result.success) {
       navigate(routeConfig.home);
@@ -64,7 +64,7 @@ function Login() {
       >
         {t("title")}
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(onLogin)} sx={{ marginTop: 1 }}>
+      <Box component="form" noValidate onSubmit={handleSubmit(handleLogin)} sx={{ marginTop: 1 }}>
         <Box
           sx={{
             mb: 2

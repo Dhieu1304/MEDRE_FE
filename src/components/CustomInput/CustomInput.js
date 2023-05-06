@@ -34,7 +34,8 @@ function CustomInput({
   message,
   showCanEditIcon,
   childrenType = "select",
-  noNameValue
+  noNameValue,
+  isCustomError
 }) {
   const theme = useTheme();
 
@@ -61,11 +62,11 @@ function CustomInput({
         fontWeight: "400",
         color: alpha(theme.components.MuiInputLabel.styleOverrides.root.color, 0.5)
       }
+    },
+    "& .MuiInputLabel-asterisk": {
+      color: "red",
+      fontSize: 25
     }
-    // "& .MuiInputLabel-asterisk": {
-    //   color: "red",
-    //   fontSize: 25
-    // },
     // "& .MuiOutlinedInput-notchedOutline legend": {
     //   fontSize: 20,
     //   fontWeight: "600",
@@ -113,7 +114,7 @@ function CustomInput({
           readOnly: true
         }}
         required={!!rules?.required}
-        value={noNameValue}
+        value={noNameValue || ""}
         disabled={disabled}
         type={inputType}
         placeholder={placeholder}
@@ -167,6 +168,7 @@ function CustomInput({
                     value,
                     onBlur: () => {
                       trigger(name, { shouldFocus: true });
+                      if (triggerTo) trigger(triggerTo, { shouldFocus: true });
                       onBlur();
                     },
                     onChange,
@@ -178,7 +180,7 @@ function CustomInput({
               })}
 
               <FormHelperText>
-                <Box component="span">{inputErrorFormat(label, error?.message)}</Box>
+                <Box component="span">{isCustomError ? error?.message : inputErrorFormat(label, error?.message)}</Box>
               </FormHelperText>
               {!error?.message && message && message?.text && (
                 <Typography
@@ -214,7 +216,7 @@ function CustomInput({
           // label={label}
           disabled={disabled}
           type={inputType}
-          helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
+          helperText={<Box component="span">{isCustomError ? error?.message : inputErrorFormat(label, error?.message)}</Box>}
           onBlur={() => {
             trigger(name, { shouldFocus: true });
             if (triggerTo) trigger(triggerTo, { shouldFocus: true });
@@ -280,8 +282,10 @@ function CustomInput({
 }
 
 CustomInput.defaultProps = {
+  control: {},
   label: "",
   rules: {},
+  trigger: undefined,
   triggerTo: null,
   children: null,
   name: undefined,
@@ -294,14 +298,15 @@ CustomInput.defaultProps = {
   multiline: undefined,
   rows: undefined,
   childrenType: "select",
-  noNameValue: ""
+  noNameValue: "",
+  isCustomError: false
 };
 
 CustomInput.propTypes = {
-  control: PropTypes.object.isRequired,
+  control: PropTypes.object,
   rules: PropTypes.object,
   label: PropTypes.string,
-  trigger: PropTypes.func.isRequired,
+  trigger: PropTypes.func,
   triggerTo: PropTypes.oneOfType([PropTypes.string]),
 
   name: PropTypes.string,
@@ -318,7 +323,8 @@ CustomInput.propTypes = {
   multiline: PropTypes.bool,
   rows: PropTypes.number,
   childrenType: PropTypes.string,
-  noNameValue: PropTypes.string
+  noNameValue: PropTypes.string,
+  isCustomError: PropTypes.bool
 };
 
 export default CustomInput;

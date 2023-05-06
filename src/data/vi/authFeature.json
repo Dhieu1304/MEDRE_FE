@@ -17,15 +17,17 @@
   },
 
   "Register": {
-    "title": "Đăng ký",
-    "button": {
-      "login": "Đăng ký"
-    },
+    "registerForm": {
+      "title": "Đăng ký",
+      "button": {
+        "login": "Đăng ký"
+      },
 
-    "link": {
-      "forgotPassword": "Quên mật khẩu",
-      "haveAnAccount": "Đã có tài khoản",
-      "signIn": "Đăng nhập"
+      "link": {
+        "forgotPassword": "Quên mật khẩu",
+        "haveAnAccount": "Đã có tài khoản",
+        "signIn": "Đăng nhập"
+      }
     }
   },
 
