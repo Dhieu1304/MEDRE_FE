@@ -4,6 +4,7 @@
     "phoneNumber": "Phone Number",
     "email": "Email",
     "password": "Password",
+    "confirmPassword": "Confirm password",
     "name": "Name",
     "image": "Image",
     "address": "Address",

@@ -1,16 +1,17 @@
-import { Button, Grid, Typography, Box } from "@mui/material";
+import { Button, Grid, Typography, Box, useTheme } from "@mui/material";
 // import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
-import formatDate from "date-and-time";
+import { useTranslation } from "react-i18next";
 import routeConfig, { authRoutes } from "../../../config/routeConfig";
 // import { authRoutes } from "../../../pages/AuthPage";
 // import { authRoutes } from "../../../config/routeConfig";
 
 import { useAuthStore } from "../../../store/AuthStore/hooks";
-import AuthInput from "../components/AuthInput";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import { userInputValidate } from "../../../entities/User/constant";
 
 function RegisterForm() {
   const { handleSubmit, control, trigger, watch } = useForm({
@@ -18,187 +19,188 @@ function RegisterForm() {
     defaultValues: {
       phoneNumber: "0375435896",
       email: "d.hieu.13.04@gmail.com",
-      name: "Nguyễn Đình Hiệu",
-      gender: "Male",
-      dob: formatDate.format(new Date(), "YYYY-MM-DD"),
-      address: "Tân Phú, TP.HCM",
-      password: "dhieu1304",
-      confirmPassword: "dhieu1304"
+      // name: "Nguyễn Đình Hiệu",
+      // gender: "Male",
+      // dob: formatDate.format(new Date(), "YYYY-MM-DD"),
+      // address: "Tân Phú, TP.HCM",
+      password: "111111",
+      confirmPassword: "111111"
     },
     criteriaMode: "all"
   });
 
+  const theme = useTheme();
   const authStore = useAuthStore();
-
   const navigate = useNavigate();
 
-  const onRegister = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
+  const { t } = useTranslation("authFeature", { keyPrefix: "Register.registerForm" });
+  const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
+  const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
+
+  const handleRegister = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
     const result = await authStore.register({ phoneNumber, email, name, gender, dob: new Date(dob), address, password });
     if (result) {
       navigate(routeConfig.home);
     }
   };
 
-  const requireErrorMessage = "field can not empty";
-
   return (
-    <>
+    <Box
+      sx={{
+        minWidth: 250,
+        width: "100%",
+        // px: {
+        //   sm: 4,
+        //   xs: 0
+        // },
+        px: 2,
+        display: "flex",
+        flexDirection: "column"
+      }}
+    >
       <Typography
         component="h1"
         variant="h2"
         sx={{
-          fontSize: 18,
+          fontSize: 25,
           fontWeight: 600,
-          mb: 2
+          mb: 2,
+          textAlign: "center"
         }}
       >
-        Sign up
+        {t("title")}
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(onRegister)} sx={{ marginTop: 1 }}>
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage,
-            // https://ihateregex.io/expr/phone/
-            pattern: {
-              value: /^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/,
-              message: "is wrong format"
-            }
+      <Box component="form" noValidate onSubmit={handleSubmit(handleRegister)} sx={{ marginTop: 1 }}>
+        <Box
+          sx={{
+            mb: 2
           }}
-          label="Phone"
-          trigger={trigger}
-          name="phoneNumber"
-          type="tel"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required"),
+              pattern: {
+                value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                message: tInputValidate("format")
+              }
+            }}
+            label={tUser("phoneNumber")}
+            trigger={trigger}
+            name="phoneNumber"
+            type="tel"
+          />
+        </Box>
 
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage,
-            // https://ihateregex.io/expr/phone/
-            pattern: {
-              value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-              message: "is wrong format"
-            }
+        <Box
+          sx={{
+            mb: 2
           }}
-          label="Email"
-          trigger={trigger}
-          name="email"
-          type="email"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required"),
+              pattern: {
+                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                message: tInputValidate("format")
+              },
+              maxLength: {
+                value: userInputValidate.EMAIL_MAX_LENGTH,
+                message: tInputValidate("maxLength", {
+                  maxLength: userInputValidate.EMAIL_MAX_LENGTH
+                })
+              }
+            }}
+            label={tUser("email")}
+            trigger={trigger}
+            name="email"
+            type="email"
+          />
+        </Box>
 
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage
+        <Box
+          sx={{
+            mb: 2
           }}
-          label="Full name"
-          trigger={trigger}
-          name="name"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required"),
+              minLength: {
+                value: userInputValidate.PASSWORD_MIN_LENGTH,
+                message: tInputValidate("minLength", {
+                  minLength: userInputValidate.PASSWORD_MIN_LENGTH
+                })
+              },
+              maxLength: {
+                value: userInputValidate.PASSWORD_MAX_LENGTH,
+                message: tInputValidate("maxLength", {
+                  maxLength: userInputValidate.PASSWORD_MAX_LENGTH
+                })
+              },
+              pattern: {
+                value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
+                message: tInputValidate("passwordFormat")
+              }
+            }}
+            label={tUser("password")}
+            trigger={trigger}
+            triggerTo="confirmPassword"
+            name="password"
+            type="password"
+          />
+        </Box>
 
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage
+        <Box
+          sx={{
+            mb: 2
           }}
-          label="Gender"
-          trigger={trigger}
-          name="gender"
-          componentType="select"
-          selectItems={[
-            {
-              label: "Male",
-              value: "Male"
-            },
-            {
-              label: "Female",
-              value: "Female"
-            }
-          ]}
-        />
-
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage
-          }}
-          label="Address"
-          trigger={trigger}
-          name="address"
-        />
-
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage
-          }}
-          label="Birthday"
-          trigger={trigger}
-          name="dob"
-          type="date"
-        />
-
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage,
-            minLength: {
-              value: 8,
-              message: "must be at least 8 characters"
-            },
-            pattern: {
-              value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
-              message: "must have at least 1 digit and 1 character"
-            }
-          }}
-          label="Passwprd"
-          trigger={trigger}
-          triggerTo="confirmPassword"
-          name="password"
-          type="password"
-        />
-
-        <AuthInput
-          control={control}
-          rules={{
-            required: requireErrorMessage,
-            minLength: {
-              value: 8,
-              message: "must be at least 8 characters"
-            },
-            pattern: {
-              value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
-              message: "must have at least 1 digit and 1 character"
-            },
-            validate: (value) => value === watch("password") || "do not match"
-          }}
-          label="Confirm Passwprd"
-          trigger={trigger}
-          name="confirmPassword"
-          type="password"
-        />
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required"),
+              validate: (value) =>
+                value === watch("password") ||
+                tInputValidate("same", {
+                  left: tUser("confirmPassword"),
+                  right: tUser("password")
+                })
+            }}
+            label={tUser("confirmPassword")}
+            trigger={trigger}
+            name="confirmPassword"
+            type="password"
+            isCustomError
+          />
+        </Box>
 
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
-          Register
+          {t("button.login")}
         </Button>
+        {authStore.isFetchApiError && (
+          <Typography component="h3" color={theme.palette.error[theme.palette.mode]}>
+            {authStore.fetchApiError}
+          </Typography>
+        )}
+
         <Grid container>
           <Grid item xs>
-            <Link variant="body2" to={routeConfig.auth + authRoutes.forgetPassword}>
-              Forgot password?
-            </Link>
+            <Link to={routeConfig.auth + authRoutes.forgetPassword}>{t("link.forgotPassword")}</Link>
           </Grid>
           <Grid item>
-            <Link variant="body2" to={routeConfig.auth + authRoutes.login}>
-              Have an account?
+            <Link to={routeConfig.auth + authRoutes.login}>
+              {t("link.haveAnAccount")}
               <Box component="span" sx={{ color: "blue", ml: 1 }}>
-                Sign in
+                {t("link.signIn")}
               </Box>
             </Link>
           </Grid>
         </Grid>
       </Box>
-    </>
+    </Box>
   );
 }
 
