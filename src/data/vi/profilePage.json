@@ -1,8 +1,7 @@
 {
   "title": {
-    "login": "Thông tin đăng nhập",
-    "auth": "Thông tin xác thực",
-    "information": "Thông tin cá nhân"
+    "account": "Thông tin đăng nhập",
+    "personality": "Thông tin cá nhân"
   },
   "subtitle": {
     "email": "Email",

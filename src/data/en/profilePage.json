@@ -1,8 +1,7 @@
 {
   "title": {
-    "login": "Identify Information",
-    "auth": "Account Information",
-    "information": "Personality Information"
+    "account": "Identify Information",
+    "personality": "Personality Information"
   },
   "subtitle": {
     "email": "Email",
