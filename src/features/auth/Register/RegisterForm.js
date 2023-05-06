@@ -1,8 +1,8 @@
 import { Button, Grid, Typography, Box, useTheme } from "@mui/material";
-// import PropTypes from "prop-types";
+import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 import routeConfig, { authRoutes } from "../../../config/routeConfig";
@@ -13,16 +13,11 @@ import { useAuthStore } from "../../../store/AuthStore/hooks";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import { userInputValidate } from "../../../entities/User/constant";
 
-function RegisterForm() {
+function RegisterForm({ setStep }) {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
       phoneNumber: "0375435896",
-      email: "d.hieu.13.04@gmail.com",
-      // name: "Nguyễn Đình Hiệu",
-      // gender: "Male",
-      // dob: formatDate.format(new Date(), "YYYY-MM-DD"),
-      // address: "Tân Phú, TP.HCM",
       password: "111111",
       confirmPassword: "111111"
     },
@@ -31,16 +26,17 @@ function RegisterForm() {
 
   const theme = useTheme();
   const authStore = useAuthStore();
-  const navigate = useNavigate();
 
   const { t } = useTranslation("authFeature", { keyPrefix: "Register.registerForm" });
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const handleRegister = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
-    const result = await authStore.register({ phoneNumber, email, name, gender, dob: new Date(dob), address, password });
+  const handleRegister = async ({ phoneNumber, password }) => {
+    // console.log({ phoneNumber, password });
+
+    const result = await authStore.register({ phoneNumber, password });
     if (result) {
-      navigate(routeConfig.home);
+      setStep((prev) => prev + 1);
     }
   };
 
@@ -89,33 +85,6 @@ function RegisterForm() {
             trigger={trigger}
             name="phoneNumber"
             type="tel"
-          />
-        </Box>
-
-        <Box
-          sx={{
-            mb: 2
-          }}
-        >
-          <CustomInput
-            control={control}
-            rules={{
-              required: tInputValidate("required"),
-              pattern: {
-                value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-                message: tInputValidate("format")
-              },
-              maxLength: {
-                value: userInputValidate.EMAIL_MAX_LENGTH,
-                message: tInputValidate("maxLength", {
-                  maxLength: userInputValidate.EMAIL_MAX_LENGTH
-                })
-              }
-            }}
-            label={tUser("email")}
-            trigger={trigger}
-            name="email"
-            type="email"
           />
         </Box>
 
@@ -204,9 +173,8 @@ function RegisterForm() {
   );
 }
 
-// RegisterForm.propTypes = {
-//   prevStep: PropTypes.func.isRequired,
-//   nextStep: PropTypes.func.isRequired
-// };
+RegisterForm.propTypes = {
+  setStep: PropTypes.func.isRequired
+};
 
 export default RegisterForm;

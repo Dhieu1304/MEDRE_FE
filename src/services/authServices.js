@@ -1,10 +1,11 @@
 import { authApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 import localStorageUtil from "../utils/localStorageUtil";
+import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
 const loginByPhoneNumber = async (phoneNumber, password) => {
   try {
-    const res = await axiosClient.post(authApi.loginByPhoneNumber, { phone_number: phoneNumber, password });
+    const res = await axiosClient.post(authApi.loginByPhoneNumber(), { phone_number: phoneNumber, password });
 
     if (res?.status) {
       const user = res?.data?.user;
@@ -42,9 +43,16 @@ const logout = async () => {
   };
 };
 
-const register = async ({ phoneNumber, email, name, gender, dob, address, password }) => {
+const register = async ({ phoneNumber, password }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    phone_number: phoneNumber,
+    password
+  });
+
   try {
-    const res = await axiosClient.post(authApi.register, { phoneNumber, email, password, name, gender, dob, address });
+    const res = await axiosClient.post(authApi.register(), dataBody);
+
+    // console.log("res: ", res);
 
     if (res?.status) {
       return {
@@ -65,8 +73,45 @@ const register = async ({ phoneNumber, email, name, gender, dob, address, passwo
   }
 };
 
+const registerVerifyOtp = async ({ otp }) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   otp
+  // });
+
+  // console.log("dataBody: ", dataBody);
+
+  // try {
+  //   const res = await axiosClient.post(authApi.registerVerifyOtp(), dataBody);
+
+  //   // console.log("res: ", res);
+
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: otp
+  };
+};
+
 export default {
   loginByPhoneNumber,
   logout,
-  register
+  register,
+  registerVerifyOtp
 };

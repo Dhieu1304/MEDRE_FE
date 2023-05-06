@@ -1,6 +1,6 @@
 import { Button, Grid, Typography, Box, useTheme, FormHelperText } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 import { MuiOtpInput } from "mui-one-time-password-input";
@@ -19,15 +19,16 @@ function OtpForm() {
 
   const theme = useTheme();
   const authStore = useAuthStore();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
 
   const { t } = useTranslation("authFeature", { keyPrefix: "Register.otpForm" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const handleVerifyOtp = async (formData) => {
-    // write haphazardly to commit
-    const success = formData;
-    return success;
+  const handleVerifyOtp = async ({ otp }) => {
+    const result = await authStore.registerVerifyOtp({ otp });
+    if (result) {
+      navigate(routeConfig.auth + authRoutes.login);
+    }
   };
 
   return (
@@ -121,70 +122,6 @@ function OtpForm() {
       </Box>
     </Box>
   );
-
-  // return (
-  //   <>
-  //     <Typography component="h1" variant="h5">
-  //       Phone number
-  //     </Typography>
-  //     <Box component="form" noValidate onSubmit={handleSubmit(onVerifyOtp)} sx={{ marginTop: 1 }}>
-  //       <Controller
-  //         control={control}
-  //         rules={{
-  //           required: requireErrorMessage,
-  //           // https://ihateregex.io/expr/phone/
-  //           pattern: {
-  //             value: /^[+]?[(]?[0-9]{3}[)]?[-s.]?[0-9]{3}[-s.]?[0-9]{4,6}$/,
-  //             message: "is wrong format"
-  //           }
-  //         }}
-  //         render={({ field: { onChange, onBlur, value, name }, fieldState: { error } }) => {
-  //           const label = "Phone";
-  //           return (
-  //             <Box
-  //               component={TextField}
-  //               sx={{ mb: 2 }}
-  //               required
-  //               error={error?.message}
-  //               value={value}
-  //               label={<Box component="span">{label}</Box>}
-  //               type="tel"
-  //               fullWidth
-  //               helperText={<Box component="span">{inputErrorFormat(label, error?.message)}</Box>}
-  //               variant="outlined"
-  //               onBlur={() => {
-  //                 trigger(name, { shouldFocus: true });
-  //                 onBlur();
-  //               }}
-  //               onChange={onChange}
-  //             />
-  //           );
-  //         }}
-  //         name="phone"
-  //       />
-
-  //       <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
-  //         Send Otp
-  //       </Button>
-  //       <Grid container>
-  //         <Grid item xs>
-  //           <Link variant="body2" to={routeConfig.auth + authRoutes.login}>
-  //             <Box component="span" sx={{ color: "blue" }}>
-  //               Sign in
-  //             </Box>
-  //           </Link>
-  //         </Grid>
-  //         <Grid item>
-  //           <Link variant="body2" to={routeConfig.auth + authRoutes.register}>
-  //             <Box component="span" sx={{ color: "blue" }}>
-  //               Sign up
-  //             </Box>
-  //           </Link>
-  //         </Grid>
-  //       </Grid>
-  //     </Box>
-  //   </>
-  // );
 }
 
 export default OtpForm;
