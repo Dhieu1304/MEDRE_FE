@@ -1,10 +1,13 @@
 {
-  "booking_card": {
-    "time": "Time",
-    "name": "Full name",
-    "status": "Status",
-    "code": "Code",
-    "detail_btn_label": "Detail"
+  "BookingCard": {
+    "button": {
+      "detail": "Detail",
+      "payment": "Payment",
+      "cancel": "Cancel"
+    },
+    "countDown": {
+      "day": "Day"
+    }
   },
   "booking_detail": {
     "title": "Detail",

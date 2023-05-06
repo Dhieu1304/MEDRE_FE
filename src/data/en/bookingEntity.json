@@ -7,6 +7,19 @@
     "paymentStatus": "Payment status",
     "reason": "Reason",
     "note": "Note",
-    "conclusion": "Doctor's Conclusion"
+    "conclusion": "Doctor's Conclusion",
+    "schedule": {
+      "expertise": "Expertise"
+    },
+    "patient": {
+      "name": "Name"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "cancel": "Cancel",
+      "booked": "Booked",
+      "waiting": "Waiting for payment"
+    }
   }
 }

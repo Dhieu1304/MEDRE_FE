@@ -10,7 +10,7 @@ import { useFetchingStore } from "../../store/FetchingApiStore";
 import bookingServices from "../../services/bookingServices";
 import { normalizeStrToInt } from "../../utils/standardizedForForm";
 
-function BookingList({ title }) {
+function BookingList({ title, type }) {
   const [bookings, setBookings] = useState([]);
   const [count, setCount] = useState();
 
@@ -38,14 +38,24 @@ function BookingList({ title }) {
 
   const { fetchApi } = useFetchingStore();
 
-  // console.log("bookings: ", bookings);
-  // console.log("count: ", count);
-
   const loadData = async ({ page }) => {
     fetchApi(async () => {
+      let from;
+      let to;
+      let order;
+      if (type === "history") {
+        to = new Date();
+        order = "date:desc";
+      } else if (type === "schedule") {
+        from = new Date();
+        order = "date:asc";
+      }
       const res = await bookingServices.getBookingList({
         page,
-        limit: watch().limit
+        limit: watch().limit,
+        from,
+        to,
+        order
       });
 
       let countData = 0;
@@ -92,7 +102,7 @@ function BookingList({ title }) {
         {title}
       </Typography>
       {bookings.map((booking) => {
-        return <BookingCard key={booking?.id} />;
+        return <BookingCard key={booking?.id} booking={booking} />;
       })}
 
       {!!count && (
@@ -120,7 +130,8 @@ function BookingList({ title }) {
 }
 
 BookingList.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  type: PropTypes.oneOf(["schedule", "booking"]).isRequired
 };
 
 export default BookingList;

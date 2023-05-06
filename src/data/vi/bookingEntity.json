@@ -7,6 +7,19 @@
     "paymentStatus": "Tình trạng thanh đoán",
     "reason": "Lý do khám",
     "note": "Ghi chú",
-    "conclusion": "Kết luận bác sĩ"
+    "conclusion": "Kết luận bác sĩ",
+    "schedule": {
+      "expertise": "Chuyên khoa"
+    },
+    "patient": {
+      "name": "Họ tên"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "cancel": "Hủy lịch",
+      "booked": "Đã đặt",
+      "waiting": "Chờ thanh toán"
+    }
   }
 }
