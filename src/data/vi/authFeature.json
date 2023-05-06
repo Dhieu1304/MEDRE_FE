@@ -10,6 +10,7 @@
     },
 
     "link": {
+      "verification": "Xác thực",
       "forgotPassword": "Quên mật khẩu",
       "dontHaveAnAccount": "Không có tài khoản",
       "signUp": "Đăng ký"
@@ -36,6 +37,7 @@
       },
 
       "link": {
+        "verification": "Xác thực",
         "signIn": "Đăng nhập",
         "signUp": "Đăng ký"
       }

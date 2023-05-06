@@ -1,35 +1,22 @@
 import { Button, Grid, Typography, Box, useTheme, FormHelperText } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Controller, useFormContext } from "react-hook-form";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import { MuiOtpInput } from "mui-one-time-password-input";
-import routeConfig, { authRoutes } from "../../../config/routeConfig";
-// import { authRoutes } from "../../../pages/AuthPage";
+import routeConfig from "../../../config/routeConfig";
+import authRoutes from "../../../pages/AuthPage/routes";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 
-function OtpForm() {
-  const { handleSubmit, control } = useForm({
-    mode: "onChange",
-    defaultValues: {
-      otp: ""
-    },
-    criteriaMode: "all"
-  });
+function OtpForm({ handleVerifyOtp }) {
+  const { control, handleSubmit } = useFormContext();
 
   const theme = useTheme();
   const authStore = useAuthStore();
-  const navigate = useNavigate();
 
-  const { t } = useTranslation("authFeature", { keyPrefix: "Register.otpForm" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "OtpForm" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
-
-  const handleVerifyOtp = async ({ otp }) => {
-    const result = await authStore.registerVerifyOtp({ otp });
-    if (result) {
-      navigate(routeConfig.auth + authRoutes.login);
-    }
-  };
 
   return (
     <Box
@@ -123,5 +110,9 @@ function OtpForm() {
     </Box>
   );
 }
+
+OtpForm.propTypes = {
+  handleVerifyOtp: PropTypes.func.isRequired
+};
 
 export default OtpForm;

@@ -1,35 +1,26 @@
-import { Button, Grid, Typography, Box, useTheme, FormHelperText } from "@mui/material";
-import { Controller, useForm } from "react-hook-form";
-import { Link, useNavigate } from "react-router-dom";
+import { Button, Grid, Typography, Box, useTheme } from "@mui/material";
+import PropTypes from "prop-types";
+
+import { useFormContext } from "react-hook-form";
+import { Link } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
-import { MuiOtpInput } from "mui-one-time-password-input";
-import routeConfig, { authRoutes } from "../../../config/routeConfig";
-// import { authRoutes } from "../../../pages/AuthPage";
-import { useAuthStore } from "../../../store/AuthStore/hooks";
+import routeConfig from "../../../config/routeConfig";
+import authRoutes from "../../../pages/AuthPage/routes";
 
-function OtpForm() {
-  const { handleSubmit, control } = useForm({
-    mode: "onChange",
-    defaultValues: {
-      otp: ""
-    },
-    criteriaMode: "all"
-  });
+import { useAuthStore } from "../../../store/AuthStore/hooks";
+import CustomInput from "../../../components/CustomInput/CustomInput";
+import patternConfig from "../../../config/patternConfig";
+
+function InfoForm({ handleSendVerification }) {
+  const { handleSubmit, control, trigger } = useFormContext();
 
   const theme = useTheme();
   const authStore = useAuthStore();
-  const navigate = useNavigate();
 
-  const { t } = useTranslation("authFeature", { keyPrefix: "Register.otpForm" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "InfoForm" });
+  const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
-
-  const handleVerifyOtp = async ({ otp }) => {
-    const result = await authStore.registerVerifyOtp({ otp });
-    if (result) {
-      navigate(routeConfig.auth + authRoutes.login);
-    }
-  };
 
   return (
     <Box
@@ -57,45 +48,30 @@ function OtpForm() {
       >
         {t("title")}
       </Typography>
-      <Box
-        component="form"
-        noValidate
-        onSubmit={handleSubmit(handleVerifyOtp)}
-        sx={{
-          marginTop: 1,
-          px: {
-            sm: 8,
-            xs: 2
-          }
-        }}
-      >
+      <Box component="form" noValidate onSubmit={handleSubmit(handleSendVerification)} sx={{ marginTop: 1 }}>
         <Box
           sx={{
             mb: 2
           }}
         >
-          <Controller
-            name="otp"
+          <CustomInput
             control={control}
             rules={{
-              validate: (value) =>
-                value.length === 6 ||
-                tInputValidate("length", {
-                  label: "OTP",
-                  length: 6
-                })
+              required: tInputValidate("required"),
+              pattern: {
+                value: patternConfig.phoneOrEmailPattern,
+                message: tInputValidate("format")
+              }
             }}
-            render={({ field, fieldState }) => (
-              <Box>
-                <MuiOtpInput sx={{ gap: 1 }} {...field} length={6} />
-                {fieldState.invalid ? <FormHelperText error>{fieldState.error?.message}</FormHelperText> : null}
-              </Box>
-            )}
+            label={tUser("phoneNumberOrEmail")}
+            trigger={trigger}
+            name="phoneNumberOrEmail"
+            type="text"
           />
         </Box>
 
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
-          {t("button.verifyOtp")}
+          {t("button.send")}
         </Button>
         {authStore.isFetchApiError && (
           <Typography component="h3" color={theme.palette.error[theme.palette.mode]}>
@@ -124,4 +100,8 @@ function OtpForm() {
   );
 }
 
-export default OtpForm;
+InfoForm.propTypes = {
+  handleSendVerification: PropTypes.func.isRequired
+};
+
+export default InfoForm;

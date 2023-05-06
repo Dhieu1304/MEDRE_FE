@@ -10,6 +10,7 @@
     },
 
     "link": {
+      "verification": "Verify",
       "forgotPassword": "Forgot password",
       "dontHaveAnAccount": "Don't have an account?",
       "signUp": "Sign up"
@@ -37,6 +38,7 @@
       },
 
       "link": {
+        "verification": "Verify",
         "signIn": "Sign in",
         "signUp": "Sign up"
       }

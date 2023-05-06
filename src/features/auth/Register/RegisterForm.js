@@ -12,15 +12,14 @@ import routeConfig, { authRoutes } from "../../../config/routeConfig";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import { userInputValidate } from "../../../entities/User/constant";
-import patternConfig from "../../../config/patternConfig";
 
 function RegisterForm({ setStep }) {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
-      phoneNumberOrEmail: "0375435896",
-      password: "A@111111",
-      confirmPassword: "A@111111"
+      phoneNumber: "0375435896",
+      password: "111111",
+      confirmPassword: "111111"
     },
     criteriaMode: "all"
   });
@@ -32,20 +31,10 @@ function RegisterForm({ setStep }) {
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const handleRegister = async ({ phoneNumberOrEmail, password }) => {
-    // console.log({ phoneNumberOrEmail, password });
+  const handleRegister = async ({ phoneNumber, password }) => {
+    // console.log({ phoneNumber, password });
 
-    let phoneNumber;
-    let email;
-    if (patternConfig.phonePattern.test(phoneNumberOrEmail)) {
-      // console.log("Reigster by phone");
-      phoneNumber = phoneNumberOrEmail;
-    } else {
-      // console.log("Reigster by email");
-      email = phoneNumberOrEmail;
-    }
-
-    const result = await authStore.register({ phoneNumber, email, password });
+    const result = await authStore.register({ phoneNumber, password });
     if (result) {
       setStep((prev) => prev + 1);
     }
@@ -88,14 +77,14 @@ function RegisterForm({ setStep }) {
             rules={{
               required: tInputValidate("required"),
               pattern: {
-                value: patternConfig.phoneOrEmailPattern,
+                value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
                 message: tInputValidate("format")
               }
             }}
-            label={tUser("phoneNumberOrEmail")}
+            label={tUser("phoneNumber")}
             trigger={trigger}
-            name="phoneNumberOrEmail"
-            type="text"
+            name="phoneNumber"
+            type="tel"
           />
         </Box>
 

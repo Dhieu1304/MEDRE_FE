@@ -1,0 +1,38 @@
+{
+  "InfoForm": {
+    "title": "Nhập thông tin",
+    "button": {
+      "send": "Gửi xác thực"
+    },
+
+    "link": {
+      "verification": "Xác thực",
+      "signIn": "Đăng nhập",
+      "signUp": "Đăng ký"
+    }
+  },
+
+  "OtpForm": {
+    "title": "Nhập OTP từ điện thoại",
+    "button": {
+      "verifyOtp": "Xác nhận OTP"
+    },
+
+    "link": {
+      "verification": "Xác thực",
+      "signIn": "Đăng nhập",
+      "signUp": "Đăng ký"
+    }
+  },
+
+  "SentEmailInfo": {
+    "title": "Email đã được gửi",
+    "subTitle": {
+      "askToCheckMail": "Vui lòng kiểm tra email của bạn"
+    },
+    "link": {
+      "signIn": "Đăng nhập",
+      "signUp": "Đăng ký"
+    }
+  }
+}

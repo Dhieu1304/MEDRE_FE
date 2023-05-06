@@ -127,6 +127,7 @@ function Login() {
         <Grid container>
           <Grid item xs>
             <Link to={routeConfig.auth + authRoutes.forgetPassword}>{t("link.forgotPassword")}</Link>
+            <Link to={routeConfig.verification}>{t("link.verification")}</Link>
           </Grid>
           <Grid item>
             <Link to={routeConfig.auth + authRoutes.register}>
