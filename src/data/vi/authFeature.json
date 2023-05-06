@@ -52,5 +52,17 @@
       "signIn": "Đăng nhập",
       "signUp": "Đăng ký"
     }
+  },
+
+  "Profile": {
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân"
+    },
+    "button": {
+      "reset": "Đặt lại",
+      "save": "Lưu"
+    }
   }
 }

@@ -78,7 +78,7 @@ function AuthProvider({ children }) {
           const { user } = res;
           dispatch(actions.login(user));
           dispatch(actions.fetchApiSuccess());
-          return true;
+          return user;
         }
         const { message } = res;
         dispatch(actions.fetchApiFailed(message));
