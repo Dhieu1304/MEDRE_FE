@@ -1,14 +1,14 @@
 {
   "properties": {
     "id": "ID",
-    "phoneNumber": "Phone Number",
+    "phoneNumber": "Phone number",
     "email": "Email",
     "name": "Name",
     "image": "Image",
     "address": "Address",
     "gender": "Gender",
-    "dob": "Date of Birth",
-    "healthInsurance": "Health Insurance",
+    "dob": "Date of birth",
+    "healthInsurance": "Health insurance",
     "createdAt": "Created at",
     "updatedAt": "Updated at",
     "deletedAt": "Deleted at",

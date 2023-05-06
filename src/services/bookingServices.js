@@ -112,8 +112,35 @@ const cancelBooking = async (id) => {
   }
 };
 
+const getBookingDetail = async (id) => {
+  try {
+    const res = await axiosClient.get(bookingApi.bookingDetail(id));
+
+    if (res?.status) {
+      const booking = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        success: true,
+        booking,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getBookingList,
   book,
-  cancelBooking
+  cancelBooking,
+  getBookingDetail
 };

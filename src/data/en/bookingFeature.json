@@ -9,18 +9,17 @@
       "day": "Day"
     }
   },
-  "booking_detail": {
-    "title": "Detail",
-    "export": "Export",
-    "doctor": "Doctor",
-    "expertise": "Expertise",
-    "time": "Time",
-    "name": "Full name",
-    "phone": "Phone",
-    "status": "Status",
-    "code": "Code",
-    "reason": "Reason",
-    "note": "Doctor's note"
+
+  "BookingDetail": {
+    "title": "Booking detail",
+    "subTitle": {
+      "scheduleInfo": "Schedule information",
+      "doctorInfo": "Doctor information",
+      "patientInfo": "Patient information"
+    },
+    "button": {
+      "exportFile": "Export file"
+    }
   },
 
   "BookingModal": {

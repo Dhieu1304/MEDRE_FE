@@ -25,7 +25,8 @@ const timeOffApi = {
 const bookingApi = {
   bookingList: () => "/booking/list",
   book: () => "/booking/new-booking",
-  cancelBooking: () => "/booking/cancel"
+  cancelBooking: () => "/booking/cancel",
+  bookingDetail: (id) => `/booking/detail/${id}`
 };
 
 const patientApi = {

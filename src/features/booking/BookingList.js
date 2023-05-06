@@ -11,6 +11,7 @@ import bookingServices from "../../services/bookingServices";
 import { normalizeStrToInt } from "../../utils/standardizedForForm";
 import CancelBookingModal from "./component/CancelBookingModal";
 import { useCustomModal } from "../../components/CustomModal";
+import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 
 function BookingList({ title, type }) {
   const [bookings, setBookings] = useState([]);
@@ -39,7 +40,7 @@ function BookingList({ title, type }) {
     criteriaMode: "all"
   });
 
-  const { fetchApi } = useFetchingStore();
+  const { isLoading, fetchApi } = useFetchingStore();
 
   const cancelBookingModal = useCustomModal();
 
@@ -96,6 +97,7 @@ function BookingList({ title, type }) {
 
   return (
     <>
+      <CustomOverlay open={isLoading} />
       <Box>
         <Typography
           component="h1"
