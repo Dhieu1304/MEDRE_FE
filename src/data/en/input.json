@@ -9,6 +9,7 @@
     "lte": "{{left}} must be less than or equal {{right}}",
     "gte": "{{left}} must be greater than or equal {{right}}",
     "same": "{{left}} must be same as {{right}}",
-    "passwordFormat": "must contain at least one digit and one character"
+    "passwordFormat": "must contain at least one digit and one character",
+    "length": "{{label}} must have {{length}} characters"
   }
 }

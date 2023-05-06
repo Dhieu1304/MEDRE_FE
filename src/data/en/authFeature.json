@@ -28,6 +28,18 @@
         "dontHaveAnAccount": "Don't have an account?",
         "signIn": "Sign in"
       }
+    },
+
+    "otpForm": {
+      "title": "Enter OTP from your phone",
+      "button": {
+        "verifyOtp": "Confirm OTP"
+      },
+
+      "link": {
+        "signIn": "Sign in",
+        "signUp": "Sign up"
+      }
     }
   }
 }

@@ -28,6 +28,17 @@
         "haveAnAccount": "Đã có tài khoản",
         "signIn": "Đăng nhập"
       }
+    },
+    "otpForm": {
+      "title": "Nhập OTP từ điện thoại",
+      "button": {
+        "verifyOtp": "Xác nhận OTP"
+      },
+
+      "link": {
+        "signIn": "Đăng nhập",
+        "signUp": "Đăng ký"
+      }
     }
   },
 

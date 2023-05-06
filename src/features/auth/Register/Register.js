@@ -7,7 +7,7 @@ const Register = () => {
   // const [step, setStep] = useState(1);
 
   const render = () => {
-    const step = 1;
+    const step = 2;
     switch (step) {
       case 1:
         return <RegisterForm />;
