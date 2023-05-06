@@ -78,6 +78,13 @@ function Header({ window }) {
     await authStore.logout();
   };
 
+  const handleChangeLanguage = () => {
+    const newLocale = locale === "viVN" ? "enUS" : "viVN";
+    const code = newLocale.slice(0, 2);
+    setLocale(newLocale);
+    i18n.changeLanguage(code);
+  };
+
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
       <Typography variant="h4" sx={{ my: 2, mr: "auto" }}>
@@ -182,6 +189,18 @@ function Header({ window }) {
               ))}
             </Box>
 
+            <Box
+              component={Avatar}
+              src={locale === "enUS" ? images.vietnamese : images.english}
+              sx={{
+                cursor: "pointer",
+                width: 25,
+                height: 25,
+                mr: 4
+              }}
+              onClick={handleChangeLanguage}
+            />
+
             {authStore.isLogin ? (
               <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
@@ -252,17 +271,7 @@ function Header({ window }) {
                   <MenuItem>
                     <FormGroup sx={{ justifyContent: "flex-start" }}>
                       <FormControlLabel
-                        control={
-                          <Switch
-                            checked={locale === "enUS"}
-                            onClick={() => {
-                              const newLocale = locale === "viVN" ? "enUS" : "viVN";
-                              const code = newLocale.slice(0, 2);
-                              setLocale(newLocale);
-                              i18n.changeLanguage(code);
-                            }}
-                          />
-                        }
+                        control={<Switch checked={locale === "enUS"} onClick={handleChangeLanguage} />}
                         sx={{ ml: 0 }}
                         label="English"
                         labelPlacement="start"

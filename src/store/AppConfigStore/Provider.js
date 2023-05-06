@@ -5,7 +5,17 @@ import Context from "./Context";
 
 function AppConfigProvider({ children }) {
   const [mode, setMode] = useState(LIGHT);
-  const [locale, setLocale] = useState("viVN");
+
+  const localeCodeObj = useMemo(() => {
+    return {
+      vi: "viVN",
+      en: "enUS"
+    };
+  }, []);
+
+  const currentLocaleCode = localStorage.getItem("i18nextLng") || "en";
+
+  const [locale, setLocale] = useState(localeCodeObj[currentLocaleCode]);
 
   const value = useMemo(
     () => ({
