@@ -4,9 +4,35 @@
     "time": "Time",
     "status": "Status",
     "code": "Code",
-    "paymentStatus": "Payment status",
+    "paymentStatus": "Payment",
     "reason": "Reason",
     "note": "Note",
-    "conclusion": "Doctor's Conclusion"
+    "conclusion": "Doctor's Conclusion",
+    "schedule": {
+      "expertise": "Expertise"
+    },
+    "patient": {
+      "phoneNumber": "Phone number",
+      "name": "Name",
+      "address": "Address",
+      "gender": "Gender",
+      "dob": "Date of birth",
+      "healthInsurance": "Health insurance"
+    },
+    "doctor": {
+      "name": "Name",
+      "expertises": "Expertises"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "cancel": "Cancel",
+      "booked": "Booked",
+      "waiting": "Waiting for payment"
+    },
+    "paymentStatuses": {
+      "paid": "Paid",
+      "unpaid": "Unpaid"
+    }
   }
 }

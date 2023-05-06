@@ -23,7 +23,10 @@ const timeOffApi = {
 };
 
 const bookingApi = {
-  book: () => "/booking/new-booking"
+  bookingList: () => "/booking/list",
+  book: () => "/booking/new-booking",
+  cancelBooking: () => "/booking/cancel",
+  bookingDetail: (id) => `/booking/detail/${id}`
 };
 
 const patientApi = {

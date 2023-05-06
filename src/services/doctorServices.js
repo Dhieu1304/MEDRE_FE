@@ -49,18 +49,6 @@ const getDoctorDetail = async (id) => {
   try {
     const res = await axiosClient.get(doctorApi.doctorDetail(id));
 
-    // console.log("res: ", res);
-    // const res = camelcaseKeys(
-    //   {
-    //     status: true,
-    //     message: "",
-    //     data: {
-    //       doctor: doctorMockData.detail(id)
-    //     }
-    //   },
-    //   { deep: true }
-    // );
-
     if (res?.status) {
       const doctor = camelcaseKeys(res?.data, { deep: true });
 

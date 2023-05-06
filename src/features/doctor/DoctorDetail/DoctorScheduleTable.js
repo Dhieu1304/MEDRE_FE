@@ -472,7 +472,6 @@ function DoctorScheduleTable({ timesList, doctorId }) {
                     component="th"
                     scope="row"
                   >
-                    {/* {row?.timeStart} - {row?.timeEnd} */}
                     {`${timesList[index]?.timeStart?.split(":")[0]}:${timesList[index]?.timeStart?.split(":")[1]}`} -{" "}
                     {`${timesList[index]?.timeEnd?.split(":")[0]}:${timesList[index]?.timeEnd?.split(":")[1]}`}
                   </TableCell>

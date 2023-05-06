@@ -7,3 +7,8 @@ export const bookingStatuses = {
   BOOKED: "Booked",
   CANCELED: "Canceled"
 };
+
+export const bookingPaymentStatuses = {
+  PAID: true,
+  UNPAID: false
+};

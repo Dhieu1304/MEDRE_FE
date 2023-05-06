@@ -1,129 +1,290 @@
-import { Box, Button, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  IconButton,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+  useTheme
+} from "@mui/material";
+import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
-
-const reason = `Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus
-at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque
-erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec
-semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla.
-Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices
-mattis odio. Donec vitae nisi. Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper
-augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit
-ligula in lacus. Curabitur at ipsum ac tellus semper interdum. 2 Morbi ut odio. Cras mi pede,
-malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor
-sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.
-Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit
-at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.`;
-
-const note = `Nullam varius. Nulla facilisi. Cras non velit nec nisi vulputate nonummy. Maecenas tincidunt lacus
-at velit. Vivamus vel nulla eget eros elementum pellentesque. Quisque porta volutpat erat. Quisque
-erat eros, viverra eget, congue eget, semper rutrum, nulla. Nunc purus. Phasellus in felis. Donec
-semper sapien a libero. Nam dui. Proin leo odio, porttitor id, consequat in, consequat ut, nulla.
-Sed accumsan felis. Ut at dolor quis odio consequat varius. Integer ac leo. Pellentesque ultrices
-mattis odio. Donec vitae nisi. Nam ultrices, libero non mattis pulvinar, nulla pede ullamcorper
-augue, a suscipit nulla elit ac nulla. Sed vel enim sit amet nunc viverra dapibus. Nulla suscipit
-ligula in lacus. Curabitur at ipsum ac tellus semper interdum. 2 Morbi ut odio. Cras mi pede,
-malesuada in, imperdiet et, commodo vulputate, justo. In blandit ultrices enim. Lorem ipsum dolor
-sit amet, consectetuer adipiscing elit. Proin interdum mauris non ligula pellentesque ultrices.
-Phasellus id sapien in sapien iaculis congue. Vivamus metus arcu, adipiscing molestie, hendrerit
-at, vulputate vitae, nisl. Aenean lectus. Pellentesque eget nunc.`;
+import { useParams } from "react-router";
+import formatDate from "date-and-time";
+import { FileDownload as FileDownloadIcon } from "@mui/icons-material";
+import bookingServices from "../../services/bookingServices";
+import { useFetchingStore } from "../../store/FetchingApiStore";
+import { useAppConfigStore } from "../../store/AppConfigStore";
+import { formatDateLocale } from "../../utils/datetimeUtil";
+import { bookingPaymentStatuses } from "../../entities/Booking/constant";
+import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 
 function BookingDetail() {
-  const { t } = useTranslation("bookingFeature", { keyPrefix: "booking_detail" });
+  const [booking, setBooking] = useState();
+
+  const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingDetail" });
+  const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
+  const { t: tBookingConstants } = useTranslation("bookingEntity", { keyPrefix: "constants" });
+
+  const params = useParams();
+  const bookingId = useMemo(() => params?.bookingId, [params?.bookingId]);
+
+  const { isLoading, fetchApi } = useFetchingStore();
+  const { locale } = useAppConfigStore();
+  const theme = useTheme();
+
+  useMemo(() => {
+    const code = locale.slice(0, 2);
+    const currentLocale = formatDateLocale[code] || formatDateLocale.en;
+    formatDate.locale(currentLocale);
+  }, [locale]);
+
+  const bookingPaymentStatusListObj = useMemo(() => {
+    return [
+      {
+        label: tBookingConstants("paymentStatuses.paid"),
+        value: bookingPaymentStatuses.PAID
+      },
+      {
+        label: tBookingConstants("paymentStatuses.unpaid"),
+        value: bookingPaymentStatuses.UNPAID
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
+
+  useEffect(() => {
+    const loadData = async () => {
+      await fetchApi(async () => {
+        const res = await bookingServices.getBookingDetail(bookingId);
+
+        if (res.success) {
+          const bookingData = res.booking;
+          setBooking(bookingData);
+
+          return { success: true };
+        }
+        setBooking({});
+        return { error: res.message };
+      });
+    };
+    loadData();
+  }, []);
+  const tableFirstCellProps = {
+    component: "th",
+    scope: "row",
+    width: "40%",
+    sx: {
+      fontSize: {
+        md: 16,
+        xs: 10
+      },
+      verticalAlign: "top"
+    }
+  };
+
+  const tableSecondCellProps = {
+    align: "left",
+    sx: {
+      width: "40%",
+      fontSize: {
+        md: 16,
+        xs: 10
+      }
+    }
+  };
+
   return (
-    <Box sx={{ display: "flex", flexDirection: "column" }}>
-      <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center" }}>
-        <Typography variant="h4" sx={{ mb: 4 }}>
-          {t("title")}
-        </Typography>
+    <>
+      <CustomOverlay open={isLoading} />
+      <Box sx={{ display: "flex", flexDirection: "column" }}>
+        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
+          <Typography
+            component="h1"
+            variant="h4"
+            fontWeight={600}
+            fontSize={{
+              sm: 30,
+              xs: 25
+            }}
+          >
+            {t("title")}
+          </Typography>
 
-        <Button variant="contained" size="small" onClick={() => {}}>
-          {t("export")}
-        </Button>
-      </Box>
+          <Button
+            variant="contained"
+            size="small"
+            onClick={() => {}}
+            sx={{
+              display: {
+                sm: "flex",
+                xs: "none"
+              },
+              backgroundColor: theme.palette.success.light,
+              color: theme.palette.success.contrastText
+            }}
+            endIcon={<FileDownloadIcon />}
+          >
+            {t("button.exportFile")}
+          </Button>
 
-      <Box sx={{ flexDirection: "column", p: 4, mb: 2, border: "1px solid rgba(0,0,0,0.2)" }}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableBody>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("doctor")}
-                </TableCell>
-                <TableCell align="left">Nguyễn Đình Hiệu</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("expertise")}
-                </TableCell>
-                <TableCell align="left">Răng hàm mặt, tiểu phẩu</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("time")}
-                </TableCell>
-                <TableCell align="left">10h00-10h20</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("name")}
-                </TableCell>
-                <TableCell align="left">Trần Ngọc Sang</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("phone")}
-                </TableCell>
-                <TableCell align="left">Sang</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("status")}
-                </TableCell>
-                <TableCell align="left">Online</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("code")}
-                </TableCell>
-                <TableCell align="left">Đã thanh toán</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell component="th" scope="row" width="30%">
-                  {t("reason")}
-                </TableCell>
-                <TableCell align="left">546456</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  width="30%"
-                  sx={{
-                    verticalAlign: "top"
-                  }}
-                >
-                  {t("note")}
-                </TableCell>
-                <TableCell align="left">{reason}</TableCell>
-              </TableRow>
-              <TableRow>
-                <TableCell
-                  component="th"
-                  scope="row"
-                  width="30%"
-                  sx={{
-                    verticalAlign: "top"
-                  }}
-                >
-                  Ghi chú của bác sĩ
-                </TableCell>
-                <TableCell align="left">{note}</TableCell>
-              </TableRow>
-            </TableBody>
-          </Table>
-        </TableContainer>
+          <IconButton
+            sx={{
+              display: {
+                sm: "none",
+                xs: "flex"
+              },
+              color: theme.palette.success.light
+            }}
+          >
+            <FileDownloadIcon />
+          </IconButton>
+        </Box>
+        {/* , border: "1px solid rgba(0,0,0,0.2)" */}
+        <Box
+          sx={{
+            flexDirection: "column",
+            alignItems: "center",
+            mb: 2,
+            width: "100%",
+            px: {
+              md: 0,
+              xs: 0
+            }
+          }}
+        >
+          <Box sx={{ flexDirection: "column", mb: 2 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+            >
+              {t("subTitle.scheduleInfo")}
+            </Typography>
+
+            <TableContainer component={Paper}>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("date")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>
+                      {formatDate.format(new Date(booking?.date), "ddd, DD/MM/YY")}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("time")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>
+                      {" "}
+                      {`${booking?.bookingTimeSchedule?.timeStart?.split(":")[0]}:${
+                        booking?.bookingTimeSchedule?.timeStart?.split(":")[1]
+                      }`}{" "}
+                      -{" "}
+                      {`${booking?.bookingTimeSchedule?.timeEnd?.split(":")[0]}:${
+                        booking?.bookingTimeSchedule?.timeEnd?.split(":")[1]
+                      }`}{" "}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("schedule.expertise")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleExpertise?.name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("paymentStatus")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{bookingPaymentStatusListObj[booking?.isPayment]?.label}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("reason")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.reason}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+
+          <Box sx={{ flexDirection: "column", mb: 2 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+            >
+              {t("subTitle.doctorInfo")}
+            </Typography>
+
+            <TableContainer component={Paper}>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("doctor.name")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleOfStaff?.name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("doctor.expertises")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>
+                      {booking?.bookingSchedule?.scheduleOfStaff?.expertises?.map((expertise) => expertise?.name).join(", ")}{" "}
+                    </TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+
+          <Box sx={{ flexDirection: "column", mb: 2 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+            >
+              {t("subTitle.patientInfo")}
+            </Typography>
+
+            <TableContainer component={Paper}>
+              <Table>
+                <TableBody>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("patient.name")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.bookingOfPatient?.name}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("patient.dob")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>
+                      {formatDate.format(new Date(booking?.bookingOfPatient?.dob), "DD/MM/YY")}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("patient.phoneNumber")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.bookingOfPatient?.phoneNumber}</TableCell>
+                  </TableRow>
+                  <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("patient.address")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>{booking?.bookingOfPatient?.address}</TableCell>
+                  </TableRow>
+                </TableBody>
+              </Table>
+            </TableContainer>
+          </Box>
+        </Box>
       </Box>
-    </Box>
+    </>
   );
 }
 

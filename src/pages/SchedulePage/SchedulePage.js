@@ -8,7 +8,8 @@ export default function SchedulePage() {
   const { t } = useTranslation("schedulePage");
   return (
     <Routes>
-      <Route path={routes.list} element={<BookingList title={t("title")} />} />
+      <Route path={routes.list} element={<BookingList title={t("title")} type="schedule" />} />
+
       <Route path={routes.detail} element={<BookingDetail />} />
     </Routes>
   );

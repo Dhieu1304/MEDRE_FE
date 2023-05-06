@@ -1,23 +1,25 @@
 {
-  "booking_card": {
-    "time": "Ca khám",
-    "name": "Họ tên bệnh nhân",
-    "status": "Tình trạng",
-    "code": "Mã tham gia",
-    "detail_btn_label": "Chi tiết"
+  "BookingCard": {
+    "button": {
+      "detail": "Chi tiết",
+      "payment": "Thanh toán",
+      "cancel": "Hủy lịch"
+    },
+    "countDown": {
+      "day": "Ngày"
+    }
   },
-  "booking_detail": {
+
+  "BookingDetail": {
     "title": "Chi tiết lịch khám",
-    "export": "Xuất file",
-    "doctor": "Bác sĩ",
-    "expertise": "Chuyên khoa",
-    "time": "Ca khám",
-    "name": "Họ tên bệnh nhân",
-    "phone": "Số điện thoại",
-    "status": "Tình trạng",
-    "code": "Mã tham gia",
-    "reason": "Lý do khám",
-    "note": "Ghi chú của bác sĩ"
+    "subTitle": {
+      "scheduleInfo": "Thông tin lịch khám",
+      "doctorInfo": "Thông tin bác sĩ",
+      "patientInfo": "Thông tin bệnh nhân"
+    },
+    "button": {
+      "exportFile": "Xuất file"
+    }
   },
 
   "BookingModal": {
@@ -32,6 +34,14 @@
     },
     "button": {
       "book": "Đặt lịch"
+    }
+  },
+
+  "CancelBookingModal": {
+    "title": "Hủy lịch khám",
+    "confirmQuestion": "Bạn có chắc chắn hủy lịch?",
+    "button": {
+      "cancel": "Hủy lịch"
     }
   }
 }
