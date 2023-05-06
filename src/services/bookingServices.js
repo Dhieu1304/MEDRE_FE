@@ -83,7 +83,37 @@ const book = async ({ scheduleId, timeId, date, reason, patientId }) => {
   }
 };
 
+const cancelBooking = async (id) => {
+  // console.log("id: ", id);
+  try {
+    const res = await axiosClient.post(bookingApi.cancelBooking(), {
+      id
+    });
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      // const schedules = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getBookingList,
-  book
+  book,
+  cancelBooking
 };

@@ -36,5 +36,13 @@
     "button": {
       "book": "Book"
     }
+  },
+
+  "CancelBookingModal": {
+    "title": "Cancel booking",
+    "confirmQuestion": "Are you sure to cancel this booking?",
+    "button": {
+      "cancel": "Cancel booking"
+    }
   }
 }

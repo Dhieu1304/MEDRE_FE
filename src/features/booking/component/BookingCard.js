@@ -28,7 +28,7 @@ import { formatDateLocale } from "../../../utils/datetimeUtil";
 import { scheduleTypes } from "../../../entities/Schedule";
 import { bookingStatuses } from "../../../entities/Booking";
 
-function BookingCard({ booking }) {
+function BookingCard({ booking, cancelBookingModal }) {
   //   const navigate = useNavigate();
 
   const { locale } = useAppConfigStore();
@@ -139,30 +139,33 @@ function BookingCard({ booking }) {
           alignItems: "center"
         }}
       >
-        {formatDate.subtract(new Date(), waitingTimeToSchedule).toDays() < -1 && (
-          <Button
-            variant="contained"
-            size="small"
-            sx={{
-              width: { sm: "inherit", xs: "100%" },
-              mb: { sm: 0, xs: 1 },
-              ml: 0,
-              backgroundColor: theme.palette.error.light,
-              color: theme.palette.error.contrastText,
-              ":hover": {
-                backgroundColor: theme.palette.error.dark,
-                color: theme.palette.error.contrastText
-              }
-            }}
-            onClick={() => {
-              // navigate(`${location.pathname}/${booking?.id}`);
-            }}
-          >
-            {t("button.cancel")}
-          </Button>
-        )}
+        {formatDate.subtract(new Date(), waitingTimeToSchedule).toDays() < -1 &&
+          booking.bookingStatus !== bookingStatuses.CANCELED && (
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                width: { sm: "inherit", xs: "100%" },
+                mb: { sm: 0, xs: 1 },
+                ml: 0,
+                backgroundColor: theme.palette.error.light,
+                color: theme.palette.error.contrastText,
+                ":hover": {
+                  backgroundColor: theme.palette.error.dark,
+                  color: theme.palette.error.contrastText
+                }
+              }}
+              onClick={() => {
+                // navigate(`${location.pathname}/${booking?.id}`);
+                cancelBookingModal.setShow(true);
+                cancelBookingModal.setData(booking);
+              }}
+            >
+              {t("button.cancel")}
+            </Button>
+          )}
 
-        {!booking?.isPayment && (
+        {!booking?.isPayment && booking.bookingStatus !== bookingStatuses.CANCELED && (
           <Button
             variant="contained"
             size="small"
@@ -206,6 +209,48 @@ function BookingCard({ booking }) {
         </Button>
       </Box>
     );
+  };
+
+  const renderStatus = (status) => {
+    const { CANCELED, BOOKED, WAITING } = bookingStatuses;
+
+    switch (status) {
+      case CANCELED:
+        return (
+          <Typography
+            sx={{
+              color: theme.palette.error.light
+            }}
+          >
+            {bookingStatusListObj[status]?.label}
+          </Typography>
+        );
+
+      case BOOKED:
+        return (
+          <Typography
+            sx={{
+              color: theme.palette.success.light
+            }}
+          >
+            {bookingStatusListObj[status]?.label}
+          </Typography>
+        );
+
+      case WAITING:
+        return (
+          <Typography
+            sx={{
+              color: theme.palette.warning.light
+            }}
+          >
+            {bookingStatusListObj[status]?.label}
+          </Typography>
+        );
+
+      default:
+        return null;
+    }
   };
 
   return (
@@ -343,7 +388,7 @@ function BookingCard({ booking }) {
                     </TableRow>
                     <TableRow>
                       <TableCell {...tableFirstCellProps}>{tBooking("status")}</TableCell>
-                      <TableCell {...tableSecondCellProps}>{bookingStatusListObj[booking?.bookingStatus]?.label}</TableCell>
+                      <TableCell {...tableSecondCellProps}>{renderStatus(booking?.bookingStatus)}</TableCell>
                     </TableRow>
                   </TableBody>
                 </Table>
@@ -358,7 +403,8 @@ function BookingCard({ booking }) {
 }
 
 BookingCard.propTypes = {
-  booking: PropTypes.object.isRequired
+  booking: PropTypes.object.isRequired,
+  cancelBookingModal: PropTypes.object.isRequired
 };
 
 export default BookingCard;

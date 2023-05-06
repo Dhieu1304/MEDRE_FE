@@ -9,6 +9,8 @@ import BookingCard from "./component/BookingCard";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import bookingServices from "../../services/bookingServices";
 import { normalizeStrToInt } from "../../utils/standardizedForForm";
+import CancelBookingModal from "./component/CancelBookingModal";
+import { useCustomModal } from "../../components/CustomModal";
 
 function BookingList({ title, type }) {
   const [bookings, setBookings] = useState([]);
@@ -27,6 +29,7 @@ function BookingList({ title, type }) {
   const defaultValues = useMemo(() => {
     const defaultSearchParams = qs.parse(location.search);
     const result = createDefaultValues(defaultSearchParams);
+
     return result;
   }, []);
 
@@ -37,6 +40,8 @@ function BookingList({ title, type }) {
   });
 
   const { fetchApi } = useFetchingStore();
+
+  const cancelBookingModal = useCustomModal();
 
   const loadData = async ({ page }) => {
     fetchApi(async () => {
@@ -85,53 +90,69 @@ function BookingList({ title, type }) {
     loadData({ page });
   }, [watch().limit]);
 
-  return (
-    <Box>
-      <Typography
-        component="h1"
-        variant="h4"
-        fontWeight={600}
-        fontSize={{
-          sm: 30,
-          xs: 25
-        }}
-        sx={{
-          mb: 4
-        }}
-      >
-        {title}
-      </Typography>
-      {bookings.map((booking) => {
-        return <BookingCard key={booking?.id} booking={booking} />;
-      })}
+  const handleAfterCancelBooking = async () => {
+    await loadData({ page: watch().page });
+  };
 
-      {!!count && (
-        <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
-          <Pagination
-            count={Math.ceil(count / watch().limit)}
-            color="primary"
-            page={watch().page}
-            sx={{
-              display: "flex",
-              justifyContent: "flex-end"
-            }}
-            onChange={(event, newPage) => {
-              setValue("page", newPage);
-              const params = { ...watch(), page: newPage };
-              const searchParams = qs.stringify(params);
-              navigate(`?${searchParams}`);
-              loadData({ page: newPage });
-            }}
-          />
-        </Box>
+  return (
+    <>
+      <Box>
+        <Typography
+          component="h1"
+          variant="h4"
+          fontWeight={600}
+          fontSize={{
+            sm: 30,
+            xs: 25
+          }}
+          sx={{
+            mb: 4
+          }}
+        >
+          {title}
+        </Typography>
+        {bookings.map((booking) => {
+          return <BookingCard key={booking?.id} booking={booking} cancelBookingModal={cancelBookingModal} />;
+        })}
+
+        {!!count && (
+          <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
+            <Pagination
+              count={Math.ceil(count / watch().limit)}
+              color="primary"
+              page={watch().page}
+              sx={{
+                display: "flex",
+                justifyContent: "flex-end"
+              }}
+              onChange={(event, newPage) => {
+                setValue("page", newPage);
+                const params = { ...watch(), page: newPage };
+                const searchParams = qs.stringify(params);
+                navigate(`?${searchParams}`);
+                loadData({ page: newPage });
+              }}
+            />
+          </Box>
+        )}
+      </Box>
+
+      {cancelBookingModal.show && (
+        <CancelBookingModal
+          show={cancelBookingModal.show}
+          setShow={cancelBookingModal.setShow}
+          data={cancelBookingModal.data}
+          setData={cancelBookingModal.setData}
+          handleAfterCancelBooking={handleAfterCancelBooking}
+        />
       )}
-    </Box>
+    </>
   );
 }
 
 BookingList.propTypes = {
   title: PropTypes.string.isRequired,
-  type: PropTypes.oneOf(["schedule", "booking"]).isRequired
+  type: PropTypes.oneOf(["schedule", "history"]).isRequired
 };
 
 export default BookingList;

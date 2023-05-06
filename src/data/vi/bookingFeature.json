@@ -36,5 +36,13 @@
     "button": {
       "book": "Đặt lịch"
     }
+  },
+
+  "CancelBookingModal": {
+    "title": "Hủy lịch khám",
+    "confirmQuestion": "Bạn có chắc chắn hủy lịch?",
+    "button": {
+      "cancel": "Hủy lịch"
+    }
   }
 }
