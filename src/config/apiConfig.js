@@ -1,6 +1,7 @@
 const authApi = {
-  loginByPhoneNumber: "/auth/login-by-phone-number",
-  register: "/auth/register"
+  loginByPhoneNumber: () => "/auth/login-by-phone-number",
+  register: () => "/auth/register",
+  registerVerifyOtp: () => ""
 };
 
 const userApi = {

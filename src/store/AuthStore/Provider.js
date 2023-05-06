@@ -42,9 +42,23 @@ function AuthProvider({ children }) {
           dispatch(actions.fetchApiSuccess());
         }
       },
-      register: async ({ phoneNumber, email, name, gender, dob, address, password }) => {
+      register: async ({ phoneNumber, password }) => {
         dispatch(actions.fetchApi());
-        const res = await authServices.register({ phoneNumber, email, name, gender, dob, address, password });
+        const res = await authServices.register({ phoneNumber, password });
+
+        if (res?.success) {
+          dispatch(actions.fetchApiSuccess());
+          return true;
+        }
+        const { message } = res;
+        dispatch(actions.fetchApiFailed(message));
+        toast.success(message);
+        return false;
+      },
+
+      registerVerifyOtp: async ({ otp }) => {
+        dispatch(actions.fetchApi());
+        const res = await authServices.registerVerifyOtp({ otp });
 
         if (res?.success) {
           dispatch(actions.fetchApiSuccess());
