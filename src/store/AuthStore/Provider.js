@@ -62,9 +62,9 @@ function AuthProvider({ children }) {
           dispatch(actions.fetchApiSuccess());
         }
       },
-      register: async ({ phoneNumber, password }) => {
+      register: async ({ phoneNumber, email, password }) => {
         dispatch(actions.fetchApi());
-        const res = await authServices.register({ phoneNumber, password });
+        const res = await authServices.register({ phoneNumber, email, password });
 
         if (res?.success) {
           dispatch(actions.fetchApiSuccess());

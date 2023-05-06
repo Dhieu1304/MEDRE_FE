@@ -73,11 +73,14 @@ const logout = async () => {
   };
 };
 
-const register = async ({ phoneNumber, password }) => {
+const register = async ({ phoneNumber, email, password }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     phone_number: phoneNumber,
-    password
+    password,
+    email
   });
+
+  // console.log("dataBody: ", dataBody);
 
   try {
     const res = await axiosClient.post(authApi.register(), dataBody);
