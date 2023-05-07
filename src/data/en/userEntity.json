@@ -5,6 +5,8 @@
     "email": "Email",
     "phoneNumberOrEmail": "Email or phone number",
     "password": "Password",
+    "oldPassword": "Old password",
+    "newPassword": "New password",
     "confirmPassword": "Confirm password",
     "name": "Name",
     "image": "Image",

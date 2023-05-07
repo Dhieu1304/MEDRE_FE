@@ -67,7 +67,41 @@ const editUserInfo = async ({ phoneNumber, email, name, address, gender, dob, he
   }
 };
 
+const changePassword = async ({ oldPassword, newPassword, confirmPassword }) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    old_password: oldPassword,
+    new_password: newPassword,
+    confirm_password: confirmPassword
+  });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(userApi.changePassword(), dataBody);
+
+    // console.log("changePassword res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getUserInfo,
-  editUserInfo
+  editUserInfo,
+  changePassword
 };

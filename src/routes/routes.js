@@ -27,7 +27,12 @@ const publicRoutes = [
   { path: `${routeConfig.schedule}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
   { path: `${routeConfig.history}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
   { path: `${routeConfig.profile}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
-  { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage, layout: AuthLayout },
+  {
+    path: `${routeConfig.changePassword}/*`,
+    component: Navigate,
+    props: { replace: true, to: "/auth/login" },
+    layout: null
+  },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   //---------------------------------
@@ -42,7 +47,7 @@ const privateRoutes = [
   { path: `${routeConfig.schedule}/*`, component: SchedulePage },
   { path: `${routeConfig.history}/*`, component: HistoryPage },
   { path: `${routeConfig.profile}/*`, component: ProfilePage },
-  { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage },
+  { path: `${routeConfig.changePassword}/*`, component: ChangePasswordPage, layout: AuthLayout },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
