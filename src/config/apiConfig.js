@@ -2,7 +2,14 @@ const authApi = {
   loginByPhoneNumber: () => "/auth/login-by-phone-number",
   loginByEmail: () => "/auth/login-by-email",
   register: () => "/auth/register",
-  registerVerifyOtp: () => ""
+  registerVerifyOtp: () => "",
+
+  sendVerificationToEmail: () => "/auth/verify/resend-mail",
+  sendResetPasswordToEmail: () => "/auth/reset-password/send-mail",
+  sendVerificationOtpToPhone: () => "",
+  sendResetPasswordOtpToPhone: () => "",
+
+  verifyOtpToVerfifyPhoneNumber: () => ""
 };
 
 const userApi = {

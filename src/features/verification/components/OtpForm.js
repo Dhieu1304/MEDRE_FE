@@ -9,7 +9,7 @@ import routeConfig from "../../../config/routeConfig";
 import authRoutes from "../../../pages/AuthPage/routes";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 
-function OtpForm({ handleVerifyOtp }) {
+function OtpForm({ handleVerifyOtp, backToFirstStep, resendVerification }) {
   const { control, handleSubmit } = useFormContext();
 
   const theme = useTheme();
@@ -99,6 +99,14 @@ function OtpForm({ handleVerifyOtp }) {
             </Link>
           </Grid>
           <Grid item>
+            <Box component="span" sx={{ color: "blue", cursor: "pointer" }} onClick={backToFirstStep}>
+              {t("link.back")}
+            </Box>
+            <Box component="span" sx={{ color: "blue", cursor: "pointer" }} onClick={resendVerification}>
+              {t("link.resend")}
+            </Box>
+          </Grid>
+          <Grid item>
             <Link to={routeConfig.auth + authRoutes.login}>
               <Box component="span" sx={{ color: "blue" }}>
                 {t("link.signIn")}
@@ -112,7 +120,9 @@ function OtpForm({ handleVerifyOtp }) {
 }
 
 OtpForm.propTypes = {
-  handleVerifyOtp: PropTypes.func.isRequired
+  handleVerifyOtp: PropTypes.func.isRequired,
+  backToFirstStep: PropTypes.func.isRequired,
+  resendVerification: PropTypes.func.isRequired
 };
 
 export default OtpForm;

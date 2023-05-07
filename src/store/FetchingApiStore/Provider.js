@@ -19,6 +19,8 @@ function FetchingApiProvider({ children }) {
         } else {
           dispatch(actions.fetchApiFailed(error));
         }
+
+        return { success, error };
       }
       // fetchApiSuccess: () => {
       //   dispatch(actions.fetchApiSuccess());

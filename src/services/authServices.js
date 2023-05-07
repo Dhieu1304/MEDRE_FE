@@ -142,10 +142,109 @@ const registerVerifyOtp = async ({ otp }) => {
   };
 };
 
+const sendVerificationToEmail = async (email) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    email,
+    type: 1
+  });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(authApi.sendVerificationToEmail(), dataBody);
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const sendVerificationOtpToPhone = async (phoneNumber) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   phone_number: phoneNumber
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.sendVerificationOtpToPhone(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: phoneNumber
+  };
+};
+
+const verifyOtpToVerfifyPhoneNumber = async (otp) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   otp
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.verifyOtpToVerfifyPhoneNumber(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: otp
+  };
+};
+
 export default {
   loginByPhoneNumber,
   loginByEmail,
   logout,
   register,
-  registerVerifyOtp
+  registerVerifyOtp,
+  sendVerificationToEmail,
+  sendVerificationOtpToPhone,
+  verifyOtpToVerfifyPhoneNumber
 };
