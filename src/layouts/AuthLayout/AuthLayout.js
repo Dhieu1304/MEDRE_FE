@@ -17,8 +17,8 @@ function AuthLayout({ children }) {
       <Grid
         item
         xs={12}
-        sm={8}
-        md={5}
+        md={8}
+        lg={6}
         component={Paper}
         elevation={6}
         square
@@ -69,8 +69,8 @@ function AuthLayout({ children }) {
       <Grid
         item
         xs={false}
-        sm={4}
-        md={7}
+        md={4}
+        lg={6}
         sx={{
           backgroundImage: `url(${images.authCover})`,
           backgroundRepeat: "no-repeat",

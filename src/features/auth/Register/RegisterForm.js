@@ -1,4 +1,4 @@
-import { Button, Grid, Typography, Box, useTheme } from "@mui/material";
+import { Button, Typography, Box, useTheme } from "@mui/material";
 // import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
@@ -169,19 +169,86 @@ function RegisterForm() {
           </Typography>
         )}
 
-        <Grid container>
-          <Grid item xs>
-            <Link to={routeConfig.auth + authRoutes.forgetPassword}>{t("link.forgotPassword")}</Link>
-          </Grid>
-          <Grid item>
-            <Link to={routeConfig.auth + authRoutes.login}>
-              {t("link.haveAnAccount")}
-              <Box component="span" sx={{ color: "blue", ml: 1 }}>
-                {t("link.signIn")}
-              </Box>
-            </Link>
-          </Grid>
-        </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            flexWrap: "wrap"
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: {
+                sm: "row",
+                xs: "column"
+              },
+              justifyContent: "space-between",
+              alignItems: {
+                sm: "center",
+                xs: "flex-start"
+              },
+              mr: 2
+            }}
+          >
+            <Box
+              component={Link}
+              sx={{ color: "blue", textDecoration: "none" }}
+              to={routeConfig.auth + authRoutes.forgetPassword}
+            >
+              {t("link.forgotPassword")}
+            </Box>
+            <Box
+              component={Link}
+              sx={{
+                color: "blue",
+                textDecoration: "none",
+                ml: {
+                  sm: 1,
+                  xs: 0
+                }
+              }}
+              to={routeConfig.verification}
+            >
+              {t("link.verification")}
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: {
+                sm: "row",
+                xs: "column"
+              },
+              justifyContent: "space-between",
+              alignItems: {
+                sm: "center",
+                xs: "flex-end"
+              },
+              color: "blue",
+              textDecoration: "none"
+            }}
+            component={Link}
+            to={routeConfig.auth + authRoutes.login}
+          >
+            <Box sx={{ color: "blue", textDecoration: "none" }}>{t("link.haveAnAccount")}</Box>
+            <Box
+              sx={{
+                color: "blue",
+                textDecoration: "none",
+                ml: {
+                  sm: 1,
+                  xs: 0
+                }
+              }}
+              component="span"
+            >
+              {t("link.signIn")}
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

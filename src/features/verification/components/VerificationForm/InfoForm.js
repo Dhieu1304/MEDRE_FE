@@ -1,21 +1,20 @@
-import { Button, Grid, Typography, Box, useTheme } from "@mui/material";
+import { Button, Grid, Typography, Box } from "@mui/material";
 import PropTypes from "prop-types";
 
 import { useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
-import routeConfig from "../../../config/routeConfig";
-import authRoutes from "../../../pages/AuthPage/routes";
+import routeConfig from "../../../../config/routeConfig";
+import authRoutes from "../../../../pages/AuthPage/routes";
 
-import { useAuthStore } from "../../../store/AuthStore/hooks";
-import CustomInput from "../../../components/CustomInput/CustomInput";
-import patternConfig from "../../../config/patternConfig";
+import { useAuthStore } from "../../../../store/AuthStore/hooks";
+import CustomInput from "../../../../components/CustomInput/CustomInput";
+import patternConfig from "../../../../config/patternConfig";
 
 function InfoForm({ handleSendVerification }) {
   const { handleSubmit, control, trigger } = useFormContext();
 
-  const theme = useTheme();
   const authStore = useAuthStore();
 
   const { t } = useTranslation("verificationFeature", { keyPrefix: "InfoForm" });
@@ -73,28 +72,25 @@ function InfoForm({ handleSendVerification }) {
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
           {t("button.send")}
         </Button>
-        {authStore.isFetchApiError && (
-          <Typography component="h3" color={theme.palette.error[theme.palette.mode]}>
-            {authStore.fetchApiError}
-          </Typography>
-        )}
 
-        <Grid container flexDirection="row" justifyContent="space-between">
-          <Grid item>
-            <Link to={routeConfig.auth + authRoutes.register}>
-              <Box component="span" sx={{ color: "blue" }}>
-                {t("link.signUp")}
-              </Box>
-            </Link>
+        {!authStore?.isLogin && (
+          <Grid container flexDirection="row" justifyContent="space-between">
+            <Grid item>
+              <Link to={routeConfig.auth + authRoutes.register}>
+                <Box component="span" sx={{ color: "blue" }}>
+                  {t("link.signUp")}
+                </Box>
+              </Link>
+            </Grid>
+            <Grid item>
+              <Link to={routeConfig.auth + authRoutes.login}>
+                <Box component="span" sx={{ color: "blue" }}>
+                  {t("link.signIn")}
+                </Box>
+              </Link>
+            </Grid>
           </Grid>
-          <Grid item>
-            <Link to={routeConfig.auth + authRoutes.login}>
-              <Box component="span" sx={{ color: "blue" }}>
-                {t("link.signIn")}
-              </Box>
-            </Link>
-          </Grid>
-        </Grid>
+        )}
       </Box>
     </Box>
   );

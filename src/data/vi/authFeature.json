@@ -25,6 +25,7 @@
       },
 
       "link": {
+        "verification": "Xác thực",
         "forgotPassword": "Quên mật khẩu",
         "haveAnAccount": "Đã có tài khoản",
         "signIn": "Đăng nhập"

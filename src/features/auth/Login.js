@@ -1,4 +1,4 @@
-import { Button, Checkbox, FormControlLabel, Grid, Typography, Box } from "@mui/material";
+import { Button, Checkbox, FormControlLabel, Typography, Box } from "@mui/material";
 
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
@@ -124,20 +124,86 @@ function Login() {
           </Typography>
         )}
 
-        <Grid container>
-          <Grid item xs>
-            <Link to={routeConfig.auth + authRoutes.forgetPassword}>{t("link.forgotPassword")}</Link>
-            <Link to={routeConfig.verification}>{t("link.verification")}</Link>
-          </Grid>
-          <Grid item>
-            <Link to={routeConfig.auth + authRoutes.register}>
-              {t("link.dontHaveAnAccount")}
-              <Box component="span" sx={{ color: "blue", ml: 1 }}>
-                {t("link.signUp")}
-              </Box>
-            </Link>
-          </Grid>
-        </Grid>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            flexWrap: "wrap"
+          }}
+        >
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: {
+                sm: "row",
+                xs: "column"
+              },
+              justifyContent: "space-between",
+              alignItems: {
+                sm: "center",
+                xs: "flex-start"
+              },
+              mr: 2
+            }}
+          >
+            <Box
+              component={Link}
+              sx={{ color: "blue", textDecoration: "none" }}
+              to={routeConfig.auth + authRoutes.forgetPassword}
+            >
+              {t("link.forgotPassword")}
+            </Box>
+            <Box
+              component={Link}
+              sx={{
+                color: "blue",
+                textDecoration: "none",
+                ml: {
+                  sm: 1,
+                  xs: 0
+                }
+              }}
+              to={routeConfig.verification}
+            >
+              {t("link.verification")}
+            </Box>
+          </Box>
+
+          <Box
+            sx={{
+              display: "flex",
+              flexDirection: {
+                sm: "row",
+                xs: "column"
+              },
+              justifyContent: "space-between",
+              alignItems: {
+                sm: "center",
+                xs: "flex-end"
+              },
+              color: "blue",
+              textDecoration: "none"
+            }}
+            component={Link}
+            to={routeConfig.auth + authRoutes.register}
+          >
+            <Box sx={{ color: "blue", textDecoration: "none" }}>{t("link.dontHaveAnAccount")}</Box>
+            <Box
+              sx={{
+                color: "blue",
+                textDecoration: "none",
+                ml: {
+                  sm: 1,
+                  xs: 0
+                }
+              }}
+              component="span"
+            >
+              {t("link.signUp")}
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

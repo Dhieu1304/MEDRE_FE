@@ -1,18 +1,18 @@
-import { Button, Grid, Typography, Box, useTheme, FormHelperText } from "@mui/material";
+import { Button, Typography, Box, FormHelperText } from "@mui/material";
 import { Controller, useFormContext } from "react-hook-form";
 import { Link } from "react-router-dom";
 import PropTypes from "prop-types";
 
 import { useTranslation } from "react-i18next";
 import { MuiOtpInput } from "mui-one-time-password-input";
-import routeConfig from "../../../config/routeConfig";
-import authRoutes from "../../../pages/AuthPage/routes";
-import { useAuthStore } from "../../../store/AuthStore/hooks";
+import routeConfig from "../../../../config/routeConfig";
+import authRoutes from "../../../../pages/AuthPage/routes";
+import { useAuthStore } from "../../../../store/AuthStore/hooks";
 
 function OtpVerify({ handleVerifyOtp, backToFirstStep, resendVerification }) {
   const { control, handleSubmit } = useFormContext();
 
-  const theme = useTheme();
+  //
   const authStore = useAuthStore();
 
   const { t } = useTranslation("verificationFeature", { keyPrefix: "OtpVerify" });
@@ -84,36 +84,89 @@ function OtpVerify({ handleVerifyOtp, backToFirstStep, resendVerification }) {
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
           {t("button.verifyOtp")}
         </Button>
-        {authStore.isFetchApiError && (
-          <Typography component="h3" color={theme.palette.error[theme.palette.mode]}>
-            {authStore.fetchApiError}
-          </Typography>
-        )}
 
-        <Grid container flexDirection="row" justifyContent="space-between">
-          <Grid item>
-            <Link to={routeConfig.auth + authRoutes.register}>
-              <Box component="span" sx={{ color: "blue" }}>
-                {t("link.signUp")}
-              </Box>
-            </Link>
-          </Grid>
-          <Grid item>
-            <Box component="span" sx={{ color: "blue", cursor: "pointer" }} onClick={backToFirstStep}>
-              {t("link.back")}
-            </Box>
-            <Box component="span" sx={{ color: "blue", cursor: "pointer" }} onClick={resendVerification}>
-              {t("link.resend")}
-            </Box>
-          </Grid>
-          <Grid item>
-            <Link to={routeConfig.auth + authRoutes.login}>
-              <Box component="span" sx={{ color: "blue" }}>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            justifyContent: "space-between",
+            flexWrap: "wrap"
+          }}
+        >
+          {!authStore.isLogin && (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: {
+                  sm: "row",
+                  xs: "column"
+                },
+                justifyContent: "space-between",
+                mr: 2
+              }}
+            >
+              <Box
+                component={Link}
+                to={routeConfig.auth + authRoutes.login}
+                sx={{
+                  color: "blue",
+                  textDecoration: "none",
+                  cursor: "pointer",
+                  mr: {
+                    sm: 2,
+                    xs: 0
+                  }
+                }}
+              >
                 {t("link.signIn")}
               </Box>
-            </Link>
-          </Grid>
-        </Grid>
+
+              <Box
+                component={Link}
+                to={routeConfig.auth + authRoutes.register}
+                sx={{ color: "blue", textDecoration: "none", cursor: "pointer" }}
+              >
+                {t("link.signUp")}
+              </Box>
+            </Box>
+          )}
+
+          <Box
+            sx={{
+              display: "flex",
+              flexGrow: authStore.isLogin ? 1 : 0,
+              flexDirection: {
+                sm: "row",
+                xs: authStore.isLogin ? "row" : "column"
+              },
+              justifyContent: "space-between"
+            }}
+          >
+            <Box
+              component="span"
+              sx={{ color: "blue", textDecoration: "none", cursor: "pointer" }}
+              onClick={backToFirstStep}
+            >
+              {t("link.back")}
+            </Box>
+
+            <Box
+              component="span"
+              sx={{
+                color: "blue",
+                textDecoration: "none",
+                cursor: "pointer",
+                ml: {
+                  sm: 2,
+                  xs: 0
+                }
+              }}
+              onClick={resendVerification}
+            >
+              {t("link.resend")}
+            </Box>
+          </Box>
+        </Box>
       </Box>
     </Box>
   );

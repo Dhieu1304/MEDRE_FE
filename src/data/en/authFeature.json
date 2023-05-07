@@ -25,6 +25,7 @@
       },
 
       "link": {
+        "verification": "Verify",
         "forgotPassword": "Forgot password",
         "dontHaveAnAccount": "Don't have an account?",
         "signIn": "Sign in"
