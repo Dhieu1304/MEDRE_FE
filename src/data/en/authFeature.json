@@ -46,5 +46,12 @@
 
   "ForgotPassword": {
     "title": "Reset password"
+  },
+
+  "ChangePassword": {
+    "title": "Change password",
+    "button": {
+      "save": "Save"
+    }
   }
 }

@@ -15,7 +15,8 @@ const authApi = {
 
 const userApi = {
   userInfo: "/user/my-profile",
-  editUser: () => `/user/my-profile/edit`
+  editUser: () => `/user/my-profile/edit`,
+  changePassword: () => "/user/my-profile/change-password"
 };
 
 const doctorApi = {

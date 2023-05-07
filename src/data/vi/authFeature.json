@@ -46,5 +46,12 @@
 
   "ForgotPassword": {
     "title": "Đặt lại mật khẩu"
+  },
+
+  "ChangePassword": {
+    "title": "Thay đổi mật khẩu",
+    "button": {
+      "save": "Lưu"
+    }
   }
 }
