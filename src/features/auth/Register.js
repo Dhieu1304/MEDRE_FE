@@ -196,6 +196,10 @@ function Register() {
               component={Link}
               sx={{ color: "blue", textDecoration: "none" }}
               to={routeConfig.auth + authRoutes.forgetPassword}
+              state={{
+                phoneNumberOrEmail: watch().phoneNumberOrEmail,
+                isFinishSendInfoStep: false
+              }}
             >
               {t("link.forgotPassword")}
             </Box>
@@ -210,6 +214,10 @@ function Register() {
                 }
               }}
               to={routeConfig.verification}
+              state={{
+                phoneNumberOrEmail: watch().phoneNumberOrEmail,
+                isFinishSendInfoStep: false
+              }}
             >
               {t("link.verification")}
             </Box>

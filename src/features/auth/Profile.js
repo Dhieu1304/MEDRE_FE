@@ -11,18 +11,21 @@ import {
   Select,
   MenuItem,
   ListItemText,
-  useTheme
+  useTheme,
+  InputAdornment
 } from "@mui/material";
 import { RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
 
 import { useForm } from "react-hook-form";
 import { toast } from "react-toastify";
+import { useNavigate } from "react-router";
 import userServices from "../../services/userServices";
 import { useAuthStore } from "../../store/AuthStore/hooks";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import { userGenders, userInputValidate } from "../../entities/User/constant";
 import { mergeObjectsWithoutNullAndUndefined } from "../../utils/objectUtil";
 import { useFetchingStore } from "../../store/FetchingApiStore/hooks";
+import routeConfig from "../../config/routeConfig";
 
 function Profile() {
   const [defaultValues, setDefaultValues] = useState({
@@ -43,6 +46,7 @@ function Profile() {
 
   const authStore = useAuthStore();
   const theme = useTheme();
+  const navigate = useNavigate();
   const { fetchApi } = useFetchingStore();
 
   const user = useMemo(() => {
@@ -168,7 +172,7 @@ function Profile() {
         <Grid container spacing={3}>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <CustomInput
-              disabled
+              // disabled
               control={control}
               rules={{
                 required: tInputValidate("required"),
@@ -198,11 +202,35 @@ function Profile() {
                       text: tUserMessage("emailVerifiedFailed")
                     }
               }
+              InputProps={
+                user?.emailVerified
+                  ? {}
+                  : {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Button
+                            variant="contained"
+                            sx={{
+                              bgcolor: theme.palette.warning.light,
+                              color: theme.palette.warning.contrastText
+                            }}
+                            onClick={() => {
+                              navigate(routeConfig.verification, {
+                                state: { phoneNumberOrEmail: user?.email, isFinishSendInfoStep: false }
+                              });
+                            }}
+                          >
+                            {t("button.verify")}
+                          </Button>
+                        </InputAdornment>
+                      )
+                    }
+              }
             />
           </Grid>
           <Grid item xs={12} sm={12} md={6} lg={6}>
             <CustomInput
-              disabled
+              // disabled
               control={control}
               rules={{
                 required: tInputValidate("required"),
@@ -224,6 +252,30 @@ function Profile() {
                   : {
                       type: "error",
                       text: tUserMessage("phoneVerifiedFailed")
+                    }
+              }
+              InputProps={
+                user?.phoneVerified
+                  ? {}
+                  : {
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <Button
+                            variant="contained"
+                            sx={{
+                              bgcolor: theme.palette.warning.light,
+                              color: theme.palette.warning.contrastText
+                            }}
+                            onClick={() => {
+                              navigate(routeConfig.verification, {
+                                state: { phoneNumberOrEmail: user?.phoneNumber, isFinishSendInfoStep: false }
+                              });
+                            }}
+                          >
+                            {t("button.verify")}
+                          </Button>
+                        </InputAdornment>
+                      )
                     }
               }
             />

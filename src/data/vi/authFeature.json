@@ -39,7 +39,8 @@
     },
     "button": {
       "reset": "Đặt lại",
-      "save": "Lưu"
+      "save": "Lưu",
+      "verify": "Xác thực"
     }
   },
 

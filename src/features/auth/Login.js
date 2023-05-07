@@ -14,7 +14,7 @@ import patternConfig from "../../config/patternConfig";
 // import { useEffect } from "react";
 
 function Login() {
-  const { handleSubmit, control, trigger } = useForm({
+  const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
       phoneNumberOrEmail: "",
@@ -151,6 +151,10 @@ function Login() {
               component={Link}
               sx={{ color: "blue", textDecoration: "none" }}
               to={routeConfig.auth + authRoutes.forgetPassword}
+              state={{
+                phoneNumberOrEmail: watch().phoneNumberOrEmail,
+                isFinishSendInfoStep: false
+              }}
             >
               {t("link.forgotPassword")}
             </Box>
@@ -165,6 +169,10 @@ function Login() {
                 }
               }}
               to={routeConfig.verification}
+              state={{
+                phoneNumberOrEmail: watch().phoneNumberOrEmail,
+                isFinishSendInfoStep: false
+              }}
             >
               {t("link.verification")}
             </Box>

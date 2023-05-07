@@ -39,7 +39,8 @@
     },
     "button": {
       "reset": "Reset",
-      "save": "Save"
+      "save": "Save",
+      "verify": "Verify"
     }
   },
 
