@@ -1,0 +1,8 @@
+{
+  "ChangeAvatarModal": {
+    "title": "Change avatar",
+    "button": {
+      "save": "Save"
+    }
+  }
+}

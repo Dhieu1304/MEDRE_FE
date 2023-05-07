@@ -29,7 +29,7 @@ const getUserInfo = async () => {
   }
 };
 
-const editUserInfo = async ({ phoneNumber, email, name, address, gender, dob, healthInsurance }) => {
+const editUserInfo = async ({ phoneNumber, email, name, address, gender, dob, healthInsurance, image }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
     phone_number: phoneNumber,
     email,
@@ -37,7 +37,8 @@ const editUserInfo = async ({ phoneNumber, email, name, address, gender, dob, he
     address,
     gender,
     dob,
-    health_insurance: healthInsurance
+    health_insurance: healthInsurance,
+    image
   });
 
   try {
@@ -100,8 +101,58 @@ const changePassword = async ({ oldPassword, newPassword, confirmPassword }) => 
   }
 };
 
+const uploadAvatar = async (file) => {
+  // console.log("file: ", file);
+  const formData = new FormData();
+  formData.append("image", file);
+
+  try {
+    const res = await axiosClient.post("/upload/avatar", formData, {
+      headers: { "Content-Type": "multipart/form-data" }
+    });
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      const image = res?.data;
+      return {
+        image,
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
+const changeAvatar = async (file) => {
+  const uploadAvatarResult = await uploadAvatar(file);
+
+  // console.log("uploadAvatarResult: ", uploadAvatarResult);
+  if (uploadAvatarResult?.success) {
+    const image = uploadAvatarResult?.image;
+    // console.log("image: ", image);
+    const changeAvatarResult = await editUserInfo({ image });
+
+    // console.log("changeAvatarResult: ", changeAvatarResult);
+    return changeAvatarResult;
+  }
+
+  return uploadAvatarResult;
+};
+
 export default {
   getUserInfo,
   editUserInfo,
-  changePassword
+  changePassword,
+  changeAvatar
 };
