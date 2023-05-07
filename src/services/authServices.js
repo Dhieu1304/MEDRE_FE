@@ -174,6 +174,38 @@ const sendVerificationToEmail = async (email) => {
   }
 };
 
+const sendResetPasswordToEmail = async (email) => {
+  const dataBody = cleanUndefinedAndEmptyStrValueObject({
+    email,
+    type: 1
+  });
+
+  // console.log("dataBody: ", dataBody);
+
+  try {
+    const res = await axiosClient.post(authApi.sendResetPasswordToEmail(), dataBody);
+
+    // console.log("res: ", res);
+
+    if (res?.status) {
+      return {
+        success: true,
+        message: res?.message
+      };
+    }
+    return {
+      success: false,
+      message: res?.message
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 const sendVerificationOtpToPhone = async (phoneNumber) => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   phone_number: phoneNumber
@@ -181,6 +213,38 @@ const sendVerificationOtpToPhone = async (phoneNumber) => {
   // console.log("dataBody: ", dataBody);
   // try {
   //   const res = await axiosClient.post(authApi.sendVerificationOtpToPhone(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: phoneNumber
+  };
+};
+
+const sendResetPasswordOtpToPhone = async (phoneNumber) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   phone_number: phoneNumber
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.sendResetPasswordOtpToPhone(), dataBody);
   //   console.log("res: ", res);
   //   if (res?.status) {
   //     return {
@@ -238,6 +302,38 @@ const verifyOtpToVerfifyPhoneNumber = async (otp) => {
   };
 };
 
+const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
+  // const dataBody = cleanUndefinedAndEmptyStrValueObject({
+  //   otp
+  // });
+  // console.log("dataBody: ", dataBody);
+  // try {
+  //   const res = await axiosClient.post(authApi.verifyOtpToResetPasswordPhoneNumber(), dataBody);
+  //   console.log("res: ", res);
+  //   if (res?.status) {
+  //     return {
+  //       success: true,
+  //       message: res?.message
+  //     };
+  //   }
+  //   return {
+  //     success: false,
+  //     message: res?.message
+  //   };
+  // } catch (e) {
+  //   // console.error(e.message);
+  //   return {
+  //     success: false,
+  //     message: e.message
+  //   };
+  // }
+
+  return {
+    success: true,
+    message: otp
+  };
+};
+
 export default {
   loginByPhoneNumber,
   loginByEmail,
@@ -246,5 +342,8 @@ export default {
   registerVerifyOtp,
   sendVerificationToEmail,
   sendVerificationOtpToPhone,
-  verifyOtpToVerfifyPhoneNumber
+  verifyOtpToVerfifyPhoneNumber,
+  sendResetPasswordToEmail,
+  sendResetPasswordOtpToPhone,
+  verifyOtpToResetPasswordPhoneNumber
 };

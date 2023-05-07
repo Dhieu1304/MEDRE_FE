@@ -41,5 +41,9 @@
       "reset": "Reset",
       "save": "Save"
     }
+  },
+
+  "ForgotPassword": {
+    "title": "Reset password"
   }
 }

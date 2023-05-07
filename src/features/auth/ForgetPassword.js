@@ -4,17 +4,17 @@ import { useTranslation } from "react-i18next";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import authServices from "../../services/authServices";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
-import VerificationForm from "./components/VerificationForm/VerificationForm";
+import VerificationForm from "../verification/components/VerificationForm/VerificationForm";
 
 function Verification() {
   const { isLoading, fetchApi } = useFetchingStore();
 
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "Verification" });
+  const { t } = useTranslation("authFeature", { keyPrefix: "ForgotPassword" });
 
   const sendVerificationOtpToPhone = async (phoneNumber) => {
     // return await fetchApi(async () => {
     return fetchApi(async () => {
-      const res = await authServices.sendVerificationOtpToPhone(phoneNumber);
+      const res = await authServices.sendResetPasswordOtpToPhone(phoneNumber);
       if (res.success) {
         toast(res.message);
         return { success: true };
@@ -27,7 +27,7 @@ function Verification() {
   const sendVerificationToEmail = async (email) => {
     // return await fetchApi(async () => {
     return fetchApi(async () => {
-      const res = await authServices.sendVerificationToEmail(email);
+      const res = await authServices.sendResetPasswordToEmail(email);
       if (res.success) {
         toast(res.message);
         return { success: true };
@@ -44,7 +44,7 @@ function Verification() {
         flexDirection: "column",
         alignItems: "center",
         width: "100%",
-        px: 4
+        px: 2
       }}
     >
       <CustomOverlay open={isLoading} />

@@ -9,7 +9,8 @@ const authApi = {
   sendVerificationOtpToPhone: () => "",
   sendResetPasswordOtpToPhone: () => "",
 
-  verifyOtpToVerfifyPhoneNumber: () => ""
+  verifyOtpToVerfifyPhoneNumber: () => "",
+  verifyOtpToResetPasswordPhoneNumber: () => ""
 };
 
 const userApi = {
