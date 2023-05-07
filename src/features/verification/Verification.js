@@ -6,6 +6,11 @@ import SentEmailInfo from "./components/SentEmailInfo";
 function Verification() {
   // const [step, setStep] = useState(4);
 
+  // const location = useLocation();
+  // const myData = location.state?.myData;
+
+  // console.log("location.state: ", location.state);
+
   const infoForm = useForm({
     mode: "onChange",
     defaultValues: {

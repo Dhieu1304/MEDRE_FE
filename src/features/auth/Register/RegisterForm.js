@@ -1,28 +1,31 @@
 import { Button, Grid, Typography, Box, useTheme } from "@mui/material";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
 import routeConfig, { authRoutes } from "../../../config/routeConfig";
 // import { authRoutes } from "../../../pages/AuthPage";
 // import { authRoutes } from "../../../config/routeConfig";
 
+import patternConfig from "../../../config/patternConfig";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import { userInputValidate } from "../../../entities/User/constant";
 
-function RegisterForm({ setStep }) {
+function RegisterForm() {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
-      phoneNumber: "0375435896",
-      password: "111111",
-      confirmPassword: "111111"
+      phoneNumberOrEmail: "0375435896",
+      password: "A@111111",
+      confirmPassword: "A@111111"
     },
     criteriaMode: "all"
   });
+
+  const navigate = useNavigate();
 
   const theme = useTheme();
   const authStore = useAuthStore();
@@ -31,12 +34,23 @@ function RegisterForm({ setStep }) {
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const handleRegister = async ({ phoneNumber, password }) => {
-    // console.log({ phoneNumber, password });
+  const handleRegister = async ({ phoneNumberOrEmail, password }) => {
+    // console.log({ phoneNumberOrEmail, password });
+    let email;
+    let phoneNumber;
 
-    const result = await authStore.register({ phoneNumber, password });
+    if (patternConfig.phonePattern.test(phoneNumberOrEmail)) {
+      // console.log("Regi by phone");
+      phoneNumber = phoneNumberOrEmail;
+    } else {
+      // console.log("Regi by email");
+      email = phoneNumberOrEmail;
+    }
+
+    const result = await authStore.register({ email, phoneNumber, password });
+
     if (result) {
-      setStep((prev) => prev + 1);
+      navigate(routeConfig.verification, { state: { myData: "Hello" } });
     }
   };
 
@@ -77,13 +91,13 @@ function RegisterForm({ setStep }) {
             rules={{
               required: tInputValidate("required"),
               pattern: {
-                value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
+                value: patternConfig.phoneOrEmailPattern,
                 message: tInputValidate("format")
               }
             }}
-            label={tUser("phoneNumber")}
+            label={tUser("phoneNumberOrEmail")}
             trigger={trigger}
-            name="phoneNumber"
+            name="phoneNumberOrEmail"
             type="tel"
           />
         </Box>
@@ -173,8 +187,8 @@ function RegisterForm({ setStep }) {
   );
 }
 
-RegisterForm.propTypes = {
-  setStep: PropTypes.func.isRequired
-};
+// RegisterForm.propTypes = {
+//   setStep: PropTypes.func.isRequired
+// };
 
 export default RegisterForm;

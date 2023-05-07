@@ -85,7 +85,7 @@ const register = async ({ phoneNumber, email, password }) => {
   try {
     const res = await axiosClient.post(authApi.register(), dataBody);
 
-    // console.log("res: ", res);
+    // console.log("res: ", res)
 
     if (res?.status) {
       return {

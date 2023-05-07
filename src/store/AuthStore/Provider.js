@@ -63,6 +63,8 @@ function AuthProvider({ children }) {
         }
       },
       register: async ({ phoneNumber, email, password }) => {
+        // console.log({ phoneNumber, email, password });
+
         dispatch(actions.fetchApi());
         const res = await authServices.register({ phoneNumber, email, password });
 
