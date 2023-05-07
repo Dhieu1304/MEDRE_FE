@@ -15,6 +15,7 @@ import bookingEntity from "./bookingEntity.json";
 import profilePage from "./profilePage.json";
 import components from "./components.json";
 import userEntity from "./userEntity.json";
+import userFeature from "./userFeature.json";
 import patientEntity from "./patientEntity.json";
 import verificationFeature from "./verificationFeature.json";
 
@@ -36,6 +37,7 @@ const vi = {
   common,
   components,
   userEntity,
+  userFeature,
   patientEntity,
   verificationFeature
 };

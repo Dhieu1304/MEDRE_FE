@@ -5,8 +5,6 @@ import {
   CssBaseline,
   Divider,
   Drawer,
-  FormGroup,
-  FormControlLabel,
   IconButton,
   List,
   ListItem,
@@ -250,33 +248,23 @@ function Header({ window }) {
                     </MenuItem>
                   ))}
                   <MenuItem>
-                    <FormGroup>
-                      <FormControlLabel
-                        control={
-                          <Switch
-                            checked={mode === DARK}
-                            onClick={() => {
-                              setMode((prev) => {
-                                return prev === LIGHT ? DARK : LIGHT;
-                              });
-                            }}
-                          />
-                        }
-                        sx={{ ml: 0 }}
-                        label="Dark mode"
-                        labelPlacement="start"
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                      <Typography>{t("dark_mode_label")} </Typography>
+                      <Switch
+                        checked={mode === DARK}
+                        onClick={() => {
+                          setMode((prev) => {
+                            return prev === LIGHT ? DARK : LIGHT;
+                          });
+                        }}
                       />
-                    </FormGroup>
+                    </Box>
                   </MenuItem>
                   <MenuItem>
-                    <FormGroup sx={{ justifyContent: "flex-start" }}>
-                      <FormControlLabel
-                        control={<Switch checked={locale === "enUS"} onClick={handleChangeLanguage} />}
-                        sx={{ ml: 0 }}
-                        label="English"
-                        labelPlacement="start"
-                      />
-                    </FormGroup>
+                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                      <Typography>{t("english_language_label")} </Typography>
+                      <Switch checked={locale === "enUS"} onClick={handleChangeLanguage} />
+                    </Box>
                   </MenuItem>
                   <MenuItem onClick={onLogout}>
                     <Typography textAlign="center">{t("logout_label")}</Typography>

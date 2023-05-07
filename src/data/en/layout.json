@@ -2,6 +2,8 @@
   "header": {
     "profile_label": "Profile",
     "change_password_label": "Change password",
+    "dark_mode_label": "Dark mode",
+    "english_language_label": "English",
     "logout_label": "Logout",
     "about_label": "About",
     "forum_label": "Forum",
