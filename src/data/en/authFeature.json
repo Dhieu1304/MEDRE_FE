@@ -10,7 +10,7 @@
     },
 
     "link": {
-      "verification": "Verify",
+      "verification": "Verification account",
       "forgotPassword": "Forgot password",
       "dontHaveAnAccount": "Don't have an account?",
       "signUp": "Sign up"
@@ -18,31 +18,16 @@
   },
 
   "Register": {
-    "registerForm": {
-      "title": "Sign up",
-      "button": {
-        "login": "Register"
-      },
-
-      "link": {
-        "verification": "Verify",
-        "forgotPassword": "Forgot password",
-        "dontHaveAnAccount": "Don't have an account?",
-        "signIn": "Sign in"
-      }
+    "title": "Sign up",
+    "button": {
+      "login": "Register"
     },
 
-    "otpForm": {
-      "title": "Enter OTP from your phone",
-      "button": {
-        "verifyOtp": "Confirm OTP"
-      },
-
-      "link": {
-        "verification": "Verify",
-        "signIn": "Sign in",
-        "signUp": "Sign up"
-      }
+    "link": {
+      "verification": "Verification account",
+      "forgotPassword": "Forgot password",
+      "haveAnAccount": "Have an account?",
+      "signIn": "Sign in"
     }
   },
 

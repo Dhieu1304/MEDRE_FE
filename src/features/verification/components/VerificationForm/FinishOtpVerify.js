@@ -8,7 +8,7 @@ import authRoutes from "../../../../pages/AuthPage/routes";
 import { useAuthStore } from "../../../../store/AuthStore/hooks";
 
 function FinishOtpVerify() {
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "FinishOtpVerify" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "VerificationForm.FinishOtpVerify" });
   const authStore = useAuthStore();
 
   return (
@@ -21,7 +21,13 @@ function FinishOtpVerify() {
         p: 2
       }}
     >
-      <Typography variant="h4" sx={{ mb: 2 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontSize: 25,
+          mb: 2
+        }}
+      >
         {t("title")}
       </Typography>
       <Typography variant="subtitle1" sx={{ mb: 2 }}>

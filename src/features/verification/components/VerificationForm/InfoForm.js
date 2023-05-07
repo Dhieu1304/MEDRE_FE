@@ -17,7 +17,7 @@ function InfoForm({ handleSendVerification }) {
 
   const authStore = useAuthStore();
 
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "InfoForm" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "VerificationForm.InfoForm" });
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
@@ -37,10 +37,9 @@ function InfoForm({ handleSendVerification }) {
     >
       <Typography
         component="h1"
-        variant="h2"
+        variant="h6"
         sx={{
           fontSize: 25,
-          fontWeight: 600,
           mb: 2,
           textAlign: "center"
         }}

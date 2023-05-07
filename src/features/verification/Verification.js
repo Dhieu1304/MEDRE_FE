@@ -1,5 +1,6 @@
 import { toast } from "react-toastify";
 import { Typography } from "@mui/material";
+import { useTranslation } from "react-i18next";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import authServices from "../../services/authServices";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
@@ -7,6 +8,9 @@ import VerificationForm from "./components/VerificationForm/VerificationForm";
 
 function Verification() {
   const { isLoading, fetchApi } = useFetchingStore();
+
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "Verification" });
+
   const sendVerificationOtpToPhone = async (phoneNumber) => {
     // return await fetchApi(async () => {
     return fetchApi(async () => {
@@ -36,7 +40,15 @@ function Verification() {
   return (
     <>
       <CustomOverlay open={isLoading} />
-      <Typography>Verification</Typography>
+      <Typography
+        variant="h5"
+        sx={{
+          fontSize: 30,
+          fontWeight: 600
+        }}
+      >
+        {t("title")}
+      </Typography>
       <VerificationForm
         sendVerificationOtpToPhone={sendVerificationOtpToPhone}
         sendVerificationToEmail={sendVerificationToEmail}

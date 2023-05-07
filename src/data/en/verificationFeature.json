@@ -1,53 +1,59 @@
 {
-  "InfoForm": {
-    "title": "Enter information",
-    "button": {
-      "send": "Send"
-    },
-
-    "link": {
-      "verification": "Verify",
-      "signIn": "Sign in",
-      "signUp": "Sign up"
-    }
+  "Verification": {
+    "title": "Verification"
   },
 
-  "OtpVerify": {
-    "title": "Enter OTP from your phone",
-    "button": {
-      "verifyOtp": "Confirm OTP"
+  "VerificationForm": {
+    "InfoForm": {
+      "title": "Enter information",
+      "button": {
+        "send": "Send"
+      },
+
+      "link": {
+        "verification": "Verify",
+        "signIn": "Sign in",
+        "signUp": "Sign up"
+      }
     },
 
-    "link": {
-      "verification": "Verify",
-      "signIn": "Sign in",
-      "signUp": "Sign up",
-      "back": "Back",
-      "resend": "Resend otp"
-    }
-  },
+    "OtpVerify": {
+      "title": "Enter OTP from your phone",
+      "button": {
+        "verifyOtp": "Confirm OTP"
+      },
 
-  "EmailVerify": {
-    "title": "Email has been sent",
-    "subTitle": {
-      "askToCheckMail": "Please check your email."
+      "link": {
+        "verification": "Verify",
+        "signIn": "Sign in",
+        "signUp": "Sign up",
+        "back": "Back",
+        "resend": "Resend otp"
+      }
     },
-    "link": {
-      "signIn": "Sign in",
-      "signUp": "Sign up",
-      "back": "Back",
-      "resend": "Resend email"
-    }
-  },
 
-  "FinishOtpVerify": {
-    "title": "OTP authentication",
-    "subTitle": {
-      "congratulation": "OTP authentication successful"
+    "EmailVerify": {
+      "title": "Email has been sent",
+      "subTitle": {
+        "askToCheckMail": "Please check your email."
+      },
+      "link": {
+        "signIn": "Sign in",
+        "signUp": "Sign up",
+        "back": "Back",
+        "resend": "Resend email"
+      }
     },
-    "link": {
-      "signIn": "Sign in",
-      "signUp": "Sign up"
+
+    "FinishOtpVerify": {
+      "title": "OTP authentication",
+      "subTitle": {
+        "congratulation": "OTP authentication successful"
+      },
+      "link": {
+        "signIn": "Sign in",
+        "signUp": "Sign up"
+      }
     }
   }
 }

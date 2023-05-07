@@ -5,16 +5,16 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
-import routeConfig, { authRoutes } from "../../../config/routeConfig";
-// import { authRoutes } from "../../../pages/AuthPage";
+import routeConfig from "../../config/routeConfig";
+import authRoutes from "../../pages/AuthPage/routes";
 // import { authRoutes } from "../../../config/routeConfig";
 
-import patternConfig from "../../../config/patternConfig";
-import { useAuthStore } from "../../../store/AuthStore/hooks";
-import CustomInput from "../../../components/CustomInput/CustomInput";
-import { userInputValidate } from "../../../entities/User/constant";
+import patternConfig from "../../config/patternConfig";
+import { useAuthStore } from "../../store/AuthStore/hooks";
+import CustomInput from "../../components/CustomInput/CustomInput";
+import { userInputValidate } from "../../entities/User/constant";
 
-function RegisterForm() {
+function Register() {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
@@ -30,7 +30,7 @@ function RegisterForm() {
   const theme = useTheme();
   const authStore = useAuthStore();
 
-  const { t } = useTranslation("authFeature", { keyPrefix: "Register.registerForm" });
+  const { t } = useTranslation("authFeature", { keyPrefix: "Register" });
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
@@ -205,7 +205,7 @@ function RegisterForm() {
                 color: "blue",
                 textDecoration: "none",
                 ml: {
-                  sm: 1,
+                  sm: 2,
                   xs: 0
                 }
               }}
@@ -254,8 +254,8 @@ function RegisterForm() {
   );
 }
 
-// RegisterForm.propTypes = {
+// Register.propTypes = {
 //   setStep: PropTypes.func.isRequired
 // };
 
-export default RegisterForm;
+export default Register;

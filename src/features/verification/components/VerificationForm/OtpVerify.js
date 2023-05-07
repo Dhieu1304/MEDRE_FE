@@ -15,7 +15,7 @@ function OtpVerify({ handleVerifyOtp, backToFirstStep, resendVerification }) {
   //
   const authStore = useAuthStore();
 
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "OtpVerify" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "VerificationForm.OtpVerify" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
   return (
@@ -34,10 +34,9 @@ function OtpVerify({ handleVerifyOtp, backToFirstStep, resendVerification }) {
     >
       <Typography
         component="h1"
-        variant="h2"
+        variant="h6"
         sx={{
           fontSize: 25,
-          fontWeight: 600,
           mb: 2,
           textAlign: "center"
         }}

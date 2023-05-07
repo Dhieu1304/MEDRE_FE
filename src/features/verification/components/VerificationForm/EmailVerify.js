@@ -11,7 +11,7 @@ import { useAuthStore } from "../../../../store/AuthStore/hooks";
 function EmailVerify({ backToFirstStep, resendVerification }) {
   const authStore = useAuthStore();
 
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "EmailVerify" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "VerificationForm.EmailVerify" });
 
   return (
     <Box
@@ -23,7 +23,13 @@ function EmailVerify({ backToFirstStep, resendVerification }) {
         p: 2
       }}
     >
-      <Typography variant="h4" sx={{ mb: 2 }}>
+      <Typography
+        variant="h6"
+        sx={{
+          fontSize: 25,
+          mb: 2
+        }}
+      >
         {t("title")}
       </Typography>
       <Typography variant="subtitle1" sx={{ mb: 2 }}>
