@@ -10,6 +10,7 @@
     },
 
     "link": {
+      "verification": "Verification account",
       "forgotPassword": "Forgot password",
       "dontHaveAnAccount": "Don't have an account?",
       "signUp": "Sign up"
@@ -17,29 +18,16 @@
   },
 
   "Register": {
-    "registerForm": {
-      "title": "Sign up",
-      "button": {
-        "login": "Register"
-      },
-
-      "link": {
-        "forgotPassword": "Forgot password",
-        "dontHaveAnAccount": "Don't have an account?",
-        "signIn": "Sign in"
-      }
+    "title": "Sign up",
+    "button": {
+      "login": "Register"
     },
 
-    "otpForm": {
-      "title": "Enter OTP from your phone",
-      "button": {
-        "verifyOtp": "Confirm OTP"
-      },
-
-      "link": {
-        "signIn": "Sign in",
-        "signUp": "Sign up"
-      }
+    "link": {
+      "verification": "Verification account",
+      "forgotPassword": "Forgot password",
+      "haveAnAccount": "Have an account?",
+      "signIn": "Sign in"
     }
   },
 
@@ -51,7 +39,12 @@
     },
     "button": {
       "reset": "Reset",
-      "save": "Save"
+      "save": "Save",
+      "verify": "Verify"
     }
+  },
+
+  "ForgotPassword": {
+    "title": "Reset password"
   }
 }

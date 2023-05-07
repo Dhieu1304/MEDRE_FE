@@ -3,6 +3,7 @@
     "id": "ID",
     "phoneNumber": "Số điện thoại",
     "email": "Email",
+    "phoneNumberOrEmail": "Email hoặc số điện thoại",
     "password": "Mật khẩu",
     "confirmPassword": "Xác nhận mật khẩu",
     "name": "Họ tên",

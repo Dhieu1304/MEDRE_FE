@@ -31,6 +31,26 @@ function AuthProvider({ children }) {
         toast.success(message);
         return false;
       },
+
+      loginByEmail: async (email, password) => {
+        dispatch(actions.fetchApi());
+        const res = await authServices.loginByEmail(email, password);
+
+        if (res?.success) {
+          const { user, message } = res;
+          dispatch(actions.login(user));
+          dispatch(actions.fetchApiSuccess());
+          return {
+            success: true,
+            message
+          };
+        }
+        const { message } = res;
+        dispatch(actions.fetchApiFailed(message));
+        toast.success(message);
+        return false;
+      },
+
       logout: async () => {
         dispatch(actions.fetchApi());
         const res = await authServices.logout();
@@ -42,9 +62,11 @@ function AuthProvider({ children }) {
           dispatch(actions.fetchApiSuccess());
         }
       },
-      register: async ({ phoneNumber, password }) => {
+      register: async ({ phoneNumber, email, password }) => {
+        // console.log({ phoneNumber, email, password });
+
         dispatch(actions.fetchApi());
-        const res = await authServices.register({ phoneNumber, password });
+        const res = await authServices.register({ phoneNumber, email, password });
 
         if (res?.success) {
           dispatch(actions.fetchApiSuccess());

@@ -1,51 +1,56 @@
-import { Button, Checkbox, FormControlLabel, Typography, Box } from "@mui/material";
+import { Button, Typography, Box, useTheme } from "@mui/material";
+// import PropTypes from "prop-types";
 
 import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
-import { useTheme } from "@mui/material/styles";
 
 import { useTranslation } from "react-i18next";
-import routeConfig, { authRoutes } from "../../config/routeConfig";
-// import { authRoutes } from "../../pages/AuthPage";
+import routeConfig from "../../config/routeConfig";
+import authRoutes from "../../pages/AuthPage/routes";
+// import { authRoutes } from "../../../config/routeConfig";
 
+import patternConfig from "../../config/patternConfig";
 import { useAuthStore } from "../../store/AuthStore/hooks";
 import CustomInput from "../../components/CustomInput/CustomInput";
-import patternConfig from "../../config/patternConfig";
-// import { useEffect } from "react";
+import { userInputValidate } from "../../entities/User/constant";
 
-function Login() {
+function Register() {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
-      phoneNumberOrEmail: "",
-      password: ""
+      phoneNumberOrEmail: "0375435896",
+      password: "A@111111",
+      confirmPassword: "A@111111"
     },
     criteriaMode: "all"
   });
 
-  const theme = useTheme();
-
-  const authStore = useAuthStore();
   const navigate = useNavigate();
 
-  const { t } = useTranslation("authFeature", { keyPrefix: "Login" });
+  const theme = useTheme();
+  const authStore = useAuthStore();
+
+  const { t } = useTranslation("authFeature", { keyPrefix: "Register" });
   const { t: tUser } = useTranslation("userEntity", { keyPrefix: "properties" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
-  const handleLogin = async ({ phoneNumberOrEmail, password }) => {
-    let result;
+  const handleRegister = async ({ phoneNumberOrEmail, password }) => {
+    // console.log({ phoneNumberOrEmail, password });
+    let email;
+    let phoneNumber;
+
     if (patternConfig.phonePattern.test(phoneNumberOrEmail)) {
-      // console.log("Login by phone");
-      const phoneNumber = phoneNumberOrEmail;
-      result = await authStore.loginByPhoneNumber(phoneNumber, password);
+      // console.log("Regi by phone");
+      phoneNumber = phoneNumberOrEmail;
     } else {
-      // console.log("Login by email");
-      const email = phoneNumberOrEmail;
-      result = await authStore.loginByEmail(email, password);
+      // console.log("Regi by email");
+      email = phoneNumberOrEmail;
     }
 
-    if (result?.success) {
-      navigate(routeConfig.home);
+    const result = await authStore.register({ email, phoneNumber, password });
+
+    if (result) {
+      navigate(routeConfig.verification, { state: { phoneNumberOrEmail, isFinishSendInfoStep: true } });
     }
   };
 
@@ -75,7 +80,7 @@ function Login() {
       >
         {t("title")}
       </Typography>
-      <Box component="form" noValidate onSubmit={handleSubmit(handleLogin)} sx={{ marginTop: 1 }}>
+      <Box component="form" noValidate onSubmit={handleSubmit(handleRegister)} sx={{ marginTop: 1 }}>
         <Box
           sx={{
             mb: 2
@@ -93,7 +98,7 @@ function Login() {
             label={tUser("phoneNumberOrEmail")}
             trigger={trigger}
             name="phoneNumberOrEmail"
-            type="text"
+            type="tel"
           />
         </Box>
 
@@ -105,16 +110,56 @@ function Login() {
           <CustomInput
             control={control}
             rules={{
-              required: tInputValidate("required")
+              required: tInputValidate("required"),
+              minLength: {
+                value: userInputValidate.PASSWORD_MIN_LENGTH,
+                message: tInputValidate("minLength", {
+                  minLength: userInputValidate.PASSWORD_MIN_LENGTH
+                })
+              },
+              maxLength: {
+                value: userInputValidate.PASSWORD_MAX_LENGTH,
+                message: tInputValidate("maxLength", {
+                  maxLength: userInputValidate.PASSWORD_MAX_LENGTH
+                })
+              },
+              pattern: {
+                value: /(?=.*[a-zA-Z])(?=.*[0-9])/,
+                message: tInputValidate("passwordFormat")
+              }
             }}
             label={tUser("password")}
             trigger={trigger}
+            triggerTo="confirmPassword"
             name="password"
             type="password"
           />
         </Box>
 
-        <FormControlLabel control={<Checkbox value="remember" color="primary" />} label={t("subTitle.remember")} />
+        <Box
+          sx={{
+            mb: 2
+          }}
+        >
+          <CustomInput
+            control={control}
+            rules={{
+              required: tInputValidate("required"),
+              validate: (value) =>
+                value === watch("password") ||
+                tInputValidate("same", {
+                  left: tUser("confirmPassword"),
+                  right: tUser("password")
+                })
+            }}
+            label={tUser("confirmPassword")}
+            trigger={trigger}
+            name="confirmPassword"
+            type="password"
+            isCustomError
+          />
+        </Box>
+
         <Button type="submit" fullWidth variant="contained" sx={{ mb: 2, p: 1, fontSize: 10 }}>
           {t("button.login")}
         </Button>
@@ -194,9 +239,9 @@ function Login() {
               textDecoration: "none"
             }}
             component={Link}
-            to={routeConfig.auth + authRoutes.register}
+            to={routeConfig.auth + authRoutes.login}
           >
-            <Box sx={{ color: "blue", textDecoration: "none" }}>{t("link.dontHaveAnAccount")}</Box>
+            <Box sx={{ color: "blue", textDecoration: "none" }}>{t("link.haveAnAccount")}</Box>
             <Box
               sx={{
                 color: "blue",
@@ -208,7 +253,7 @@ function Login() {
               }}
               component="span"
             >
-              {t("link.signUp")}
+              {t("link.signIn")}
             </Box>
           </Box>
         </Box>
@@ -217,4 +262,8 @@ function Login() {
   );
 }
 
-export default Login;
+// Register.propTypes = {
+//   setStep: PropTypes.func.isRequired
+// };
+
+export default Register;

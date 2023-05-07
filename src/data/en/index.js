@@ -16,6 +16,7 @@ import profilePage from "./profilePage.json";
 import components from "./components.json";
 import userEntity from "./userEntity.json";
 import patientEntity from "./patientEntity.json";
+import verificationFeature from "./verificationFeature.json";
 
 const en = {
   authFeature,
@@ -35,7 +36,8 @@ const en = {
   common,
   components,
   userEntity,
-  patientEntity
+  patientEntity,
+  verificationFeature
 };
 
 export default en;

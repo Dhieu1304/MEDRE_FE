@@ -10,6 +10,7 @@
     },
 
     "link": {
+      "verification": "Xác thực tài khoản",
       "forgotPassword": "Quên mật khẩu",
       "dontHaveAnAccount": "Không có tài khoản",
       "signUp": "Đăng ký"
@@ -17,40 +18,16 @@
   },
 
   "Register": {
-    "registerForm": {
-      "title": "Đăng ký",
-      "button": {
-        "login": "Đăng ký"
-      },
-
-      "link": {
-        "forgotPassword": "Quên mật khẩu",
-        "haveAnAccount": "Đã có tài khoản",
-        "signIn": "Đăng nhập"
-      }
-    },
-    "otpForm": {
-      "title": "Nhập OTP từ điện thoại",
-      "button": {
-        "verifyOtp": "Xác nhận OTP"
-      },
-
-      "link": {
-        "signIn": "Đăng nhập",
-        "signUp": "Đăng ký"
-      }
-    }
-  },
-
-  "ForgotPassword": {
-    "title": "Quên mật khẩu",
+    "title": "Đăng ký",
     "button": {
-      "sendOtp": "Đăng ký"
+      "login": "Đăng ký"
     },
 
     "link": {
-      "signIn": "Đăng nhập",
-      "signUp": "Đăng ký"
+      "verification": "Xác thực tài khoản",
+      "forgotPassword": "Quên mật khẩu",
+      "haveAnAccount": "Đã có tài khoản",
+      "signIn": "Đăng nhập"
     }
   },
 
@@ -62,7 +39,12 @@
     },
     "button": {
       "reset": "Đặt lại",
-      "save": "Lưu"
+      "save": "Lưu",
+      "verify": "Xác thực"
     }
+  },
+
+  "ForgotPassword": {
+    "title": "Đặt lại mật khẩu"
   }
 }
