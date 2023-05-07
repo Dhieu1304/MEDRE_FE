@@ -1,20 +1,25 @@
 import { FormProvider, useForm } from "react-hook-form";
 import { useLocation } from "react-router";
+
 import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
-import OtpForm from "./components/OtpForm";
+import EmailVerify from "./components/EmailVerify";
 import InfoForm from "./components/InfoForm";
-import SentEmailInfo from "./components/SentEmailInfo";
+import OtpVerify from "./components/OtpVerify";
 import patternConfig from "../../config/patternConfig";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import authServices from "../../services/authServices";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
+import FinishOtpVerify from "./components/FinishOtpVerify";
 
 const steps = {
-  SENT_INFO: "SENT_INFO",
+  SEND_INFO: "SEND_INFO",
   VERIFY: {
-    EMAIL: "EMAIL",
-    OTP: "OTP"
+    EMAIL: "VERIFY_EMAIL",
+    OTP: "VERIFY_OTP"
+  },
+  FINISH: {
+    OTP: "FINISH_OTP"
   }
 };
 
@@ -24,15 +29,15 @@ function Verification() {
   const location = useLocation();
   const [initPhoneNumberOrEmail, initStep] = useMemo(() => {
     const phoneNumberOrEmail = location.state?.phoneNumberOrEmail || "";
-    const isFinalVerifyStep = location.state?.isFinalVerifyStep;
-    let initStepData = steps.SENT_INFO;
+    const isFinishSendInfoStep = location.state?.isFinishSendInfoStep;
+    let initStepData = steps.SEND_INFO;
 
     if (patternConfig.phonePattern.test(phoneNumberOrEmail)) {
-      if (isFinalVerifyStep) {
+      if (isFinishSendInfoStep) {
         initStepData = steps.VERIFY.OTP;
       }
     } else if (patternConfig.emailPattern.test(phoneNumberOrEmail)) {
-      if (isFinalVerifyStep) {
+      if (isFinishSendInfoStep) {
         initStepData = steps.VERIFY.EMAIL;
       }
     }
@@ -51,7 +56,7 @@ function Verification() {
     criteriaMode: "all"
   });
 
-  const otpForm = useForm({
+  const otpVerifyForm = useForm({
     mode: "onChange",
     defaultValues: {
       otp: ""
@@ -92,7 +97,7 @@ function Verification() {
     } else if (patternConfig.emailPattern.test(phoneNumberOrEmail)) {
       await sendVerificationToEmail(phoneNumberOrEmail);
     } else {
-      setStep(steps.SENT_INFO);
+      setStep(steps.SEND_INFO);
     }
   };
 
@@ -115,7 +120,7 @@ function Verification() {
       const res = await authServices.verifyOtpToVerfifyPhoneNumber(otp);
       if (res.success) {
         toast(res.message);
-        // navigate
+        setStep(steps.FINISH.OTP);
         return { success: true };
       }
       toast(res.message);
@@ -124,15 +129,15 @@ function Verification() {
   };
 
   const backToFirstStep = () => {
-    setStep(steps.SENT_INFO);
-    otpForm.reset({
+    setStep(steps.SEND_INFO);
+    otpVerifyForm.reset({
       otp: ""
     });
   };
 
   const render = () => {
     switch (step) {
-      case steps.SENT_INFO:
+      case steps.SEND_INFO:
         return (
           <FormProvider {...infoForm}>
             <InfoForm handleSendVerification={handleSendVerification} />;
@@ -140,8 +145,8 @@ function Verification() {
         );
       case steps.VERIFY.OTP:
         return (
-          <FormProvider {...otpForm}>
-            <OtpForm
+          <FormProvider {...otpVerifyForm}>
+            <OtpVerify
               handleVerifyOtp={handleVerifyOtp}
               backToFirstStep={backToFirstStep}
               resendVerification={resendVerification}
@@ -149,9 +154,12 @@ function Verification() {
             ;
           </FormProvider>
         );
-
       case steps.VERIFY.EMAIL:
-        return <SentEmailInfo backToFirstStep={backToFirstStep} resendVerification={resendVerification} />;
+        return <EmailVerify backToFirstStep={backToFirstStep} resendVerification={resendVerification} />;
+
+      case steps.FINISH.OTP:
+        return <FinishOtpVerify backToFirstStep={backToFirstStep} resendVerification={resendVerification} />;
+
       default:
         return (
           <FormProvider {...infoForm}>

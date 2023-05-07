@@ -12,7 +12,7 @@
     }
   },
 
-  "OtpForm": {
+  "OtpVerify": {
     "title": "Enter OTP from your phone",
     "button": {
       "verifyOtp": "Confirm OTP"
@@ -21,14 +21,29 @@
     "link": {
       "verification": "Verify",
       "signIn": "Sign in",
-      "signUp": "Sign up"
+      "signUp": "Sign up",
+      "back": "Back",
+      "resend": "Resend otp"
     }
   },
 
-  "SentEmailInfo": {
+  "EmailVerify": {
     "title": "Email has been sent",
     "subTitle": {
       "askToCheckMail": "Please check your email."
+    },
+    "link": {
+      "signIn": "Sign in",
+      "signUp": "Sign up",
+      "back": "Back",
+      "resend": "Resend email"
+    }
+  },
+
+  "FinishOtpVerify": {
+    "title": "OTP authentication",
+    "subTitle": {
+      "congratulation": "OTP authentication successful"
     },
     "link": {
       "signIn": "Sign in",

@@ -6,8 +6,8 @@ import { Link } from "react-router-dom";
 import routeConfig from "../../../config/routeConfig";
 import authRoutes from "../../../pages/AuthPage/routes";
 
-function SentEmailInfo({ backToFirstStep, resendVerification }) {
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "SentEmailInfo" });
+function EmailVerify({ backToFirstStep, resendVerification }) {
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "EmailVerify" });
 
   return (
     <Box
@@ -53,9 +53,9 @@ function SentEmailInfo({ backToFirstStep, resendVerification }) {
   );
 }
 
-SentEmailInfo.propTypes = {
+EmailVerify.propTypes = {
   backToFirstStep: PropTypes.func.isRequired,
   resendVerification: PropTypes.func.isRequired
 };
 
-export default SentEmailInfo;
+export default EmailVerify;

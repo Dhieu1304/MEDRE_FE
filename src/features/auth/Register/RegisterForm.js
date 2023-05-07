@@ -50,7 +50,7 @@ function RegisterForm() {
     const result = await authStore.register({ email, phoneNumber, password });
 
     if (result) {
-      navigate(routeConfig.verification, { state: { phoneNumberOrEmail, isFinalVerifyStep: true } });
+      navigate(routeConfig.verification, { state: { phoneNumberOrEmail, isFinishSendInfoStep: true } });
     }
   };
 

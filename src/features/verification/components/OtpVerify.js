@@ -9,13 +9,13 @@ import routeConfig from "../../../config/routeConfig";
 import authRoutes from "../../../pages/AuthPage/routes";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 
-function OtpForm({ handleVerifyOtp, backToFirstStep, resendVerification }) {
+function OtpVerify({ handleVerifyOtp, backToFirstStep, resendVerification }) {
   const { control, handleSubmit } = useFormContext();
 
   const theme = useTheme();
   const authStore = useAuthStore();
 
-  const { t } = useTranslation("verificationFeature", { keyPrefix: "OtpForm" });
+  const { t } = useTranslation("verificationFeature", { keyPrefix: "OtpVerify" });
   const { t: tInputValidate } = useTranslation("input", { keyPrefix: "validation" });
 
   return (
@@ -119,10 +119,10 @@ function OtpForm({ handleVerifyOtp, backToFirstStep, resendVerification }) {
   );
 }
 
-OtpForm.propTypes = {
+OtpVerify.propTypes = {
   handleVerifyOtp: PropTypes.func.isRequired,
   backToFirstStep: PropTypes.func.isRequired,
   resendVerification: PropTypes.func.isRequired
 };
 
-export default OtpForm;
+export default OtpVerify;
