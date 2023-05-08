@@ -33,6 +33,7 @@ import { scheduleSessions } from "../../../entities/Schedule";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import { bookingStatuses } from "../../../entities/Booking";
 import BookingModal from "../../booking/component/BookingModal";
+import paymentServices from "../../../services/paymentServices";
 
 function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -70,7 +71,11 @@ function DoctorScheduleTable({ timesList, doctorId }) {
 
   const loadData = async () => {
     await fetchApi(async () => {
-      const res = await scheduleServices.getScheduleListByDoctorId(doctorId, heads[0], heads[6]);
+      const res = await scheduleServices.getScheduleListByDoctorId(
+        doctorId,
+        formatDate.format(heads[0], "YYYY-MM-DD"),
+        formatDate.format(heads[6], "YYYY-MM-DD")
+      );
 
       if (res.success) {
         const schedulesData = res.schedules;
@@ -86,8 +91,8 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   const loadTimeOffs = async () => {
     await fetchApi(async () => {
       const res = await timeOffServices.getTimeOffByDoctorId(doctorId, {
-        from: heads[0],
-        to: heads[6]
+        from: formatDate.format(heads[0], "YYYY-MM-DD"),
+        to: formatDate.format(heads[6], "YYYY-MM-DD")
       });
 
       if (res.success) {
@@ -116,6 +121,27 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   const schedulesDayOfWeekAndSession = useMemo(() => {
     return groupSchedulesDayOfWeekAndSession(schedules);
   }, [schedules]);
+
+  const handlePayment = async (booking) => {
+    let language = "vn";
+    if (locale === "enUS") {
+      language = "en";
+    }
+
+    const bookingId = booking?.id;
+    await fetchApi(async () => {
+      const res = await paymentServices.createPayment({ bookingId, language });
+
+      if (res.success) {
+        const data = res?.data;
+        // console.log("data: ", data);
+        window.location.href = data;
+        return { success: true };
+      }
+
+      return { error: res.message };
+    });
+  };
 
   const renderBookingButton = (schedule, booking, colDate, time) => {
     if (!booking) {
@@ -159,6 +185,9 @@ function DoctorScheduleTable({ timesList, doctorId }) {
             sx={{
               color: theme.palette.warning.light
             }}
+            onClick={async () => {
+              await handlePayment(booking);
+            }}
           >
             {t("button.waiting")}
           </Button>
@@ -177,9 +206,17 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     );
   };
 
+  // console.log("schedules: ", schedules);
+
   const renderCell = (schedule, colDate, time) => {
     const booking = findBookingsByDate(schedule?.bookings, colDate, time);
     const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, colDate, time);
+    // if (dayOfWeek === 5) {
+    //   console.log(formatDate.format(colDate, "ddd DD/MM/YYYY"));
+    //   console.log("schedule: ", schedule);
+    //   console.log("booking: ", booking);
+    //   console.log("isTimeOff: ", isTimeOff);
+    // }
 
     return (
       <TableCell
@@ -248,7 +285,6 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     const cols = heads.map((head) => {
       // schedulesBySession là 1 obj có 2 key morning và afternoon
       const dayOfWeek = head.getDay();
-      // console.log("dayOfWeek: ", dayOfWeek);
       // const schedulesBySession = schedulesDayOfWeekAndSession[index];
       const schedulesBySession = schedulesDayOfWeekAndSession[dayOfWeek];
       // console.log("schedulesBySession: ", schedulesBySession);
@@ -268,8 +304,6 @@ function DoctorScheduleTable({ timesList, doctorId }) {
           break;
       }
 
-      // console.log("schedule: ", schedule);
-
       // const colDate = heads[index];
       const colDate = new Date(head);
 
@@ -279,8 +313,9 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     return cols;
   };
 
-  const handleAfterBooking = async () => {
+  const handleAfterBooking = async (booking) => {
     await loadData();
+    await handlePayment(booking);
   };
 
   return (
