@@ -27,6 +27,8 @@ import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { formatDateLocale } from "../../../utils/datetimeUtil";
 import { scheduleTypes } from "../../../entities/Schedule";
 import { bookingStatuses } from "../../../entities/Booking";
+import { useFetchingStore } from "../../../store/FetchingApiStore";
+import paymentServices from "../../../services/paymentServices";
 
 function BookingCard({ booking, cancelBookingModal }) {
   //   const navigate = useNavigate();
@@ -36,6 +38,7 @@ function BookingCard({ booking, cancelBookingModal }) {
   const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
+  const { fetchApi } = useFetchingStore();
 
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingCard" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
@@ -123,6 +126,27 @@ function BookingCard({ booking, cancelBookingModal }) {
     }
   };
 
+  const handlePayment = async () => {
+    let language = "vn";
+    if (locale === "enUS") {
+      language = "en";
+    }
+
+    const bookingId = booking?.id;
+    await fetchApi(async () => {
+      const res = await paymentServices.createPayment({ bookingId, language });
+
+      if (res.success) {
+        const data = res?.data;
+        // console.log("data: ", data);
+        window.location.href = data;
+        return { success: true };
+      }
+
+      return { error: res.message };
+    });
+  };
+
   const renderCardActions = () => {
     return (
       <Box
@@ -180,9 +204,7 @@ function BookingCard({ booking, cancelBookingModal }) {
                 color: theme.palette.success.contrastText
               }
             }}
-            onClick={() => {
-              // navigate(`${location.pathname}/${booking?.id}`);
-            }}
+            onClick={handlePayment}
           >
             {t("button.payment")}
           </Button>

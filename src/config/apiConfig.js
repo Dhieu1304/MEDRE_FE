@@ -47,4 +47,8 @@ const patientApi = {
   createPatient: () => "/patient/create"
 };
 
-export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi, patientApi };
+const paymentApi = {
+  createPayment: () => "/payment/create"
+};
+
+export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi, patientApi, paymentApi };

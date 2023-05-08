@@ -42,6 +42,8 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
   const [isSelf, setIsSelf] = useState(true);
   const [patient, setPatient] = useState();
 
+  // console.log("---------------------------------------------------------");
+
   const bookingForm = useForm({
     defaultValues: {
       scheduleId: data?.schedule?.id,
@@ -97,11 +99,20 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
 
   const book = async ({ scheduleId, timeId, date, reason }, patientId = "") => {
     await fetchApi(async () => {
-      const res = await bookingServices.book({ scheduleId, timeId, date, reason, patientId });
+      // console.log("data: ", data);
+
+      const res = await bookingServices.book({
+        scheduleId,
+        timeId,
+        date: formatDate.format(date, "YYYY-MM-DD"),
+        reason,
+        patientId
+      });
       if (res?.success) {
+        const booking = res?.booking;
         setShow(false);
         setData({});
-        if (handleAfterBooking) await handleAfterBooking();
+        if (handleAfterBooking) await handleAfterBooking(booking);
         return { success: true };
       }
       toast(res.message);

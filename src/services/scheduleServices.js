@@ -3,8 +3,6 @@ import { scheduleApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
 
 const getScheduleListByDoctorId = async (doctorId, from, to) => {
-  // console.log({ from, to });
-
   const params = {
     id_doctor: doctorId,
     from,

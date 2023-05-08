@@ -63,10 +63,11 @@ const book = async ({ scheduleId, timeId, date, reason, patientId }) => {
     // console.log("res: ", res);
 
     if (res?.status) {
-      // const schedules = camelcaseKeys(res?.data, { deep: true });
+      const booking = camelcaseKeys(res?.data, { deep: true });
 
       return {
         success: true,
+        booking,
         message: res?.message
       };
     }
