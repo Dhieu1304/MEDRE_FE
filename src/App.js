@@ -25,6 +25,9 @@ function App() {
     const loadData = async () => {
       await authStore.loadUserInfo();
       setIsFirstVisit(false);
+      // runOneSignal();
+      // const oneId = await OneSignalReact.getUserId();
+      // console.log("oneId: ", oneId);
     };
     loadData();
   }, []);

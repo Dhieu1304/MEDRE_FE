@@ -4,8 +4,11 @@ import localStorageUtil from "../utils/localStorageUtil";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
 
 const loginByPhoneNumber = async (phoneNumber, password) => {
+  // console.log({ phoneNumber, password });
   try {
     const res = await axiosClient.post(authApi.loginByPhoneNumber(), { phone_number: phoneNumber, password });
+
+    // console.log("res: ", res);
 
     if (res?.status) {
       const user = res?.data?.user;
