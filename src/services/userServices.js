@@ -42,9 +42,6 @@ const editUserInfo = async ({ phoneNumber, email, name, address, gender, dob, he
 
   try {
     const res = await axiosClient.post(userApi.editUser(), dataBody);
-
-    console.log("editUserInfo res: ", res);
-
     if (res?.status) {
       const user = camelcaseKeys(res?.data?.user, { deep: true });
 
