@@ -1,21 +1,41 @@
+// import Cookies from "js-cookie";
 import { authApi } from "../config/apiConfig";
 import axiosClient from "../config/axiosClient";
-import localStorageUtil from "../utils/localStorageUtil";
+// import localStorageUtil from "../utils/localStorageUtil";
 import { cleanUndefinedAndEmptyStrValueObject } from "../utils/objectUtil";
+import { clearToken, saveToken } from "../utils/tokenUtils";
 
 const loginByPhoneNumber = async (phoneNumber, password) => {
   // console.log({ phoneNumber, password });
   try {
     const res = await axiosClient.post(authApi.loginByPhoneNumber(), { phone_number: phoneNumber, password });
 
-    // console.log("res: ", res);
+    // console.log("loginByPhoneNumber res: ", res);
 
     if (res?.status) {
       const user = res?.data?.user;
       const tokens = res?.data?.tokens;
 
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXP, tokens?.access?.expires);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXP, tokens?.refresh?.expires);
+
+      // Cookies.set(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token, {
+      //   expires: new Date(tokens?.access?.expires)
+      // });
+      // Cookies.set("ACCESS_TOKEN2", tokens?.access?.token);
+      // Cookies.set(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token, {
+      //   expires: new Date(tokens?.refresh?.expires)
+      // });
+
+      saveToken(tokens);
+
+      // console.log("loginByPhoneNumber res return: ", {
+      //   success: true,
+      //   user,
+      //   message: res?.message
+      // });
 
       return {
         success: true,
@@ -40,12 +60,23 @@ const loginByEmail = async (email, password) => {
   try {
     const res = await axiosClient.post(authApi.loginByEmail(), { email, password });
 
+    // console.log("loginByEmail res: ", res);
+
     if (res?.status) {
       const user = res?.data?.user;
       const tokens = res?.data?.tokens;
 
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token);
-      localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGEz.ACCESS_TOKEN, tokens?.access?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXP, tokens?.access?.expires);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token);
+      // localStorageUtil.setItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXP, tokens?.refresh?.expires);
+
+      // Cookies.set(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN, tokens?.access?.token, { expires: tokens?.access?.expires });
+      // Cookies.set(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN, tokens?.refresh?.token, {
+      //   expires: tokens?.refresh?.expires
+      // });
+
+      saveToken(tokens);
 
       return {
         success: true,
@@ -67,8 +98,15 @@ const loginByEmail = async (email, password) => {
 };
 
 const logout = async () => {
-  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
-  localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN_EXP);
+  // localStorageUtil.removeItem(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN_EXP);
+
+  // Cookies.remove(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
+  // Cookies.remove(localStorageUtil.LOCAL_STORAGE.REFRESH_TOKEN);
+
+  clearToken();
 
   return {
     success: true,
