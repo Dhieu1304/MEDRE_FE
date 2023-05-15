@@ -6,12 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import * as locales from "@mui/material/locale";
 
+import Cookies from "js-cookie";
 import { privateRoutes, publicRoutes } from "./routes";
 import DefaultLayout from "./layouts/DefaultLayout";
 import { useAuthStore } from "./store/AuthStore/hooks";
 import { useAppConfigStore } from "./store/AppConfigStore";
 import { getTheme } from "./config/themeConfig";
 import CustomOverlay from "./components/CustomOverlay";
+import cookiesUtil from "./utils/cookiesUtil";
 
 function App() {
   const authStore = useAuthStore();
@@ -25,9 +27,22 @@ function App() {
     const loadData = async () => {
       await authStore.loadUserInfo();
       setIsFirstVisit(false);
+      // runOneSignal();
+      // const oneId = await OneSignalReact.getUserId();
+      // console.log("oneId: ", oneId);z
     };
     loadData();
   }, []);
+
+  // console.log("Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN): ", Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
+  useEffect(() => {
+    // console.log("refresh token change");
+    if (!Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN)) {
+      // console.log("token hết hạn");
+    }
+  }, [Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN)]);
+
+  // console.log("authStore: ", authStore);
 
   return (
     <ThemeProvider theme={theme}>

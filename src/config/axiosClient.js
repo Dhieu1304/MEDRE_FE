@@ -1,5 +1,7 @@
 import axios from "axios";
-import localStorageUtil from "../utils/localStorageUtil";
+import Cookies from "js-cookie";
+import cookiesUtil from "../utils/cookiesUtil";
+import { saveToken } from "../utils/tokenUtils";
 
 // eslint-disable-next-line no-console
 console.log("process.env.REACT_APP_BE_URL: ", process.env.REACT_APP_BE_URL);
@@ -11,14 +13,39 @@ const axiosClient = axios.create({
   }
 });
 
+const getNewToken = async () => {
+  // console.log("getNewToken");
+
+  const refreshToken = Cookies.get(cookiesUtil.COOKIES.REFRESH_TOKEN);
+
+  if (!refreshToken) return "";
+  try {
+    const response = await axios.post(`${process.env.REACT_APP_BE_URL}/auth/refresh-tokens`, {
+      refresh_token: refreshToken
+    });
+
+    // console.log("response: ", response);
+    const tokens = response.data?.data?.tokens;
+    saveToken(tokens);
+
+    return tokens?.access?.token;
+  } catch (error) {
+    // throw new Error("Failed to refresh token");
+    return "";
+  }
+};
+
 axiosClient.interceptors.request.use(async (config) => {
   const customHeaders = {};
-  // await isTokenExpired();
-  const accessToken = localStorageUtil.getItem(localStorageUtil.LOCAL_STORAGE.ACCESS_TOKEN);
+
+  const accessToken = Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN);
+
   if (accessToken) {
     customHeaders.Authorization = `Bearer ${accessToken}`;
+  } else {
+    const newAccessToken = await getNewToken();
+    customHeaders.Authorization = `Bearer ${newAccessToken}`;
   }
-
   return {
     ...config,
     headers: {
