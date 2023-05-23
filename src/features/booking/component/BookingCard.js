@@ -46,7 +46,7 @@ function BookingCard({ booking, cancelBookingModal }) {
   const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
 
   useMemo(() => {
-    const code = locale.slice(0, 2);
+    const code = locale?.slice(0, 2);
     const currentLocale = formatDateLocale[code] || formatDateLocale.en;
     formatDate.locale(currentLocale);
   }, [locale]);
