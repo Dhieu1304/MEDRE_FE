@@ -2,7 +2,6 @@ import { Avatar, Box, TextField } from "@mui/material";
 import PropTypes from "prop-types";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
@@ -32,14 +31,12 @@ function ChangeAvatarModal({ show, setShow, data, setData, handleAfterChangeAvat
       if (res.success) {
         setData({});
         setShow(false);
-        toast(res.message);
         if (handleAfterChangeAvatar) {
           await handleAfterChangeAvatar();
         }
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

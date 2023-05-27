@@ -1,4 +1,3 @@
-import { toast } from "react-toastify";
 import { Box, Typography } from "@mui/material";
 import { useTranslation } from "react-i18next";
 import { useFetchingStore } from "../../store/FetchingApiStore";
@@ -15,12 +14,7 @@ function Verification() {
     // return await fetchApi(async () => {
     return fetchApi(async () => {
       const res = await authServices.sendVerificationOtpToPhone(phoneNumber);
-      if (res.success) {
-        toast(res.message);
-        return { success: true };
-      }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 
@@ -28,12 +22,7 @@ function Verification() {
     // return await fetchApi(async () => {
     return fetchApi(async () => {
       const res = await authServices.sendVerificationToEmail(email);
-      if (res.success) {
-        toast(res.message);
-        return { success: true };
-      }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

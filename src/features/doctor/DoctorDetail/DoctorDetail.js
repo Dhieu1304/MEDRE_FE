@@ -24,18 +24,21 @@ function DoctorDetail() {
 
   useEffect(() => {
     const loadData = async () => {
-      await fetchApi(async () => {
-        const res = await doctorServices.getDoctorDetail(doctorId);
+      await fetchApi(
+        async () => {
+          const res = await doctorServices.getDoctorDetail(doctorId);
 
-        if (res.success) {
-          const doctorData = res.doctor;
-          setDoctor(doctorData);
+          if (res.success) {
+            const doctorData = res.doctor;
+            setDoctor(doctorData);
 
-          return { success: true };
-        }
-        setDoctor({});
-        return { error: res.message };
-      });
+            return { ...res };
+          }
+          setDoctor({});
+          return { ...res };
+        },
+        { hideSuccessToast: true }
+      );
     };
     loadData();
   }, []);

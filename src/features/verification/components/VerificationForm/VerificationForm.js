@@ -3,7 +3,6 @@ import { useLocation } from "react-router";
 import PropTypes from "prop-types";
 
 import { useMemo, useState } from "react";
-import { toast } from "react-toastify";
 
 import EmailVerify from "./EmailVerify";
 import InfoForm from "./InfoForm";
@@ -96,12 +95,10 @@ function VerificationForm({ sendVerificationOtpToPhone, sendVerificationToEmail 
     await fetchApi(async () => {
       const res = await authServices.verifyOtpToVerfifyPhoneNumber(otp);
       if (res.success) {
-        toast(res.message);
         setStep(steps.FINISH.OTP);
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

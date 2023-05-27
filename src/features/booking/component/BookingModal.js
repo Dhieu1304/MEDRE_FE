@@ -17,7 +17,6 @@ import formatDate from "date-and-time";
 import { useEffect, useMemo, useState } from "react";
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import { useForm } from "react-hook-form";
 import CustomInput from "../../../components/CustomInput/CustomInput";
 import CustomModal from "../../../components/CustomModal";
@@ -113,10 +112,9 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
         setShow(false);
         setData({});
         if (handleAfterBooking) await handleAfterBooking(booking);
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 
@@ -126,10 +124,9 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
       const res = await patientServices.createPatient({ phoneNumber, name, gender, address, dob, healthInsurance });
       if (res?.success) {
         newPatient = res?.patient;
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
     return newPatient;
   };

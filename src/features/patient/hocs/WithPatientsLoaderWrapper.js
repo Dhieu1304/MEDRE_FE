@@ -15,10 +15,10 @@ const WithPatientsLoaderWrapper = (WrappedComponent) => {
         if (res.success) {
           const patientsData = res?.patients;
           setPatients([...patientsData]);
-          return { success: true };
+          return { ...res };
         }
         setPatients([]);
-        return { error: res.message };
+        return { ...res };
       });
     };
 

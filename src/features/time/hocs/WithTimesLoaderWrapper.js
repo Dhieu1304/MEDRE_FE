@@ -9,17 +9,20 @@ const WithTimesLoaderWrapper = (WrappedComponent) => {
     const { fetchApi } = useFetchingStore();
 
     const loadTimesList = async () => {
-      await fetchApi(async () => {
-        const res = await scheduleServices.getTimeList();
+      await fetchApi(
+        async () => {
+          const res = await scheduleServices.getTimeList();
 
-        if (res.success) {
-          const timesData = res?.times;
-          setTimesList(timesData);
-          return { success: true };
-        }
-        setTimesList([]);
-        return { error: res.message };
-      });
+          if (res.success) {
+            const timesData = res?.times;
+            setTimesList(timesData);
+            return { ...res };
+          }
+          setTimesList([]);
+          return { ...res };
+        },
+        { hideSuccessToast: true }
+      );
     };
 
     useEffect(() => {

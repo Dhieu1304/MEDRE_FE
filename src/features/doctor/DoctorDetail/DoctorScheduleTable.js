@@ -70,39 +70,45 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   }, [locale]);
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await scheduleServices.getScheduleListByDoctorId(
-        doctorId,
-        formatDate.format(heads[0], "YYYY-MM-DD"),
-        formatDate.format(heads[6], "YYYY-MM-DD")
-      );
+    await fetchApi(
+      async () => {
+        const res = await scheduleServices.getScheduleListByDoctorId(
+          doctorId,
+          formatDate.format(heads[0], "YYYY-MM-DD"),
+          formatDate.format(heads[6], "YYYY-MM-DD")
+        );
 
-      if (res.success) {
-        const schedulesData = res.schedules;
-        // console.log("res: ", res);
-        setSchedules(schedulesData);
-        return { success: true, error: "" };
-      }
-      setSchedules([]);
-      return { success: false, error: res.message };
-    });
+        if (res.success) {
+          const schedulesData = res.schedules;
+          // console.log("res: ", res);
+          setSchedules(schedulesData);
+          return { ...res };
+        }
+        setSchedules([]);
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   const loadTimeOffs = async () => {
-    await fetchApi(async () => {
-      const res = await timeOffServices.getTimeOffByDoctorId(doctorId, {
-        from: formatDate.format(heads[0], "YYYY-MM-DD"),
-        to: formatDate.format(heads[6], "YYYY-MM-DD")
-      });
+    await fetchApi(
+      async () => {
+        const res = await timeOffServices.getTimeOffByDoctorId(doctorId, {
+          from: formatDate.format(heads[0], "YYYY-MM-DD"),
+          to: formatDate.format(heads[6], "YYYY-MM-DD")
+        });
 
-      if (res.success) {
-        const timeOffsData = res.timeOffs;
-        setTimeOffs(timeOffsData);
-        return { success: true, error: "" };
-      }
-      setTimeOffs([]);
-      return { success: false, error: res.message };
-    });
+        if (res.success) {
+          const timeOffsData = res.timeOffs;
+          setTimeOffs(timeOffsData);
+          return { ...res };
+        }
+        setTimeOffs([]);
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {
@@ -136,10 +142,10 @@ function DoctorScheduleTable({ timesList, doctorId }) {
         const data = res?.data;
         // console.log("data: ", data);
         window.location.href = data;
-        return { success: true };
+        return { ...res };
       }
 
-      return { error: res.message };
+      return { ...res };
     });
   };
 

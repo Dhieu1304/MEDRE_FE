@@ -5,7 +5,6 @@ import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 // import routeConfig from "../../config/routeConfig";
 // import authRoutes from "../../pages/AuthPage/routes";
 // import { authRoutes } from "../../../config/routeConfig";
@@ -44,12 +43,10 @@ function ChangePassword() {
     await fetchApi(async () => {
       const res = await userServices.changePassword({ oldPassword, newPassword, confirmPassword });
       if (res?.success) {
-        toast(res.message);
         navigate(routeConfig.home);
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

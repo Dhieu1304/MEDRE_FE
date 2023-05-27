@@ -2,7 +2,6 @@ import { Box, Typography } from "@mui/material";
 
 import PropTypes from "prop-types";
 import { useTranslation } from "react-i18next";
-import { toast } from "react-toastify";
 import CustomModal from "../../../components/CustomModal";
 import { useFetchingStore } from "../../../store/FetchingApiStore/hooks";
 import bookingServices from "../../../services/bookingServices";
@@ -19,10 +18,9 @@ function CancelBookingModal({ show, setShow, data, setData, handleAfterCancelBoo
         setShow(false);
         setData({});
         if (handleAfterCancelBooking) await handleAfterCancelBooking();
-        return { success: true };
+        return { ...res };
       }
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
 
     setShow(false);

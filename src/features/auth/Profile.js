@@ -57,25 +57,28 @@ function Profile() {
   // console.log("user: ", user);
 
   const loadData = async () => {
-    await fetchApi(async () => {
-      const res = await userServices.getUserInfo();
+    await fetchApi(
+      async () => {
+        const res = await userServices.getUserInfo();
 
-      if (res?.success) {
-        const userData = res?.user;
+        if (res?.success) {
+          const userData = res?.user;
 
-        if (userData) {
-          authStore.setUser(userData);
+          if (userData) {
+            authStore.setUser(userData);
 
-          const newDefaultValues = {
-            ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData)
-          };
+            const newDefaultValues = {
+              ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData)
+            };
 
-          setDefaultValues(newDefaultValues);
-          reset(newDefaultValues);
+            setDefaultValues(newDefaultValues);
+            reset(newDefaultValues);
+          }
         }
-      }
-      return { ...res };
-    });
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {

@@ -14,21 +14,21 @@ function FetchingApiProvider({ children }) {
   const value = useMemo(
     () => ({
       ...state,
-      fetchApi: async (callback, { hideErrorToast = true, hideSuccessToast = true } = {}) => {
+      fetchApi: async (callback, { hideErrorToast = false, hideSuccessToast = false } = {}) => {
         dispatch(actions.fetchApi());
         const { success, message, isMustLoginAgain } = await callback();
         // const { success, message, isMustLoginAgain, statusCode } = await callback();
         // console.log({ hideErrorToast, hideSuccessToast });
-        // console.log({ success, message, isMustLoginAgain, statusCode });
+        // console.log({ success, message, isMustLoginAgain });
 
         if (success) {
           dispatch(actions.fetchApiSuccess());
 
-          if (message && hideSuccessToast) toast(message);
+          if (message && !hideSuccessToast) toast(message);
         } else {
           dispatch(actions.fetchApiFailed(message));
 
-          if (message && hideErrorToast) toast(message);
+          if (message && !hideErrorToast) toast(message);
         }
 
         if (isMustLoginAgain) {

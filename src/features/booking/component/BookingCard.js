@@ -140,10 +140,10 @@ function BookingCard({ booking, cancelBookingModal }) {
         const data = res?.data;
         // console.log("data: ", data);
         window.location.href = data;
-        return { success: true };
+        return { ...res };
       }
 
-      return { error: res.message };
+      return { ...res };
     });
   };
 

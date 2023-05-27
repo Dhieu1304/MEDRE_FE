@@ -63,18 +63,20 @@ function BookingDetail() {
 
   useEffect(() => {
     const loadData = async () => {
-      await fetchApi(async () => {
-        const res = await bookingServices.getBookingDetail(bookingId);
+      await fetchApi(
+        async () => {
+          const res = await bookingServices.getBookingDetail(bookingId);
 
-        if (res.success) {
-          const bookingData = res.booking;
-          setBooking(bookingData);
-
-          return { success: true };
-        }
-        setBooking({});
-        return { error: res.message };
-      });
+          if (res.success) {
+            const bookingData = res.booking;
+            setBooking(bookingData);
+            return { ...res };
+          }
+          setBooking({});
+          return { ...res };
+        },
+        { hideSuccessToast: true }
+      );
     };
     loadData();
   }, []);

@@ -110,40 +110,46 @@ function DoctorList() {
       page
     };
 
-    await fetchApi(async () => {
-      const res = await doctorServices.getDoctorList(paramsObj);
+    await fetchApi(
+      async () => {
+        const res = await doctorServices.getDoctorList(paramsObj);
 
-      let countData = 0;
-      let doctorsData = [];
+        let countData = 0;
+        let doctorsData = [];
 
-      if (res.success) {
-        doctorsData = res?.doctors || [];
-        countData = res?.count;
-        setDoctors(doctorsData);
-        setCount(countData);
+        if (res.success) {
+          doctorsData = res?.doctors || [];
+          countData = res?.count;
+          setDoctors(doctorsData);
+          setCount(countData);
 
-        return { success: true };
-      }
-      setDoctors([]);
-      setCount(0);
-      return { error: res.message };
-    });
+          return { ...res };
+        }
+        setDoctors([]);
+        setCount(0);
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   const loadConfig = async () => {
-    await fetchApi(async () => {
-      const res = await doctorServices.getDoctorExpertises();
+    await fetchApi(
+      async () => {
+        const res = await doctorServices.getDoctorExpertises();
 
-      if (res.success) {
-        const expertisesData = res?.expertises;
-        setExpertisesList(expertisesData);
+        if (res.success) {
+          const expertisesData = res?.expertises;
+          setExpertisesList(expertisesData);
+          setIsFetchConfigSuccess(true);
+          return { ...res };
+        }
+        setExpertisesList([]);
         setIsFetchConfigSuccess(true);
-        return { success: true };
-      }
-      setExpertisesList([]);
-      setIsFetchConfigSuccess(true);
-      return { error: res.message };
-    });
+        return { ...res };
+      },
+      { hideSuccessToast: true }
+    );
   };
 
   useEffect(() => {
