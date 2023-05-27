@@ -42,10 +42,11 @@ axiosClient.interceptors.request.use(async (config) => {
 
   if (accessToken) {
     customHeaders.Authorization = `Bearer ${accessToken}`;
-  } else {
-    const newAccessToken = await getNewToken();
-    customHeaders.Authorization = `Bearer ${newAccessToken}`;
   }
+  // else {
+  //   const newAccessToken = await getNewToken();
+  //   customHeaders.Authorization = `Bearer ${newAccessToken}`;
+  // }
   return {
     ...config,
     headers: {
@@ -58,14 +59,34 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {
-      return response.data;
+      let isMustLoginAgain = false;
+      return { ...response.data, statusCode: response.status, isMustLoginAgain };
     }
     return response;
   },
-  (error) => {
-    // console.error(error);
+  async (error) => {
     if (error && error.response && error.response.data) {
-      return error.response.data;
+      // console.log("Có response error ");
+      let isMustLoginAgain = false;
+      if (error.response.status === 401) {
+        // console.log("error.response.status: ", error.response.status);
+        const originalRequest = error.config;
+
+        const newAccessToken = await getNewToken();
+        if (newAccessToken) {
+          // console.log("Có access token mới ");
+          // Nếu lấy được access token mới gửi lại request
+          originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
+          return axiosClient(originalRequest);
+        } else {
+          // console.log("KO Có access token mới => yêu cầu login lại");
+          // Ngược lại isMustLoginAgain = false; để yêu cầu đăng nhập lại
+          isMustLoginAgain = true;
+        }
+      }
+      // console.log("return về lối");
+
+      return { ...error.response.data, statusCode: error.response.status, isMustLoginAgain };
     }
     return error;
   }

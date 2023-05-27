@@ -38,7 +38,7 @@ const getBookingList = async ({ type, bookingStatus, from, to, isPayment, order,
       message: res?.message || `Status is ${res.status}`
     };
   } catch (e) {
-    // console.error(e.message);
+    // console.error("e: ", e);
     return {
       success: false,
       message: e.message

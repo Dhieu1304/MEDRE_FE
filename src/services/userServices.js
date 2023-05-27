@@ -7,6 +7,7 @@ const getUserInfo = async () => {
   try {
     const res = await axiosClient.get(userApi.userInfo);
 
+    // console.log("res: ", res);
     if (res?.status) {
       const user = camelcaseKeys(res?.data, { deep: true });
 
@@ -21,6 +22,7 @@ const getUserInfo = async () => {
       message: ""
     };
   } catch (e) {
+    // console.log("e: ", e);
     // console.error(e.message);
     return {
       success: false,
