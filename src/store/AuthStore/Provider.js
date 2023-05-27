@@ -52,6 +52,7 @@ function AuthProvider({ children }) {
       },
 
       logout: async () => {
+        // console.log("logout");
         dispatch(actions.fetchApi());
         const res = await authServices.logout();
         if (res?.success) {
@@ -106,6 +107,10 @@ function AuthProvider({ children }) {
         dispatch(actions.fetchApiFailed(message));
         toast.success(message);
         return false;
+      },
+
+      setUser: (user) => {
+        dispatch(actions.setUser(user));
       }
     }),
     [state]

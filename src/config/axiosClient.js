@@ -59,7 +59,7 @@ axiosClient.interceptors.request.use(async (config) => {
 axiosClient.interceptors.response.use(
   (response) => {
     if (response && response.data) {
-      let isMustLoginAgain = false;
+      const isMustLoginAgain = false;
       return { ...response.data, statusCode: response.status, isMustLoginAgain };
     }
     return response;
@@ -78,11 +78,10 @@ axiosClient.interceptors.response.use(
           // Nếu lấy được access token mới gửi lại request
           originalRequest.headers.Authorization = `Bearer ${newAccessToken}`;
           return axiosClient(originalRequest);
-        } else {
-          // console.log("KO Có access token mới => yêu cầu login lại");
-          // Ngược lại isMustLoginAgain = false; để yêu cầu đăng nhập lại
-          isMustLoginAgain = true;
         }
+        // console.log("KO Có access token mới => yêu cầu login lại");
+        // Ngược lại isMustLoginAgain = false; để yêu cầu đăng nhập lại
+        isMustLoginAgain = true;
       }
       // console.log("return về lối");
 

@@ -17,7 +17,6 @@ import {
 import { RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
 
 import { useForm } from "react-hook-form";
-import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 import userServices from "../../services/userServices";
 import { useAuthStore } from "../../store/AuthStore/hooks";
@@ -58,18 +57,25 @@ function Profile() {
   // console.log("user: ", user);
 
   const loadData = async () => {
-    const userData = await authStore.loadUserInfo();
+    await fetchApi(async () => {
+      const res = await userServices.getUserInfo();
 
-    // console.log("userData: ", userData);
+      if (res?.success) {
+        const userData = res?.user;
 
-    if (userData) {
-      const newDefaultValues = {
-        ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData)
-      };
+        if (userData) {
+          authStore.setUser(userData);
 
-      setDefaultValues(newDefaultValues);
-      reset(newDefaultValues);
-    }
+          const newDefaultValues = {
+            ...mergeObjectsWithoutNullAndUndefined(defaultValues, userData)
+          };
+
+          setDefaultValues(newDefaultValues);
+          reset(newDefaultValues);
+        }
+      }
+      return { ...res };
+    });
   };
 
   useEffect(() => {
@@ -127,11 +133,8 @@ function Profile() {
       const res = await userServices.editUserInfo(data);
       if (res?.success) {
         await loadData();
-        return { success: true };
       }
-
-      toast(res.message);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

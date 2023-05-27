@@ -11,11 +11,11 @@ import { FetchingApiProvider } from "./store/FetchingApiStore";
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <AppConfigProvider>
-    <FetchingApiProvider>
-      <AuthProvider>
+    <AuthProvider>
+      <FetchingApiProvider>
         <App />
-      </AuthProvider>
-    </FetchingApiProvider>
+      </FetchingApiProvider>
+    </AuthProvider>
   </AppConfigProvider>
 );
 

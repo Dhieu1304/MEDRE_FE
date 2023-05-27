@@ -30,12 +30,16 @@ const getBookingList = async ({ type, bookingStatus, from, to, isPayment, order,
         bookings,
         count,
         success: true,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error("e: ", e);
@@ -68,12 +72,16 @@ const book = async ({ scheduleId, timeId, date, reason, patientId }) => {
       return {
         success: true,
         booking,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -97,12 +105,16 @@ const cancelBooking = async (id) => {
 
       return {
         success: true,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -123,12 +135,16 @@ const getBookingDetail = async (id) => {
       return {
         success: true,
         booking,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);

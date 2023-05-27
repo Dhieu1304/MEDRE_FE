@@ -26,12 +26,16 @@ const createPatient = async ({ phoneNumber, name, gender, address, dob, healthIn
       return {
         success: true,
         patient,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -52,12 +56,16 @@ const getPatients = async () => {
       return {
         success: true,
         patients,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);

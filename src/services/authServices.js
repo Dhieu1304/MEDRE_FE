@@ -34,18 +34,23 @@ const loginByPhoneNumber = async (phoneNumber, password) => {
       // console.log("loginByPhoneNumber res return: ", {
       //   success: true,
       //   user,
-      //   message: res?.message
+      //   message: res?.message,
+      //  ...res
       // });
 
       return {
         success: true,
         user,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -81,12 +86,16 @@ const loginByEmail = async (email, password) => {
       return {
         success: true,
         user,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -131,12 +140,16 @@ const register = async ({ phoneNumber, email, password }) => {
     if (res?.status) {
       return {
         success: true,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -162,12 +175,14 @@ const registerVerifyOtp = async ({ otp }) => {
   //   if (res?.status) {
   //     return {
   //       success: true,
-  //       message: res?.message
+  //       message: res?.message,
+  //       ...res
   //     };
   //   }
   //   return {
   //     success: false,
-  //     message: res?.message
+  //     message: res?.message,
+  //       ...res
   //   };
   // } catch (e) {
   //   // console.error(e.message);
@@ -199,12 +214,16 @@ const sendVerificationToEmail = async (email) => {
     if (res?.status) {
       return {
         success: true,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -231,12 +250,16 @@ const sendResetPasswordToEmail = async (email) => {
     if (res?.status) {
       return {
         success: true,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message
+      message: res?.message,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -258,12 +281,14 @@ const sendVerificationOtpToPhone = async (phoneNumber) => {
   //   if (res?.status) {
   //     return {
   //       success: true,
-  //       message: res?.message
+  //       message: res?.message,
+  //       ...res
   //     };
   //   }
   //   return {
   //     success: false,
-  //     message: res?.message
+  //     message: res?.message,
+  //       ...res
   //   };
   // } catch (e) {
   //   // console.error(e.message);
@@ -290,12 +315,14 @@ const sendResetPasswordOtpToPhone = async (phoneNumber) => {
   //   if (res?.status) {
   //     return {
   //       success: true,
-  //       message: res?.message
+  //       message: res?.message,
+  //       ...res
   //     };
   //   }
   //   return {
   //     success: false,
-  //     message: res?.message
+  //     message: res?.message,
+  //       ...res
   //   };
   // } catch (e) {
   //   // console.error(e.message);
@@ -322,12 +349,14 @@ const verifyOtpToVerfifyPhoneNumber = async (otp) => {
   //   if (res?.status) {
   //     return {
   //       success: true,
-  //       message: res?.message
+  //       message: res?.message,
+  //       ...res
   //     };
   //   }
   //   return {
   //     success: false,
-  //     message: res?.message
+  //     message: res?.message,
+  //       ...res
   //   };
   // } catch (e) {
   //   // console.error(e.message);
@@ -354,12 +383,14 @@ const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
   //   if (res?.status) {
   //     return {
   //       success: true,
-  //       message: res?.message
+  //       message: res?.message,
+  //       ...res
   //     };
   //   }
   //   return {
   //     success: false,
-  //     message: res?.message
+  //     message: res?.message,
+  //       ...res
   //   };
   // } catch (e) {
   //   // console.error(e.message);

@@ -24,12 +24,16 @@ const getScheduleListByDoctorId = async (doctorId, from, to) => {
       return {
         success: true,
         schedules,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
@@ -50,12 +54,16 @@ const getTimeList = async () => {
       return {
         success: true,
         times,
-        message: res?.message
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
       };
     }
     return {
       success: false,
-      message: res?.message || `Status is ${res.status}`
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
     };
   } catch (e) {
     // console.error(e.message);
