@@ -15,6 +15,7 @@ import { getTheme } from "./config/themeConfig";
 import CustomOverlay from "./components/CustomOverlay";
 import cookiesUtil from "./utils/cookiesUtil";
 import { SOCKET, socket } from "./config/socketConfig";
+import { requestPermission } from "./config/firebase";
 
 function App() {
   const authStore = useAuthStore();
@@ -78,7 +79,7 @@ function App() {
     if (authStore.isLogin) {
       socket.emit(SOCKET.JOIN_ROOM, Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
 
-      // requestPermission();
+      requestPermission();
     }
   }, [authStore.isLogin]);
 
