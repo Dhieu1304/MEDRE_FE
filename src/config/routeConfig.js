@@ -11,6 +11,7 @@ const routeConfig = {
   payment: "/payment",
   meeting: "/meeting",
   verification: "/verification",
+  notification: "/notification",
   default: "/*"
 };
 

@@ -12,7 +12,9 @@ import ForumPage from "../pages/ForumPage";
 import PaymentPage from "../pages/PaymentPage";
 import MeetingPage from "../pages/MeetingPage";
 import VerificationPage from "../pages/VerificationPage";
+import NotificationPage from "../pages/NotificationPage";
 import AuthLayout from "../layouts/AuthLayout";
+import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout";
 
 // Public routes
 const publicRoutes = [
@@ -51,6 +53,7 @@ const privateRoutes = [
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
   { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
+  { path: `${routeConfig.notification}/*`, component: NotificationPage, layout: DefaultLayout },
   { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
 ];
 

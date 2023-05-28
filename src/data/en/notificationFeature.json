@@ -1,0 +1,9 @@
+{
+  "NotificationDetail": {
+    "title": "Notification Detail",
+    "subtitle": {
+      "content": "Content",
+      "description": "Description"
+    }
+  }
+}
