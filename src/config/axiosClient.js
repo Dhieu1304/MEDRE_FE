@@ -4,7 +4,7 @@ import cookiesUtil from "../utils/cookiesUtil";
 import { saveToken } from "../utils/tokenUtils";
 
 // eslint-disable-next-line no-console
-console.log("process.env.REACT_APP_BE_URL: ", process.env.REACT_APP_BE_URL);
+// console.log("process.env.REACT_APP_BE_URL: ", process.env.REACT_APP_BE_URL);
 
 const axiosClient = axios.create({
   baseURL: process.env.REACT_APP_BE_URL,

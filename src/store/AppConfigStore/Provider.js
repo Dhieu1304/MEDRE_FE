@@ -5,6 +5,7 @@ import Context from "./Context";
 
 function AppConfigProvider({ children }) {
   const [mode, setMode] = useState(LIGHT);
+  const [notifications, setNotifications] = useState([]);
 
   const localeCodeObj = useMemo(() => {
     return {
@@ -17,14 +18,18 @@ function AppConfigProvider({ children }) {
 
   const [locale, setLocale] = useState(localeCodeObj[currentLocaleCode]);
 
+  // console.log("notifications: ", notifications);
+
   const value = useMemo(
     () => ({
       mode,
       setMode,
       locale,
-      setLocale
+      setLocale,
+      notifications,
+      setNotifications
     }),
-    [mode, locale]
+    [mode, locale, notifications]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

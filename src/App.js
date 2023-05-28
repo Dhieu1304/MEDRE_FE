@@ -14,35 +14,73 @@ import { useAppConfigStore } from "./store/AppConfigStore";
 import { getTheme } from "./config/themeConfig";
 import CustomOverlay from "./components/CustomOverlay";
 import cookiesUtil from "./utils/cookiesUtil";
+import { SOCKET, socket } from "./config/socketConfig";
 
 function App() {
   const authStore = useAuthStore();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
 
-  const { mode, locale } = useAppConfigStore();
+  const { mode, locale, setNotifications } = useAppConfigStore();
 
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
+
+  // console.log("locale: ", locale);
+  // console.log("notifications: ", notifications);
 
   useEffect(() => {
     const loadData = async () => {
       await authStore.loadUserInfo();
       setIsFirstVisit(false);
-      // runOneSignal();
-      // const oneId = await OneSignalReact.getUserId();
-      // console.log("oneId: ", oneId);z
     };
     loadData();
   }, []);
 
-  // console.log("Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN): ", Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
-  useEffect(() => {
-    // console.log("refresh token change");
-    if (!Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN)) {
-      // console.log("token hết hạn");
-    }
-  }, [Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN)]);
+  const onConnect = () => {
+    // console.log("Connect");
+    // setIsConnected(true);
+  };
+  const onDisconnect = () => {
+    // console.log("Diconnect");
+    // setIsConnected(false);
+  };
 
-  // console.log("authStore: ", authStore);
+  const handleNotifications = (payload) => {
+    setNotifications((prev) => [...prev, payload?.notification]);
+  };
+
+  useEffect(() => {
+    socket.on(SOCKET.CONNECT, () => {});
+    socket.on(SOCKET.DISCONNECT, () => {});
+    socket.on(SOCKET.CONNECT_ERROR, () => {});
+    socket.on(SOCKET.SUCCESS, () => {});
+    socket.on(SOCKET.ERROR, () => {});
+
+    // socket.on("Success", (message) => {
+    //   // console.log("Success: ", message);
+    // });
+    // socket.on("Error", (message) => {
+    //   // console.log("Error: ", message);
+    // });
+    // socket.on("connect_error", (error) => {
+    //   // console.log("Error", error.message);
+    // });
+
+    socket.on(SOCKET.NOTIFICATION, handleNotifications);
+
+    return () => {
+      socket.off(SOCKET.CONNECT, onConnect);
+      socket.off(SOCKET.DISCONNECT, onDisconnect);
+    };
+  }, []);
+
+  useEffect(() => {
+    // console.log("authStore.isLogin: ", authStore.isLogin);
+    if (authStore.isLogin) {
+      socket.emit(SOCKET.JOIN_ROOM, Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
+
+      // requestPermission();
+    }
+  }, [authStore.isLogin]);
 
   return (
     <ThemeProvider theme={theme}>
