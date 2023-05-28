@@ -16,17 +16,32 @@ import CustomOverlay from "./components/CustomOverlay";
 import cookiesUtil from "./utils/cookiesUtil";
 import { SOCKET, socket } from "./config/socketConfig";
 import { requestPermission } from "./config/firebase";
+import { useFetchingStore } from "./store/FetchingApiStore";
+import notificationServices from "./services/notificationServices";
 
 function App() {
   const authStore = useAuthStore();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
 
   const { mode, locale, setNotifications } = useAppConfigStore();
+  const { fetchApi } = useFetchingStore();
 
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
 
   // console.log("locale: ", locale);
   // console.log("notifications: ", notifications);
+  const loadNotifications = async () => {
+    await fetchApi(async () => {
+      const res = await notificationServices.getNotificationList();
+      if (res.success) {
+        const notificationData = res?.notifications || [];
+        setNotifications([...notificationData]);
+        return { ...res };
+      }
+      setNotifications([]);
+      return { ...res };
+    });
+  };
 
   useEffect(() => {
     const loadData = async () => {
@@ -45,8 +60,9 @@ function App() {
     // setIsConnected(false);
   };
 
-  const handleNotifications = (payload) => {
-    setNotifications((prev) => [...prev, payload?.notification]);
+  const handleNotifications = async () => {
+    // setNotifications((prev) => [...prev, payload?.notification]);
+    await loadNotifications();
   };
 
   useEffect(() => {
@@ -74,14 +90,23 @@ function App() {
     };
   }, []);
 
+  const handleAfterLogin = async () => {
+    socket.emit(SOCKET.JOIN_ROOM, Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
+    await loadNotifications();
+    const token = await requestPermission();
+    if (token) {
+      await notificationServices.subscribeTopic(token);
+    }
+  };
+
   useEffect(() => {
     // console.log("authStore.isLogin: ", authStore.isLogin);
     if (authStore.isLogin) {
-      socket.emit(SOCKET.JOIN_ROOM, Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));
-
-      requestPermission();
+      handleAfterLogin();
     }
   }, [authStore.isLogin]);
+
+  // console.log("notifications: ", notifications);
 
   return (
     <ThemeProvider theme={theme}>

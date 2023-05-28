@@ -45,7 +45,7 @@ function BookingList({ title, type }) {
   const cancelBookingModal = useCustomModal();
 
   const loadData = async ({ page }) => {
-    fetchApi(async () => {
+    await fetchApi(async () => {
       let from;
       let to;
       let order;
@@ -73,11 +73,11 @@ function BookingList({ title, type }) {
         setBookings(bookingsData);
         setCount(countData);
 
-        return { success: true };
+        return { ...res };
       }
       setBookings([]);
       setCount(countData);
-      return { error: res.message };
+      return { ...res };
     });
   };
 

@@ -51,4 +51,12 @@ const paymentApi = {
   createPayment: () => "/payment/create"
 };
 
-export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi, patientApi, paymentApi };
+const notificationApi = {
+  notificationList: () => "/notification/list",
+  markRead: () => "/notification/mark-read",
+  countUnread: () => "/notification/count-unread",
+  subscribeTopic: () => "/notification/subscribe-topic",
+  unSubscribeTopic: () => "/notification/un-subscribe-topic"
+};
+
+export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi, patientApi, paymentApi, notificationApi };
