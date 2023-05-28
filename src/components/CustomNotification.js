@@ -3,11 +3,16 @@ import React, { useState } from "react";
 import { IconButton, Badge, Menu, MenuItem, Box, Typography, Button } from "@mui/material";
 import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import { useAppConfigStore } from "../store/AppConfigStore";
+import { useFetchingStore } from "../store/FetchingApiStore";
+import notificationServices from "../services/notificationServices";
 
 function CustomNotification({ notifications }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const { t } = useTranslation("components", { keyPrefix: "CustomNotification" });
+  const { fetchApi } = useFetchingStore();
+  const { notificationLimit, notificationPage, notificationTotalPages, updateNotifications } = useAppConfigStore();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -15,6 +20,31 @@ function CustomNotification({ notifications }) {
 
   const handleClose = () => {
     setAnchorEl(null);
+  };
+
+  const handleLoadMoreNotifications = async () => {
+    await fetchApi(async () => {
+      const newPage = notificationPage + 1;
+      // console.log("notificationLimit: ", notificationLimit);
+      const res = await notificationServices.getNotificationList({ page: newPage, limit: notificationLimit });
+      if (res.success) {
+        const notificationData = res?.notifications || [];
+        const page = res?.page;
+        const limit = res?.limit;
+        const totalPages = res?.totalPages;
+        const count = res?.count;
+
+        updateNotifications({
+          notificationData: [...notifications, ...notificationData],
+          page,
+          limit,
+          totalPages,
+          count
+        });
+        return { ...res };
+      }
+      return { ...res };
+    });
   };
 
   return (
@@ -38,7 +68,7 @@ function CustomNotification({ notifications }) {
             width: 350
           }}
         >
-          {notifications.map((notification) => (
+          {notifications.map((notification, index) => (
             <MenuItem
               key={notification?.id}
               onClick={handleClose}
@@ -48,6 +78,7 @@ function CustomNotification({ notifications }) {
             >
               <Box>
                 <Typography variant="h5" fontSize={16} fontWeight={600}>
+                  {index}
                   {notification?.notificationsParent?.title?.slice(0, 50)}
                   {notification?.notificationsParent?.title?.length > 50 && "..."}
                 </Typography>
@@ -78,7 +109,9 @@ function CustomNotification({ notifications }) {
             alignItems: "center"
           }}
         >
-          <Button variant="text">{t("button.seeMore")}</Button>
+          <Button variant="text" onClick={handleLoadMoreNotifications} disabled={notificationTotalPages <= notificationPage}>
+            {t("button.seeMore")}
+          </Button>
         </Box>
       </Menu>
     </Box>

@@ -23,23 +23,37 @@ import CustomNotificatioToast from "./components/CustomNotificatioToast";
 function App() {
   const authStore = useAuthStore();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
+  const [isSocketConnected, setIsSocketConnected] = useState(true);
 
-  const { mode, locale, setNotifications } = useAppConfigStore();
+  const { mode, locale, notifications, notificationLimit, updateNotifications } = useAppConfigStore();
   const { fetchApi } = useFetchingStore();
 
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
 
   // console.log("locale: ", locale);
   // console.log("notifications: ", notifications);
-  const loadNotifications = async () => {
+  const loadNotifications = async (loadLimit) => {
+    const newLoadLimit = loadLimit || notificationLimit || 5;
+    // console.log("newLoadLimit: ", newLoadLimit);
+
     await fetchApi(async () => {
-      const res = await notificationServices.getNotificationList();
+      const res = await notificationServices.getNotificationList({ limit: newLoadLimit });
       if (res.success) {
         const notificationData = res?.notifications || [];
-        setNotifications([...notificationData]);
+        const page = res?.page;
+        const limit = res?.limit;
+        const totalPages = res?.totalPages;
+        const count = res?.count;
+        // console.log({ page, limit, totalPages, count });
+        updateNotifications({
+          notificationData,
+          page,
+          limit,
+          totalPages,
+          count
+        });
         return { ...res };
       }
-      setNotifications([]);
       return { ...res };
     });
   };
@@ -54,15 +68,14 @@ function App() {
 
   const onConnect = () => {
     // console.log("Connect");
-    // setIsConnected(true);
+    setIsSocketConnected(true);
   };
   const onDisconnect = () => {
     // console.log("Diconnect");
-    // setIsConnected(false);
+    setIsSocketConnected(false);
   };
 
   const handleNotifications = async (payload) => {
-    // console.log("payload?.notification: ", payload?.notification);
     toast(<CustomNotificatioToast title={payload?.notification?.title} body={payload?.notification?.body} />, {
       position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 3000,
@@ -73,8 +86,10 @@ function App() {
       progress: undefined
     });
 
-    await loadNotifications();
+    await loadNotifications((notifications?.length || 0) + 1);
   };
+
+  // console.log("notifications: ", notifications);
 
   useEffect(() => {
     socket.on(SOCKET.CONNECT, () => {});
@@ -93,13 +108,21 @@ function App() {
     //   // console.log("Error", error.message);
     // });
 
-    socket.on(SOCKET.NOTIFICATION, handleNotifications);
-
     return () => {
       socket.off(SOCKET.CONNECT, onConnect);
       socket.off(SOCKET.DISCONNECT, onDisconnect);
     };
   }, []);
+
+  useEffect(() => {
+    if (isSocketConnected) {
+      socket.on(SOCKET.NOTIFICATION, handleNotifications);
+      return () => {
+        socket.off(SOCKET.NOTIFICATION, handleNotifications);
+      };
+    }
+    return () => {};
+  }, [isSocketConnected, notifications]);
 
   const handleAfterLogin = async () => {
     socket.emit(SOCKET.JOIN_ROOM, Cookies.get(cookiesUtil.COOKIES.ACCESS_TOKEN));

@@ -5,7 +5,12 @@ import Context from "./Context";
 
 function AppConfigProvider({ children }) {
   const [mode, setMode] = useState(LIGHT);
+
   const [notifications, setNotifications] = useState([]);
+  const [notificationLimit, setNotificationLimit] = useState(10);
+  const [notificationPage, setNotificationPage] = useState(1);
+  const [notificationTotalPages, setNotificationTotalPages] = useState(0);
+  const [notificationCount, setNotificationCount] = useState(0);
 
   const localeCodeObj = useMemo(() => {
     return {
@@ -20,6 +25,16 @@ function AppConfigProvider({ children }) {
 
   // console.log("notifications: ", notifications);
 
+  const updateNotifications = ({ notificationData, page, limit, totalPages, count }) => {
+    setNotifications(() => [...notificationData]);
+    setNotificationPage(page);
+    setNotificationLimit(limit);
+    setNotificationTotalPages(totalPages);
+    setNotificationCount(count);
+  };
+
+  // console.log({ notificationLimit, notificationPage, notificationTotalPages, notificationCount });
+
   const value = useMemo(
     () => ({
       mode,
@@ -27,9 +42,13 @@ function AppConfigProvider({ children }) {
       locale,
       setLocale,
       notifications,
-      setNotifications
+      notificationLimit,
+      notificationPage,
+      notificationTotalPages,
+      notificationCount,
+      updateNotifications
     }),
-    [mode, locale, notifications]
+    [mode, locale, notifications, notificationLimit, notificationPage, notificationTotalPages, notificationCount]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

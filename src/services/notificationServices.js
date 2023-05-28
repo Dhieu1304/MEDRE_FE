@@ -20,11 +20,18 @@ const getNotificationList = async ({ type, read, page, limit } = {}) => {
 
     if (res?.status) {
       const notifications = camelcaseKeys(res?.data?.results, { deep: true });
-      const count = camelcaseKeys(res?.data?.totalResults, { deep: true });
+
+      // const page = camelcaseKeys(res?.data?.page, { deep: true });
+      // const limit = camelcaseKeys(res?.data?.limit, { deep: true });
+      // const totalPages = camelcaseKeys(res?.data?.totalPages, { deep: true });
+      // const count = camelcaseKeys(res?.data?.totalResults, { deep: true });
 
       return {
         notifications,
-        count,
+        page: camelcaseKeys(res?.data?.page, { deep: true }),
+        limit: camelcaseKeys(res?.data?.limit, { deep: true }),
+        totalPages: camelcaseKeys(res?.data?.totalPages, { deep: true }),
+        count: camelcaseKeys(res?.data?.totalResults, { deep: true }),
         success: true,
         message: res?.message,
         isMustLoginAgain: res?.isMustLoginAgain,
