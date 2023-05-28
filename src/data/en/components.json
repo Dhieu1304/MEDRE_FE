@@ -6,5 +6,12 @@
   },
   "NoDataBox": {
     "title": "No relevant data available"
+  },
+
+  "CustomNotification": {
+    "title": "Notifications",
+    "button": {
+      "seeMore": "See more"
+    }
   }
 }

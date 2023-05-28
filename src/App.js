@@ -1,7 +1,7 @@
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 import { Fragment, useEffect, useMemo, useState } from "react";
-import { ToastContainer } from "react-toastify";
+import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { Box, createTheme, ThemeProvider } from "@mui/material";
 import * as locales from "@mui/material/locale";
@@ -18,6 +18,7 @@ import { SOCKET, socket } from "./config/socketConfig";
 import { requestPermission } from "./config/firebase";
 import { useFetchingStore } from "./store/FetchingApiStore";
 import notificationServices from "./services/notificationServices";
+import CustomNotificatioToast from "./components/CustomNotificatioToast";
 
 function App() {
   const authStore = useAuthStore();
@@ -60,8 +61,18 @@ function App() {
     // setIsConnected(false);
   };
 
-  const handleNotifications = async () => {
-    // setNotifications((prev) => [...prev, payload?.notification]);
+  const handleNotifications = async (payload) => {
+    // console.log("payload?.notification: ", payload?.notification);
+    toast(<CustomNotificatioToast title={payload?.notification?.title} body={payload?.notification?.body} />, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      autoClose: 3000,
+      hideProgressBar: true,
+      closeOnClick: true,
+      pauseOnHover: true,
+      draggable: true,
+      progress: undefined
+    });
+
     await loadNotifications();
   };
 

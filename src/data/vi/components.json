@@ -6,5 +6,12 @@
   },
   "NoDataBox": {
     "title": "Không có dữ liệu phù hợp"
+  },
+
+  "CustomNotification": {
+    "title": "Thông báo",
+    "button": {
+      "seeMore": "Xem thêm"
+    }
   }
 }

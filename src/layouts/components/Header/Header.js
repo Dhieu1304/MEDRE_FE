@@ -40,13 +40,14 @@ import { useAuthStore } from "../../../store/AuthStore/hooks";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { DARK, LIGHT } from "../../../config/themeConfig";
 import routeConfig from "../../../config/routeConfig";
+import CustomNotification from "../../../components/CustomNotification";
 
 function Header({ window }) {
   const [mobileOpen, setMobileOpen] = useState(false);
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const { mode, setMode, locale, setLocale } = useAppConfigStore();
+  const { mode, setMode, locale, setLocale, notifications } = useAppConfigStore();
 
   const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
@@ -194,83 +195,86 @@ function Header({ window }) {
                 cursor: "pointer",
                 width: 25,
                 height: 25,
-                mr: 4
+                mr: 2
               }}
               onClick={handleChangeLanguage}
             />
 
             {authStore.isLogin ? (
-              <Box sx={{ flexGrow: 0 }}>
-                <Tooltip title="Open settings">
-                  <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt={authStore.user?.name} src={authStore.user?.image} sx={{ mr: 1 }} />
-                    <Typography
-                      variant="caption"
-                      noWrap
-                      component="span"
-                      href=""
-                      sx={{
-                        display: { xs: "none", md: "flex" },
-                        fontWeight: 700,
-                        color: "inherit",
-                        textDecoration: "none"
-                      }}
-                    >
-                      {authStore.user?.name}
-                    </Typography>
-                  </IconButton>
-                </Tooltip>
-                <Menu
-                  sx={{ mt: "45px" }}
-                  id="menu-appbar"
-                  anchorEl={anchorElUser}
-                  anchorOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  keepMounted
-                  transformOrigin={{
-                    vertical: "top",
-                    horizontal: "right"
-                  }}
-                  open={Boolean(anchorElUser)}
-                  onClose={handleCloseUserMenu}
-                >
-                  {headerDropdownMenu.map((item) => (
-                    <MenuItem
-                      key={item.label}
-                      onClick={() => {
-                        navigate(item.to);
-                        handleCloseUserMenu();
-                      }}
-                    >
-                      <Typography textAlign="center">{t(item.label)}</Typography>
-                    </MenuItem>
-                  ))}
-                  <MenuItem>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                      <Typography>{t("dark_mode_label")} </Typography>
-                      <Switch
-                        checked={mode === DARK}
-                        onClick={() => {
-                          setMode((prev) => {
-                            return prev === LIGHT ? DARK : LIGHT;
-                          });
+              <>
+                <CustomNotification notifications={notifications} />
+                <Box>
+                  <Tooltip title="Open settings">
+                    <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                      <Avatar alt={authStore.user?.name} src={authStore.user?.image} sx={{ mr: 1 }} />
+                      <Typography
+                        variant="caption"
+                        noWrap
+                        component="span"
+                        href=""
+                        sx={{
+                          display: { xs: "none", md: "flex" },
+                          fontWeight: 700,
+                          color: "inherit",
+                          textDecoration: "none"
                         }}
-                      />
-                    </Box>
-                  </MenuItem>
-                  <MenuItem>
-                    <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
-                      <Typography>{t("english_language_label")} </Typography>
-                      <Switch checked={locale === "enUS"} onClick={handleChangeLanguage} />
-                    </Box>
-                  </MenuItem>
-                  <MenuItem onClick={onLogout}>
-                    <Typography textAlign="center">{t("logout_label")}</Typography>
-                  </MenuItem>
-                </Menu>
-              </Box>
+                      >
+                        {authStore.user?.name}
+                      </Typography>
+                    </IconButton>
+                  </Tooltip>
+                  <Menu
+                    sx={{ mt: "45px" }}
+                    id="menu-appbar"
+                    anchorEl={anchorElUser}
+                    anchorOrigin={{
+                      vertical: "top",
+                      horizontal: "right"
+                    }}
+                    keepMounted
+                    transformOrigin={{
+                      vertical: "top",
+                      horizontal: "right"
+                    }}
+                    open={Boolean(anchorElUser)}
+                    onClose={handleCloseUserMenu}
+                  >
+                    {headerDropdownMenu.map((item) => (
+                      <MenuItem
+                        key={item.label}
+                        onClick={() => {
+                          navigate(item.to);
+                          handleCloseUserMenu();
+                        }}
+                      >
+                        <Typography textAlign="center">{t(item.label)}</Typography>
+                      </MenuItem>
+                    ))}
+                    <MenuItem>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        <Typography>{t("dark_mode_label")} </Typography>
+                        <Switch
+                          checked={mode === DARK}
+                          onClick={() => {
+                            setMode((prev) => {
+                              return prev === LIGHT ? DARK : LIGHT;
+                            });
+                          }}
+                        />
+                      </Box>
+                    </MenuItem>
+                    <MenuItem>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        <Typography>{t("english_language_label")} </Typography>
+                        <Switch checked={locale === "enUS"} onClick={handleChangeLanguage} />
+                      </Box>
+                    </MenuItem>
+                    <MenuItem onClick={onLogout}>
+                      <Typography textAlign="center">{t("logout_label")}</Typography>
+                    </MenuItem>
+                  </Menu>
+                </Box>
+              </>
             ) : (
               <Box sx={{ display: { xs: "flex", md: "flex" } }}>
                 {headerRightItems.map((item) =>
