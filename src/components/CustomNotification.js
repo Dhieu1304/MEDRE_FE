@@ -68,7 +68,7 @@ function CustomNotification({ notifications }) {
             width: 350
           }}
         >
-          {notifications.map((notification, index) => (
+          {notifications.map((notification) => (
             <MenuItem
               key={notification?.id}
               onClick={handleClose}
@@ -78,7 +78,6 @@ function CustomNotification({ notifications }) {
             >
               <Box>
                 <Typography variant="h5" fontSize={16} fontWeight={600}>
-                  {index}
                   {notification?.notificationsParent?.title?.slice(0, 50)}
                   {notification?.notificationsParent?.title?.length > 50 && "..."}
                 </Typography>
