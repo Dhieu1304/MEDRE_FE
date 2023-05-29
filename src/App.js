@@ -13,13 +13,17 @@ import { useAppConfigStore } from "./store/AppConfigStore";
 import { getTheme } from "./config/themeConfig";
 import CustomOverlay from "./components/CustomOverlay";
 import useNotificationBackground from "./features/notification/hooks/useNotificationBackground";
+import { useFetchingStore } from "./store/FetchingApiStore";
+import settingServices from "./services/settingServices";
 
 function App() {
   const authStore = useAuthStore();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
+  const [isLoadingConfigFinish, setIsLoadingConfigFinish] = useState(false);
   // const [isSocketConnected, setIsSocketConnected] = useState(true);
 
-  const { mode, locale } = useAppConfigStore();
+  const { fetchApi } = useFetchingStore();
+  const { mode, locale, setSettings } = useAppConfigStore();
 
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
 
@@ -33,6 +37,27 @@ function App() {
     loadData();
   }, []);
 
+  const loadSettings = async () => {
+    await fetchApi(async () => {
+      const res = await settingServices.getSettingList();
+
+      if (res.success) {
+        const settingsData = res?.settings || [];
+        setSettings([...settingsData]);
+        setIsLoadingConfigFinish(true);
+        // console.log("settingsData: ", settingsData);
+      }
+      return { ...res };
+    });
+  };
+  useEffect(() => {
+    if (authStore?.isLogin) {
+      loadSettings();
+    } else {
+      setIsLoadingConfigFinish(false);
+    }
+  }, [authStore?.isLogin]);
+
   return (
     <ThemeProvider theme={theme}>
       {isFirstVisit ? (
@@ -42,7 +67,7 @@ function App() {
       ) : (
         <>
           <CustomOverlay open={authStore.isLoading} />
-          {authStore.isLogin ? (
+          {authStore.isLogin && isLoadingConfigFinish ? (
             <Router>
               <Routes>
                 {privateRoutes.map((route) => {

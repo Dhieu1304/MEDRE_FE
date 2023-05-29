@@ -12,6 +12,8 @@ function AppConfigProvider({ children }) {
   const [notificationTotalPages, setNotificationTotalPages] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
 
+  const [settings, setSettings] = useState([]);
+
   const localeCodeObj = useMemo(() => {
     return {
       vi: "viVN",
@@ -54,9 +56,11 @@ function AppConfigProvider({ children }) {
       notificationTotalPages,
       notificationCount,
       updateNotifications,
-      markReadNotification
+      markReadNotification,
+      settings,
+      setSettings
     }),
-    [mode, locale, notifications, notificationLimit, notificationPage, notificationTotalPages, notificationCount]
+    [mode, locale, notifications, notificationLimit, notificationPage, notificationTotalPages, notificationCount, settings]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

@@ -59,4 +59,19 @@ const notificationApi = {
   unSubscribeTopic: () => "/notification/un-subscribe-topic"
 };
 
-export { authApi, userApi, doctorApi, scheduleApi, timeOffApi, bookingApi, patientApi, paymentApi, notificationApi };
+const settingApi = {
+  settingList: () => "/setting/list"
+};
+
+export {
+  authApi,
+  userApi,
+  doctorApi,
+  scheduleApi,
+  timeOffApi,
+  bookingApi,
+  patientApi,
+  paymentApi,
+  notificationApi,
+  settingApi
+};
