@@ -71,7 +71,7 @@ function CustomNotification({ notifications }) {
           <NotificationsIcon />
         </Badge>
       </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)}>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <Typography variant="h4" textAlign="center" fontSize={20} fontWeight={600} sx={{ py: 1 }}>
           {t("title")}
         </Typography>
