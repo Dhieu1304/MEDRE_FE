@@ -10,6 +10,7 @@ import { formatDateLocale } from "../../utils/datetimeUtil";
 import { bookingPaymentStatuses } from "../../entities/Booking/constant";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 import CustomPageTitle from "../../components/CustomPageTitle";
+import CustomInput from "../../components/CustomInput/CustomInput";
 
 function BookingDetail() {
   const [booking, setBooking] = useState();
@@ -260,6 +261,21 @@ function BookingDetail() {
                 </TableBody>
               </Table>
             </TableContainer>
+          </Box>
+          <Box sx={{ flexDirection: "column", mb: 2 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+            >
+              {t("subTitle.doctorConclusion")}
+            </Typography>
+
+            <CustomInput label={tBooking("conclusion")} noNameValue={booking?.note} type="text" multiline rows={6} />
           </Box>
         </Box>
       </Box>

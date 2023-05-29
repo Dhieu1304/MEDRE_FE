@@ -15,7 +15,8 @@
     "subTitle": {
       "scheduleInfo": "Schedule information",
       "doctorInfo": "Doctor information",
-      "patientInfo": "Patient information"
+      "patientInfo": "Patient information",
+      "doctorConclusion": "Doctor conclusion"
     },
     "button": {
       "exportFile": "Export file"

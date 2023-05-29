@@ -15,7 +15,8 @@
     "subTitle": {
       "scheduleInfo": "Thông tin lịch khám",
       "doctorInfo": "Thông tin bác sĩ",
-      "patientInfo": "Thông tin bệnh nhân"
+      "patientInfo": "Thông tin bệnh nhân",
+      "doctorConclusion": "Kết luận của bác sĩ"
     },
     "button": {
       "exportFile": "Xuất file"

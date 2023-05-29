@@ -197,7 +197,7 @@ function Profile() {
           <Grid container spacing={3}>
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput
-                // disabled
+                disabled={user?.emailVerified}
                 control={control}
                 rules={{
                   required: tInputValidate("required"),
@@ -256,6 +256,7 @@ function Profile() {
             <Grid item xs={12} sm={12} md={6} lg={6}>
               <CustomInput
                 // disabled
+                disabled={user?.phoneVerified}
                 control={control}
                 rules={{
                   required: tInputValidate("required"),
