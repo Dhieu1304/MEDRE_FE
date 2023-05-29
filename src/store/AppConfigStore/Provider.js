@@ -33,6 +33,13 @@ function AppConfigProvider({ children }) {
     setNotificationCount(count);
   };
 
+  const markReadNotification = (index) => {
+    const newNotification = { ...notifications[index], read: true };
+    const newNotifications = [...notifications];
+    newNotifications[index] = newNotification;
+    setNotifications([...newNotifications]);
+  };
+
   // console.log({ notificationLimit, notificationPage, notificationTotalPages, notificationCount });
 
   const value = useMemo(
@@ -46,7 +53,8 @@ function AppConfigProvider({ children }) {
       notificationPage,
       notificationTotalPages,
       notificationCount,
-      updateNotifications
+      updateNotifications,
+      markReadNotification
     }),
     [mode, locale, notifications, notificationLimit, notificationPage, notificationTotalPages, notificationCount]
   );

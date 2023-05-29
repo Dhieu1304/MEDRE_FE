@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { IconButton, Badge, Menu, MenuItem, Box, Typography, Button } from "@mui/material";
 import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { useAppConfigStore } from "../store/AppConfigStore";
 import { useFetchingStore } from "../store/FetchingApiStore";
 import notificationServices from "../services/notificationServices";
@@ -12,7 +13,8 @@ function CustomNotification({ notifications }) {
 
   const { t } = useTranslation("components", { keyPrefix: "CustomNotification" });
   const { fetchApi } = useFetchingStore();
-  const { notificationLimit, notificationPage, notificationTotalPages, updateNotifications } = useAppConfigStore();
+  const { notificationLimit, notificationPage, notificationTotalPages, updateNotifications, markReadNotification } =
+    useAppConfigStore();
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -47,6 +49,21 @@ function CustomNotification({ notifications }) {
     });
   };
 
+  const handleToNotificationDetail = async (id, index) => {
+    await fetchApi(
+      async () => {
+        // console.log("notificationLimit: ", notificationLimit);
+        const res = await notificationServices.markRead(id);
+        if (res.success) {
+          markReadNotification(index);
+          return { ...res };
+        }
+        return { ...res };
+      },
+      { hideErrorToast: true, hideSuccessToast: true }
+    );
+  };
+
   return (
     <Box>
       <IconButton color="inherit" onClick={handleClick} size="large" sx={{ mr: 2 }}>
@@ -54,7 +71,7 @@ function CustomNotification({ notifications }) {
           <NotificationsIcon />
         </Badge>
       </IconButton>
-      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
+      <Menu anchorEl={anchorEl} open={Boolean(anchorEl)}>
         <Typography variant="h4" textAlign="center" fontSize={20} fontWeight={600} sx={{ py: 1 }}>
           {t("title")}
         </Typography>
@@ -68,7 +85,7 @@ function CustomNotification({ notifications }) {
             width: 350
           }}
         >
-          {notifications.map((notification) => (
+          {notifications.map((notification, index) => (
             <MenuItem
               key={notification?.id}
               onClick={handleClose}
@@ -76,12 +93,22 @@ function CustomNotification({ notifications }) {
                 position: "relative"
               }}
             >
-              <Box>
-                <Typography variant="h5" fontSize={16} fontWeight={600}>
+              <Box
+                component={Link}
+                to={`/notification/${notification?.id}`}
+                sx={{
+                  textDecoration: "none"
+                }}
+                state={{
+                  notification
+                }}
+                onClick={async () => handleToNotificationDetail(notification?.id, index)}
+              >
+                <Typography variant="h5" fontSize={16} fontWeight={600} color="black">
                   {notification?.notificationsParent?.title?.slice(0, 50)}
                   {notification?.notificationsParent?.title?.length > 50 && "..."}
                 </Typography>
-                <Box component="p" fontSize={12}>
+                <Box component="p" fontSize={12} color="rgba(0,0,0,0.6)">
                   {notification?.notificationsParent?.content?.slice(0, 50)}
                   {notification?.notificationsParent?.content?.length > 50 && "..."}
                 </Box>
