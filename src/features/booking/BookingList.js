@@ -1,4 +1,4 @@
-import { Box, Pagination, Typography } from "@mui/material";
+import { Box, Pagination } from "@mui/material";
 import PropTypes from "prop-types";
 import qs from "query-string";
 import { useEffect, useMemo, useState } from "react";
@@ -12,6 +12,7 @@ import { normalizeStrToInt } from "../../utils/standardizedForForm";
 import CancelBookingModal from "./component/CancelBookingModal";
 import { useCustomModal } from "../../components/CustomModal";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
+import CustomPageTitle from "../../components/CustomPageTitle";
 
 function BookingList({ title, type }) {
   const [bookings, setBookings] = useState([]);
@@ -99,20 +100,7 @@ function BookingList({ title, type }) {
     <>
       <CustomOverlay open={isLoading} />
       <Box>
-        <Typography
-          component="h1"
-          variant="h4"
-          fontWeight={600}
-          fontSize={{
-            sm: 30,
-            xs: 25
-          }}
-          sx={{
-            mb: 4
-          }}
-        >
-          {title}
-        </Typography>
+        <CustomPageTitle title={title} />
         {bookings.map((booking) => {
           return <BookingCard key={booking?.id} booking={booking} cancelBookingModal={cancelBookingModal} />;
         })}

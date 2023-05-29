@@ -29,6 +29,7 @@ import {
   normalizeStrToStr
 } from "../../../utils/standardizedForForm";
 import useObjDebounce from "../../../hooks/useObjDebounce";
+import CustomPageTitle from "../../../components/CustomPageTitle";
 
 function DoctorList() {
   const [expertisesList, setExpertisesList] = useState([]);
@@ -181,31 +182,10 @@ function DoctorList() {
     isFetchConfigSuccess && (
       <Box sx={{ flex: 1, display: "flex", flexDirection: "column" }}>
         <CustomOverlay open={isLoading} />
-
-        <Box
-          sx={{
-            display: "flex",
-            justifyContent: "flex-start",
-            alignItems: "center",
-            mb: 4
-          }}
-        >
-          <Typography
-            component="h1"
-            variant="h4"
-            fontWeight={600}
-            fontSize={{
-              sm: 30,
-              xs: 25
-            }}
-            sx={{
-              mr: 2
-            }}
-          >
-            {t("title")}
-          </Typography>
-          {isSearchWaiting && <CircularProgress color="primary" size={24} thickness={3} />}
-        </Box>
+        <CustomPageTitle
+          title={t("title")}
+          titleRight={isSearchWaiting && <CircularProgress color="primary" size={24} thickness={3} />}
+        />
 
         <Box
           sx={{

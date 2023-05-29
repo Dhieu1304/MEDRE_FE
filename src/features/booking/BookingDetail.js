@@ -1,27 +1,15 @@
-import {
-  Box,
-  Button,
-  IconButton,
-  Paper,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableRow,
-  Typography,
-  useTheme
-} from "@mui/material";
+import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import formatDate from "date-and-time";
-import { FileDownload as FileDownloadIcon } from "@mui/icons-material";
 import bookingServices from "../../services/bookingServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { useAppConfigStore } from "../../store/AppConfigStore";
 import { formatDateLocale } from "../../utils/datetimeUtil";
 import { bookingPaymentStatuses } from "../../entities/Booking/constant";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
+import CustomPageTitle from "../../components/CustomPageTitle";
 
 function BookingDetail() {
   const [booking, setBooking] = useState();
@@ -35,7 +23,7 @@ function BookingDetail() {
 
   const { isLoading, fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
-  const theme = useTheme();
+  // const theme = useTheme();
 
   useMemo(() => {
     const code = locale.slice(0, 2);
@@ -108,19 +96,8 @@ function BookingDetail() {
     <>
       <CustomOverlay open={isLoading} />
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <Box sx={{ display: "flex", flexDirection: "row", justifyContent: "space-between", alignItems: "center", mb: 4 }}>
-          <Typography
-            component="h1"
-            variant="h4"
-            fontWeight={600}
-            fontSize={{
-              sm: 30,
-              xs: 25
-            }}
-          >
-            {t("title")}
-          </Typography>
-
+        <CustomPageTitle title={t("title")} />
+        {/*
           <Button
             variant="contained"
             size="small"
@@ -148,8 +125,8 @@ function BookingDetail() {
             }}
           >
             <FileDownloadIcon />
-          </IconButton>
-        </Box>
+          </IconButton> */}
+
         {/* , border: "1px solid rgba(0,0,0,0.2)" */}
         <Box
           sx={{

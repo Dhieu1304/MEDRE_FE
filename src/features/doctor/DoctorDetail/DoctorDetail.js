@@ -10,6 +10,7 @@ import { useFetchingStore } from "../../../store/FetchingApiStore";
 import ExpertiseButton from "../components/ExpertiseButton";
 import DoctorScheduleTable from "./DoctorScheduleTable";
 import CustomOverlay from "../../../components/CustomOverlay/CustomOverlay";
+import CustomPageTitle from "../../../components/CustomPageTitle";
 
 function DoctorDetail() {
   const [doctor, setDoctor] = useState();
@@ -46,20 +47,7 @@ function DoctorDetail() {
   return (
     <>
       <CustomOverlay open={isLoading} />
-      <Typography
-        component="h1"
-        variant="h4"
-        fontWeight={600}
-        fontSize={{
-          sm: 30,
-          xs: 25
-        }}
-        sx={{
-          mb: 4
-        }}
-      >
-        {t("title")}
-      </Typography>
+      <CustomPageTitle title={t("title")} />
 
       <Box>
         <Box

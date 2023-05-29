@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
 
-function CustomPageTitle({ title, right }) {
+function CustomPageTitle({ title, titleRight, right }) {
   return (
     <Box
       sx={{
@@ -16,17 +16,20 @@ function CustomPageTitle({ title, right }) {
         <Typography component="h1" variant="h4" fontWeight={600} fontSize={{ sm: 30, xs: 22 }}>
           {title}
         </Typography>
+        <Box sx={{ display: "flex", justifyContent: "flex-start", alignItems: "center", ml: 2 }}>{titleRight}</Box>
       </Box>
       <Box>{right}</Box>
     </Box>
   );
 }
 CustomPageTitle.defaultProps = {
-  right: undefined
+  right: undefined,
+  titleRight: undefined
 };
 
 CustomPageTitle.propTypes = {
   title: PropTypes.string.isRequired,
+  titleRight: PropTypes.node,
   right: PropTypes.node
 };
 
