@@ -21,7 +21,7 @@ import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "@mui/i
 import { useTranslation } from "react-i18next";
 import { useCustomModal } from "../../../components/CustomModal";
 import scheduleServices from "../../../services/scheduleServices";
-import { formatDateLocale, getNext7DaysFrom, isEqualDateWithoutTime } from "../../../utils/datetimeUtil";
+import { formatDateLocale, getNext7DaysFrom, isEqualDateWithoutTime, subtractDate } from "../../../utils/datetimeUtil";
 
 import WithTimesLoaderWrapper from "../../time/hocs/WithTimesLoaderWrapper";
 
@@ -34,6 +34,7 @@ import { useAuthStore } from "../../../store/AuthStore/hooks";
 import { bookingStatuses } from "../../../entities/Booking";
 import BookingModal from "../../booking/component/BookingModal";
 import paymentServices from "../../../services/paymentServices";
+import { settingNames } from "../../../entities/Setting/constant";
 
 function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -51,7 +52,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     keyPrefix: "constants.types"
   });
   const { fetchApi } = useFetchingStore();
-  const { locale } = useAppConfigStore();
+  const { locale, settingConfig } = useAppConfigStore();
   const authStore = useAuthStore();
 
   const heads = useMemo(() => getNext7DaysFrom(currentDate), [currentDate]);
@@ -151,6 +152,13 @@ function DoctorScheduleTable({ timesList, doctorId }) {
 
   const renderBookingButton = (schedule, booking, colDate, time) => {
     if (!booking) {
+      // Số ngày cần đặt trước
+      const bookAdvanceDay = settingConfig[settingNames.BOOK_ADVANCE_DAY]?.value;
+      // Số ngày được phép đặt trước
+      const bookAfterDay = settingConfig[settingNames.BOOK_AFTER_DAY]?.value;
+
+      const canBooking =
+        subtractDate(colDate, new Date()) > bookAdvanceDay && subtractDate(colDate, new Date()) < bookAfterDay;
       return (
         <Button
           variant="contained"
@@ -158,6 +166,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
             backgroundColor: "#009dff",
             color: "white"
           }}
+          disabled={!canBooking}
           onClick={() => {
             bookingModal.setShow(true);
             bookingModal.setData({

@@ -163,7 +163,9 @@ function BookingCard({ booking, cancelBookingModal }) {
           alignItems: "center"
         }}
       >
-        {formatDate.subtract(new Date(), waitingTimeToSchedule).toDays() < -1 &&
+        {/* Tạm thờ bỏ chức năng cancel */}
+        {false &&
+          formatDate.subtract(new Date(), waitingTimeToSchedule).toDays() < -1 &&
           booking.bookingStatus !== bookingStatuses.CANCELED && (
             <Button
               variant="contained"

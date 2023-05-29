@@ -12,7 +12,7 @@ function AppConfigProvider({ children }) {
   const [notificationTotalPages, setNotificationTotalPages] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
 
-  const [settings, setSettings] = useState([]);
+  const [settingConfig, setSettingConfig] = useState({});
 
   const localeCodeObj = useMemo(() => {
     return {
@@ -26,6 +26,18 @@ function AppConfigProvider({ children }) {
   const [locale, setLocale] = useState(localeCodeObj[currentLocaleCode]);
 
   // console.log("notifications: ", notifications);
+
+  const updateSettingConfig = (settings) => {
+    const settingConfigObj = settings?.reduce((acc, cur) => {
+      return {
+        ...acc,
+        [cur?.name]: cur
+      };
+    }, {});
+    setSettingConfig({ ...settingConfigObj });
+  };
+
+  // console.log("settingConfig: ", settingConfig);
 
   const updateNotifications = ({ notificationData, page, limit, totalPages, count }) => {
     setNotifications(() => [...notificationData]);
@@ -57,10 +69,19 @@ function AppConfigProvider({ children }) {
       notificationCount,
       updateNotifications,
       markReadNotification,
-      settings,
-      setSettings
+      settingConfig,
+      updateSettingConfig
     }),
-    [mode, locale, notifications, notificationLimit, notificationPage, notificationTotalPages, notificationCount, settings]
+    [
+      mode,
+      locale,
+      notifications,
+      notificationLimit,
+      notificationPage,
+      notificationTotalPages,
+      notificationCount,
+      settingConfig
+    ]
   );
 
   return <Context.Provider value={value}>{children}</Context.Provider>;

@@ -19,11 +19,9 @@ import settingServices from "./services/settingServices";
 function App() {
   const authStore = useAuthStore();
   const [isFirstVisit, setIsFirstVisit] = useState(true);
-  const [isLoadingConfigFinish, setIsLoadingConfigFinish] = useState(false);
-  // const [isSocketConnected, setIsSocketConnected] = useState(true);
 
   const { fetchApi } = useFetchingStore();
-  const { mode, locale, setSettings } = useAppConfigStore();
+  const { mode, locale, updateSettingConfig } = useAppConfigStore();
 
   const theme = useMemo(() => createTheme(getTheme(mode), locales[locale]), [mode, locale]);
 
@@ -43,8 +41,7 @@ function App() {
 
       if (res.success) {
         const settingsData = res?.settings || [];
-        setSettings([...settingsData]);
-        setIsLoadingConfigFinish(true);
+        updateSettingConfig([...settingsData]);
         // console.log("settingsData: ", settingsData);
       }
       return { ...res };
@@ -53,8 +50,6 @@ function App() {
   useEffect(() => {
     if (authStore?.isLogin) {
       loadSettings();
-    } else {
-      setIsLoadingConfigFinish(false);
     }
   }, [authStore?.isLogin]);
 
@@ -67,7 +62,7 @@ function App() {
       ) : (
         <>
           <CustomOverlay open={authStore.isLoading} />
-          {authStore.isLogin && isLoadingConfigFinish ? (
+          {authStore.isLogin ? (
             <Router>
               <Routes>
                 {privateRoutes.map((route) => {
