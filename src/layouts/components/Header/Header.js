@@ -47,7 +47,7 @@ function Header({ window }) {
 
   const [anchorElUser, setAnchorElUser] = useState(null);
 
-  const { mode, setMode, locale, setLocale, notifications } = useAppConfigStore();
+  const { mode, setMode, locale, setLocale, notifications, unreadNotificationCount } = useAppConfigStore();
 
   const { t, i18n } = useTranslation("layout", { keyPrefix: "header" });
 
@@ -202,7 +202,7 @@ function Header({ window }) {
 
             {authStore.isLogin ? (
               <>
-                <CustomNotification notifications={notifications} />
+                <CustomNotification notifications={notifications} unreadNotificationCount={unreadNotificationCount} />
                 <Box>
                   <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>

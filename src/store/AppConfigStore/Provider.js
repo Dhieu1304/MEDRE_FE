@@ -11,6 +11,7 @@ function AppConfigProvider({ children }) {
   const [notificationPage, setNotificationPage] = useState(1);
   const [notificationTotalPages, setNotificationTotalPages] = useState(0);
   const [notificationCount, setNotificationCount] = useState(0);
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState(0);
 
   const [settingConfig, setSettingConfig] = useState({});
 
@@ -37,7 +38,7 @@ function AppConfigProvider({ children }) {
     setSettingConfig({ ...settingConfigObj });
   };
 
-  // console.log("settingConfig: ", settingConfig);
+  // console.log("notificationCount: ", notificationCount);
 
   const updateNotifications = ({ notificationData, page, limit, totalPages, count }) => {
     setNotifications(() => [...notificationData]);
@@ -52,6 +53,12 @@ function AppConfigProvider({ children }) {
     const newNotifications = [...notifications];
     newNotifications[index] = newNotification;
     setNotifications([...newNotifications]);
+    setUnreadNotificationCount((prev) => {
+      if (prev > 0) {
+        return prev - 1;
+      }
+      return 0;
+    });
   };
 
   // console.log({ notificationLimit, notificationPage, notificationTotalPages, notificationCount });
@@ -70,7 +77,9 @@ function AppConfigProvider({ children }) {
       updateNotifications,
       markReadNotification,
       settingConfig,
-      updateSettingConfig
+      updateSettingConfig,
+      unreadNotificationCount,
+      setUnreadNotificationCount
     }),
     [
       mode,
@@ -80,7 +89,8 @@ function AppConfigProvider({ children }) {
       notificationPage,
       notificationTotalPages,
       notificationCount,
-      settingConfig
+      settingConfig,
+      unreadNotificationCount
     ]
   );
 

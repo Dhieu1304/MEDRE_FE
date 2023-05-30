@@ -88,11 +88,13 @@ const markRead = async (id) => {
 
 const countUnread = async () => {
   try {
-    const res = await axiosClient.post(notificationApi.countUnread());
+    const res = await axiosClient.get(notificationApi.countUnread());
     // console.log("res: ", res);
 
     if (res?.status) {
+      const unreadCount = res?.data;
       return {
+        unreadCount,
         success: true,
         message: res?.message,
         isMustLoginAgain: res?.isMustLoginAgain,

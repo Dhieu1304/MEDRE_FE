@@ -12,7 +12,7 @@ import { requestPermission } from "../../../config/firebase";
 
 const useNotificationBackground = () => {
   const [isSocketConnected, setIsSocketConnected] = useState(true);
-  const { notifications, notificationLimit, updateNotifications } = useAppConfigStore();
+  const { notifications, notificationLimit, updateNotifications, setUnreadNotificationCount } = useAppConfigStore();
 
   const authStore = useAuthStore();
   const { fetchApi } = useFetchingStore();
@@ -37,6 +37,16 @@ const useNotificationBackground = () => {
           totalPages,
           count
         });
+        return { ...res };
+      }
+      return { ...res };
+    });
+
+    await fetchApi(async () => {
+      const res = await notificationServices.countUnread({ limit: newLoadLimit });
+      if (res.success) {
+        const unreadCountData = res?.unreadCount || 0;
+        setUnreadNotificationCount(unreadCountData);
         return { ...res };
       }
       return { ...res };

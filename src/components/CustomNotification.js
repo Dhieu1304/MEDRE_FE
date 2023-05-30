@@ -8,7 +8,7 @@ import { useAppConfigStore } from "../store/AppConfigStore";
 import { useFetchingStore } from "../store/FetchingApiStore";
 import notificationServices from "../services/notificationServices";
 
-function CustomNotification({ notifications }) {
+function CustomNotification({ notifications, unreadNotificationCount }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const { t } = useTranslation("components", { keyPrefix: "CustomNotification" });
@@ -67,9 +67,13 @@ function CustomNotification({ notifications }) {
   return (
     <Box>
       <IconButton color="inherit" onClick={handleClick} size="large" sx={{ mr: 2 }}>
-        <Badge badgeContent={notifications.length} color="secondary">
+        {unreadNotificationCount > 0 ? (
+          <Badge badgeContent={unreadNotificationCount} color="secondary">
+            <NotificationsIcon />
+          </Badge>
+        ) : (
           <NotificationsIcon />
-        </Badge>
+        )}
       </IconButton>
       <Menu anchorEl={anchorEl} open={Boolean(anchorEl)} onClose={handleClose}>
         <Typography variant="h4" textAlign="center" fontSize={20} fontWeight={600} sx={{ py: 1 }}>
@@ -145,7 +149,8 @@ function CustomNotification({ notifications }) {
 }
 
 CustomNotification.propTypes = {
-  notifications: PropTypes.array.isRequired
+  notifications: PropTypes.array.isRequired,
+  unreadNotificationCount: PropTypes.number.isRequired
 };
 
 export default CustomNotification;
