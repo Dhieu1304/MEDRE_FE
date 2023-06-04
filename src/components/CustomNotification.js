@@ -62,11 +62,7 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
       to = `/schedule/${idRedirect}`;
     }
 
-    navigate(to, {
-      state: {
-        notification
-      }
-    });
+    navigate(to);
 
     if (!notification?.read) {
       await fetchApi(

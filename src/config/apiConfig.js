@@ -53,6 +53,7 @@ const paymentApi = {
 
 const notificationApi = {
   notificationList: () => "/notification/list",
+  notificationDetail: (id) => `/notification/detail/${id}`,
   markRead: () => "/notification/mark-read",
   countUnread: () => "/notification/count-unread",
   subscribeTopic: () => "/notification/subscribe-topic",
