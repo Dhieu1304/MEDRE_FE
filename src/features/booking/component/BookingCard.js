@@ -22,20 +22,22 @@ import Countdown from "react-countdown";
 import { useTranslation } from "react-i18next";
 
 import { useMemo } from "react";
-import { useLocation, useNavigate } from "react-router";
+import { useLocation } from "react-router";
+import { Link } from "react-router-dom";
+import { VideoCall as VideoCallIcon } from "@mui/icons-material";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { formatDateLocale } from "../../../utils/datetimeUtil";
 import { scheduleTypes } from "../../../entities/Schedule";
 import { bookingStatuses } from "../../../entities/Booking";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import paymentServices from "../../../services/paymentServices";
+import routeConfig from "../../../config/routeConfig";
 
 function BookingCard({ booking, cancelBookingModal }) {
   //   const navigate = useNavigate();
 
   const { locale } = useAppConfigStore();
 
-  const navigate = useNavigate();
   const location = useLocation();
   const theme = useTheme();
   const { fetchApi } = useFetchingStore();
@@ -139,7 +141,7 @@ function BookingCard({ booking, cancelBookingModal }) {
       if (res.success) {
         const data = res?.data;
         // console.log("data: ", data);
-        window.location.href = data;
+        window.open(data, "_blank");
         return { ...res };
       }
 
@@ -191,11 +193,41 @@ function BookingCard({ booking, cancelBookingModal }) {
             </Button>
           )}
 
-        {!booking?.isPayment && booking.bookingStatus !== bookingStatuses.CANCELED && (
+        {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
+          <Box
+            component={Link}
+            to={`${routeConfig.meeting}/${booking?.id}`}
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              px: 1,
+              py: 0.5,
+              borderRadius: 5,
+              textDecoration: "none",
+              width: { sm: "inherit", xs: "100%" },
+              mb: { sm: 0, xs: 1 },
+              ml: { sm: 1, xs: 0 },
+              backgroundColor: theme.palette.success.light,
+              color: theme.palette.success.contrastText,
+              ":hover": {
+                backgroundColor: theme.palette.success.dark,
+                color: theme.palette.success.contrastText
+              }
+            }}
+          >
+            <VideoCallIcon sx={{ mr: 1 }} />
+            {t("button.meet")}
+          </Box>
+        )}
+
+        {!booking?.isPayment && booking?.bookingStatus !== bookingStatuses.CANCELED && (
           <Button
             variant="contained"
             size="small"
             sx={{
+              px: 1,
+              py: 0.5,
+              borderRadius: 5,
               width: { sm: "inherit", xs: "100%" },
               mb: { sm: 0, xs: 1 },
               ml: { sm: 1, xs: 0 },
@@ -211,10 +243,16 @@ function BookingCard({ booking, cancelBookingModal }) {
             {t("button.payment")}
           </Button>
         )}
-        <Button
+        <Box
+          component={Link}
+          to={`${location.pathname}/${booking?.id}`}
           variant="contained"
           size="small"
           sx={{
+            px: 1,
+            py: 0.5,
+            borderRadius: 5,
+            textDecoration: "none",
             width: { sm: "inherit", xs: "100%" },
             mb: { sm: 0, xs: 1 },
             ml: { sm: 1, xs: 0 },
@@ -225,12 +263,9 @@ function BookingCard({ booking, cancelBookingModal }) {
               color: theme.palette.primary.contrastText
             }
           }}
-          onClick={() => {
-            navigate(`${location.pathname}/${booking?.id}`);
-          }}
         >
           {t("button.detail")}
-        </Button>
+        </Box>
       </Box>
     );
   };

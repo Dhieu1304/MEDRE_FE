@@ -21,11 +21,8 @@ export const headerLeftItemsNotLogin = [
   {
     to: routeConfig.history,
     label: "history_label"
-  },
-  {
-    to: routeConfig.meeting,
-    label: "meeting_label"
   }
+
   // ------------ private-------------
 ];
 

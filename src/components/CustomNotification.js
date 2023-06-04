@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import { IconButton, Badge, Menu, MenuItem, Box, Typography, Button } from "@mui/material";
 import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppConfigStore } from "../store/AppConfigStore";
 import { useFetchingStore } from "../store/FetchingApiStore";
 import notificationServices from "../services/notificationServices";
@@ -52,8 +52,6 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
     });
   };
 
-  console.log("notifications: ", notifications);
-
   const handleToNotificationDetail = async (notification, index) => {
     const id = notification?.id;
     let to = `/notification/${notification?.id}`;
@@ -70,18 +68,21 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
       }
     });
 
-    await fetchApi(
-      async () => {
-        // console.log("notificationLimit: ", notificationLimit);
-        const res = await notificationServices.markRead(id);
-        if (res.success) {
-          markReadNotification(index);
+    if (!notification?.read) {
+      await fetchApi(
+        async () => {
+          // console.log("notificationLimit: ", notificationLimit);
+          // console.log("markRead");
+          const res = await notificationServices.markRead(id);
+          if (res.success) {
+            markReadNotification(index);
+            return { ...res };
+          }
           return { ...res };
-        }
-        return { ...res };
-      },
-      { hideErrorToast: true, hideSuccessToast: true }
-    );
+        },
+        { hideErrorToast: true, hideSuccessToast: true }
+      );
+    }
   };
 
   return (

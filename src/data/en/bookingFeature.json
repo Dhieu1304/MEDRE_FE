@@ -3,7 +3,8 @@
     "button": {
       "detail": "Detail",
       "payment": "Payment",
-      "cancel": "Cancel"
+      "cancel": "Cancel",
+      "meet": "Meet"
     },
     "countDown": {
       "day": "Day"
@@ -19,7 +20,10 @@
       "doctorConclusion": "Doctor conclusion"
     },
     "button": {
-      "exportFile": "Export file"
+      "exportFile": "Export file",
+      "meet": "Meet",
+      "payment": "Payment",
+      "cancel": "Cancel"
     }
   },
 

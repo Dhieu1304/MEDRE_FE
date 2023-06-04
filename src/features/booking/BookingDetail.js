@@ -1,19 +1,37 @@
-import { Box, Paper, Table, TableBody, TableCell, TableContainer, TableRow, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableRow,
+  Typography,
+  useTheme
+} from "@mui/material";
 import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useParams } from "react-router";
 import formatDate from "date-and-time";
+import { Link } from "react-router-dom";
+import { VideoCall as VideoCallIcon } from "@mui/icons-material";
 import bookingServices from "../../services/bookingServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { useAppConfigStore } from "../../store/AppConfigStore";
 import { formatDateLocale } from "../../utils/datetimeUtil";
-import { bookingPaymentStatuses } from "../../entities/Booking/constant";
+import { bookingPaymentStatuses, bookingStatuses } from "../../entities/Booking/constant";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 import CustomPageTitle from "../../components/CustomPageTitle";
 import CustomInput from "../../components/CustomInput/CustomInput";
+import { scheduleTypes } from "../../entities/Schedule";
+import routeConfig from "../../config/routeConfig";
+import paymentServices from "../../services/paymentServices";
 
 function BookingDetail() {
   const [booking, setBooking] = useState();
+
+  // console.log("booking: ", booking);
 
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingDetail" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
@@ -24,7 +42,7 @@ function BookingDetail() {
 
   const { isLoading, fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
-  // const theme = useTheme();
+  const theme = useTheme();
 
   useMemo(() => {
     const code = locale.slice(0, 2);
@@ -93,11 +111,76 @@ function BookingDetail() {
     }
   };
 
+  const handlePayment = async () => {
+    let language = "vn";
+    if (locale === "enUS") {
+      language = "en";
+    }
+
+    await fetchApi(async () => {
+      const res = await paymentServices.createPayment({ bookingId, language });
+
+      if (res.success) {
+        const data = res?.data;
+        // console.log("data: ", data);
+        window.open(data, "_blank");
+        return { ...res };
+      }
+
+      return { ...res };
+    });
+  };
+
   return (
     <>
       <CustomOverlay open={isLoading} />
       <Box sx={{ display: "flex", flexDirection: "column" }}>
-        <CustomPageTitle title={t("title")} />
+        <CustomPageTitle
+          title={t("title")}
+          right={
+            <Box>
+              {!booking?.isPayment && booking?.bookingStatus !== bookingStatuses.CANCELED && (
+                <Button
+                  variant="contained"
+                  size="small"
+                  sx={{
+                    width: { sm: "inherit", xs: "100%" },
+                    mb: { sm: 0, xs: 1 },
+                    ml: { sm: 1, xs: 0 },
+                    backgroundColor: theme.palette.success.light,
+                    color: theme.palette.success.contrastText,
+                    ":hover": {
+                      backgroundColor: theme.palette.success.dark,
+                      color: theme.palette.success.contrastText
+                    }
+                  }}
+                  onClick={handlePayment}
+                >
+                  {t("button.payment")}
+                </Button>
+              )}
+              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
+                <Box
+                  component={Link}
+                  to={`${routeConfig.meeting}/${booking?.id}`}
+                  sx={{
+                    display: "flex",
+                    alignItems: "center",
+                    px: 2,
+                    py: 1,
+                    background: theme.palette.success.light,
+                    color: theme.palette.success.contrastText,
+                    borderRadius: 10,
+                    textDecoration: "none"
+                  }}
+                >
+                  <VideoCallIcon sx={{ mr: 1 }} />
+                  {t("button.meet")}
+                </Box>
+              )}
+            </Box>
+          }
+        />
         {/*
           <Button
             variant="contained"

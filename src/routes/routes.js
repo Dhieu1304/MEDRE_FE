@@ -36,7 +36,6 @@ const publicRoutes = [
     layout: null
   },
   { path: `${routeConfig.payment}/*`, component: PaymentPage },
-  { path: `${routeConfig.meeting}/*`, component: MeetingPage, layout: null },
   //---------------------------------
   { path: routeConfig.default, component: Navigate, props: { to: routeConfig.home }, layout: null }
 ];

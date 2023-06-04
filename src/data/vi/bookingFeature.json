@@ -3,7 +3,8 @@
     "button": {
       "detail": "Chi tiết",
       "payment": "Thanh toán",
-      "cancel": "Hủy lịch"
+      "cancel": "Hủy lịch",
+      "meet": "Khám"
     },
     "countDown": {
       "day": "Ngày"
@@ -19,7 +20,10 @@
       "doctorConclusion": "Kết luận của bác sĩ"
     },
     "button": {
-      "exportFile": "Xuất file"
+      "exportFile": "Xuất file",
+      "payment": "Thanh toán",
+      "cancel": "Hủy lịch",
+      "meet": "Khám"
     }
   },
 
