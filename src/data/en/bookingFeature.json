@@ -11,6 +11,25 @@
     }
   },
 
+  "BookingList": {
+    "filter": {
+      "type": "Type",
+      "date": "Date",
+      "from": "From",
+      "to": "To",
+      "button": {
+        "reset": "Reset"
+      }
+    },
+    "select": {
+      "types": {
+        "online": "Online",
+        "offline": "Offline",
+        "all": "All"
+      }
+    }
+  },
+
   "BookingDetail": {
     "title": "Booking detail",
     "subTitle": {

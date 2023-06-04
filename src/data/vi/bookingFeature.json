@@ -11,6 +11,24 @@
     }
   },
 
+  "BookingList": {
+    "filter": {
+      "type": "Loại",
+      "date": "Ngày",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "button": {
+        "reset": "Đặt lại"
+      }
+    },
+    "select": {
+      "types": {
+        "online": "Trực tuyến",
+        "offline": "Trực tiếp",
+        "all": "Tất cả"
+      }
+    }
+  },
   "BookingDetail": {
     "title": "Chi tiết lịch khám",
     "subTitle": {

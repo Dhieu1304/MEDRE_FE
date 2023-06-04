@@ -30,6 +30,7 @@ import {
 } from "../../../utils/standardizedForForm";
 import useObjDebounce from "../../../hooks/useObjDebounce";
 import CustomPageTitle from "../../../components/CustomPageTitle";
+import { useAppConfigStore } from "../../../store/AppConfigStore";
 
 function DoctorList() {
   const [expertisesList, setExpertisesList] = useState([]);
@@ -47,23 +48,24 @@ function DoctorList() {
   const [isFetchConfigSuccess, setIsFetchConfigSuccess] = useState(false);
 
   const { isLoading, fetchApi } = useFetchingStore();
+  const { locale } = useAppConfigStore();
 
   const doctorTypesList = useMemo(() => {
     return [
       {
-        label: "online",
+        label: tSelectType("online"),
         value: "Online"
       },
       {
-        label: "offline",
+        label: tSelectType("offline"),
         value: "Offline"
       },
       {
-        label: "all",
+        label: tSelectType("all"),
         value: ""
       }
     ];
-  }, []);
+  }, [locale]);
 
   const expertiseListObj = useMemo(() => {
     return expertisesList.reduce((obj, cur) => {
@@ -97,7 +99,10 @@ function DoctorList() {
     criteriaMode: "all"
   });
 
-  const { debouncedObj: searchDebounce, isWaiting: isSearchWaiting } = useObjDebounce({ search: watch().search }, 1000);
+  const { debouncedObj: searchDebounce, isWaiting: isSearchWaiting } = useObjDebounce(
+    { search: watch().search, date: watch().date },
+    1000
+  );
 
   const navigate = useNavigate();
 
@@ -159,7 +164,7 @@ function DoctorList() {
 
   const getWatchedValues = () => {
     const returnValues = Object.keys(watch()).reduce((values, key) => {
-      if (key !== "search" && key !== "page") {
+      if (key !== "search" && key !== "page" && key !== "date") {
         values.push(watch()[key]);
       }
       return values;
@@ -236,7 +241,7 @@ function DoctorList() {
                     return (
                       <MenuItem key={item?.value} value={item?.value}>
                         <Checkbox checked={watch().type === item?.value} />
-                        <ListItemText primary={tSelectType(item?.label)} />
+                        <ListItemText primary={item?.label} />
                       </MenuItem>
                     );
                   })}
