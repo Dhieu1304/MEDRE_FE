@@ -220,29 +220,31 @@ function BookingCard({ booking, cancelBookingModal }) {
           </Box>
         )}
 
-        {!booking?.isPayment && booking?.bookingStatus !== bookingStatuses.CANCELED && (
-          <Button
-            variant="contained"
-            size="small"
-            sx={{
-              px: 1,
-              py: 0.5,
-              borderRadius: 5,
-              width: { sm: "inherit", xs: "100%" },
-              mb: { sm: 0, xs: 1 },
-              ml: { sm: 1, xs: 0 },
-              backgroundColor: theme.palette.success.light,
-              color: theme.palette.success.contrastText,
-              ":hover": {
-                backgroundColor: theme.palette.success.dark,
-                color: theme.palette.success.contrastText
-              }
-            }}
-            onClick={handlePayment}
-          >
-            {t("button.payment")}
-          </Button>
-        )}
+        {!booking?.isPayment &&
+          booking?.bookingStatus !== bookingStatuses.CANCELED &&
+          formatDate.subtract(new Date(booking?.date), new Date()).toDays() > 0 && (
+            <Button
+              variant="contained"
+              size="small"
+              sx={{
+                px: 1,
+                py: 0.5,
+                borderRadius: 5,
+                width: { sm: "inherit", xs: "100%" },
+                mb: { sm: 0, xs: 1 },
+                ml: { sm: 1, xs: 0 },
+                backgroundColor: theme.palette.success.light,
+                color: theme.palette.success.contrastText,
+                ":hover": {
+                  backgroundColor: theme.palette.success.dark,
+                  color: theme.palette.success.contrastText
+                }
+              }}
+              onClick={handlePayment}
+            >
+              {t("button.payment")}
+            </Button>
+          )}
         <Box
           component={Link}
           to={`${location.pathname}/${booking?.id}`}

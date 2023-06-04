@@ -142,7 +142,8 @@ function DoctorScheduleTable({ timesList, doctorId }) {
       if (res.success) {
         const data = res?.data;
         // console.log("data: ", data);
-        window.location.href = data;
+        // window.location.href = data;
+        window.open(data, "_blank");
         return { ...res };
       }
 
