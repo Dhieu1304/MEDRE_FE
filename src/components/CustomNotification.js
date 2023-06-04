@@ -3,13 +3,16 @@ import React, { useState } from "react";
 import { IconButton, Badge, Menu, MenuItem, Box, Typography, Button } from "@mui/material";
 import { Notifications as NotificationsIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useAppConfigStore } from "../store/AppConfigStore";
 import { useFetchingStore } from "../store/FetchingApiStore";
 import notificationServices from "../services/notificationServices";
+import { notificationTypes } from "../entities/Notification";
 
 function CustomNotification({ notifications, unreadNotificationCount }) {
   const [anchorEl, setAnchorEl] = useState(null);
+
+  const navigate = useNavigate();
 
   const { t } = useTranslation("components", { keyPrefix: "CustomNotification" });
   const { fetchApi } = useFetchingStore();
@@ -49,7 +52,24 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
     });
   };
 
-  const handleToNotificationDetail = async (id, index) => {
+  console.log("notifications: ", notifications);
+
+  const handleToNotificationDetail = async (notification, index) => {
+    const id = notification?.id;
+    let to = `/notification/${notification?.id}`;
+    const notificationType = notification?.notificationsParent?.type;
+    const idRedirect = notification?.notificationsParent?.idRedirect;
+
+    if (notificationType === notificationTypes.BOOKING && idRedirect) {
+      to = `/schedule/${idRedirect}`;
+    }
+
+    navigate(to, {
+      state: {
+        notification
+      }
+    });
+
     await fetchApi(
       async () => {
         // console.log("notificationLimit: ", notificationLimit);
@@ -98,15 +118,15 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
               }}
             >
               <Box
-                component={Link}
-                to={`/notification/${notification?.id}`}
+                // component={Link}
+                // to={`/notification/${notification?.id}`}
                 sx={{
                   textDecoration: "none"
                 }}
                 state={{
                   notification
                 }}
-                onClick={async () => handleToNotificationDetail(notification?.id, index)}
+                onClick={async () => handleToNotificationDetail(notification, index)}
               >
                 <Typography variant="h5" fontSize={16} fontWeight={600} color="black">
                   {notification?.notificationsParent?.title?.slice(0, 50)}
