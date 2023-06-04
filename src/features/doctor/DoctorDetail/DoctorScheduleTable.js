@@ -19,6 +19,7 @@ import { useEffect, useMemo, useState } from "react";
 // import { useTranslation } from "react-i18next";
 import { ArrowLeft as ArrowLeftIcon, ArrowRight as ArrowRightIcon } from "@mui/icons-material";
 import { useTranslation } from "react-i18next";
+import { useLocation, useNavigate } from "react-router";
 import { useCustomModal } from "../../../components/CustomModal";
 import scheduleServices from "../../../services/scheduleServices";
 import { formatDateLocale, getNext7DaysFrom, isEqualDateWithoutTime, subtractDate } from "../../../utils/datetimeUtil";
@@ -35,6 +36,8 @@ import { bookingStatuses } from "../../../entities/Booking";
 import BookingModal from "../../booking/component/BookingModal";
 import paymentServices from "../../../services/paymentServices";
 import { settingNames } from "../../../entities/Setting/constant";
+import { checkUserInfoIsCompleted } from "../../../utils/userUtil";
+import routeConfig from "../../../config/routeConfig";
 
 function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
@@ -54,6 +57,8 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   const { fetchApi } = useFetchingStore();
   const { locale, settingConfig } = useAppConfigStore();
   const authStore = useAuthStore();
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const heads = useMemo(() => getNext7DaysFrom(currentDate), [currentDate]);
 
@@ -169,12 +174,26 @@ function DoctorScheduleTable({ timesList, doctorId }) {
           }}
           disabled={!canBooking}
           onClick={() => {
-            bookingModal.setShow(true);
-            bookingModal.setData({
-              schedule,
-              date: colDate,
-              time
-            });
+            const isUserInfoCompleted = checkUserInfoIsCompleted(authStore.user);
+
+            if (isUserInfoCompleted) {
+              bookingModal.setShow(true);
+              bookingModal.setData({
+                schedule,
+                date: colDate,
+                time
+              });
+            } else {
+              const { pathname, search } = location;
+
+              const oldPath = `${pathname}${search}`;
+
+              navigate(routeConfig.profile, {
+                state: {
+                  oldPath
+                }
+              });
+            }
           }}
         >
           {t("button.book")}

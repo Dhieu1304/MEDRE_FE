@@ -42,6 +42,7 @@ function ChangePassword() {
 
     await fetchApi(async () => {
       const res = await userServices.changePassword({ oldPassword, newPassword, confirmPassword });
+      // console.log("handle change pass: res: ", res);
       if (res?.success) {
         navigate(routeConfig.home);
         return { ...res };

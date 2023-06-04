@@ -47,6 +47,8 @@ const editUserInfo = async ({ phoneNumber, email, name, address, gender, dob, he
     image
   });
 
+  // console.log("dataBody: ", dataBody);
+
   try {
     const res = await axiosClient.post(userApi.editUser(), dataBody);
 

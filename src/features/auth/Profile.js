@@ -17,7 +17,7 @@ import {
 import { RestartAlt as RestartAltIcon, Save as SaveIcon } from "@mui/icons-material";
 
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import userServices from "../../services/userServices";
 import { useAuthStore } from "../../store/AuthStore/hooks";
 import CustomInput from "../../components/CustomInput/CustomInput";
@@ -48,6 +48,7 @@ function Profile() {
   const authStore = useAuthStore();
   const theme = useTheme();
   const navigate = useNavigate();
+  const location = useLocation();
   const { fetchApi } = useFetchingStore();
 
   const user = useMemo(() => {
@@ -136,6 +137,11 @@ function Profile() {
       const res = await userServices.editUserInfo(data);
       if (res?.success) {
         await loadData();
+
+        const oldPath = location.state?.oldPath;
+        if (oldPath) {
+          navigate(oldPath);
+        }
       }
       return { ...res };
     });
@@ -200,7 +206,7 @@ function Profile() {
                 disabled={user?.emailVerified}
                 control={control}
                 rules={{
-                  required: tInputValidate("required"),
+                  // required: tInputValidate("required"),
                   pattern: {
                     value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
                     message: tInputValidate("format")
@@ -259,7 +265,7 @@ function Profile() {
                 disabled={user?.phoneVerified}
                 control={control}
                 rules={{
-                  required: tInputValidate("required"),
+                  // required: tInputValidate("required"),
                   pattern: {
                     value: /(84|0[3|5|7|8|9])+([0-9]{8})\b/,
                     message: tInputValidate("format")
