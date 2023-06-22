@@ -53,5 +53,9 @@
       "reset": "Reset",
       "save": "Save"
     }
+  },
+
+  "ChangePassword": {
+    "title": "Change Password"
   }
 }

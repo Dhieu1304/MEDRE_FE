@@ -64,5 +64,9 @@
       "reset": "Đặt lại",
       "save": "Lưu"
     }
+  },
+
+  "ChangePassword": {
+    "title": "Thay đổi mật khẩu"
   }
 }

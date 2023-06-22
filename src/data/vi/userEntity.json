@@ -4,6 +4,8 @@
     "phoneNumber": "Số điện thoại",
     "email": "Email",
     "password": "Mật khẩu",
+    "oldPassword": "Mật khẩu cũ",
+    "newPassword": "Mật khẩu mới",
     "confirmPassword": "Xác nhận mật khẩu",
     "name": "Họ tên",
     "image": "Ảnh",
