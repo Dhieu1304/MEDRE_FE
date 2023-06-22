@@ -7,6 +7,7 @@
     "paymentStatus": "Payment",
     "reason": "Reason",
     "note": "Note",
+    "ordinalNumber": "Ordinal Number",
     "conclusion": "Doctor's Conclusion",
     "schedule": {
       "expertise": "Expertise"

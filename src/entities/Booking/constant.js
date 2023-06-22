@@ -12,3 +12,8 @@ export const bookingPaymentStatuses = {
   PAID: true,
   UNPAID: false
 };
+
+export const bookingMethods = {
+  REMOTE: "remote",
+  REDIRECT: "redirect"
+};

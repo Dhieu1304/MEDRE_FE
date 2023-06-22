@@ -7,6 +7,7 @@
     "paymentStatus": "Thanh toán",
     "reason": "Lý do khám",
     "note": "Ghi chú",
+    "ordinalNumber": "Số thứ tự",
     "conclusion": "Kết luận bác sĩ",
     "schedule": {
       "expertise": "Chuyên khoa"

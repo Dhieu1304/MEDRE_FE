@@ -7,13 +7,13 @@ import { useNavigate } from "react-router-dom";
 import { useAppConfigStore } from "../store/AppConfigStore";
 import { useFetchingStore } from "../store/FetchingApiStore";
 import notificationServices from "../services/notificationServices";
-import { notificationTypes } from "../entities/Notification";
+import { notificationTypes } from "../entities/Notification/constant";
+import routeConfig from "../config/routeConfig";
 
 function CustomNotification({ notifications, unreadNotificationCount }) {
   const [anchorEl, setAnchorEl] = useState(null);
 
   const navigate = useNavigate();
-
   const { t } = useTranslation("components", { keyPrefix: "CustomNotification" });
   const { fetchApi } = useFetchingStore();
   const { notificationLimit, notificationPage, notificationTotalPages, updateNotifications, markReadNotification } =
@@ -51,15 +51,18 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
       return { ...res };
     });
   };
+  // console.log("notifications: ", notifications);
 
   const handleToNotificationDetail = async (notification, index) => {
+    // console.log("notification: ", notification);
     const id = notification?.id;
     let to = `/notification/${notification?.id}`;
     const notificationType = notification?.notificationsParent?.type;
     const idRedirect = notification?.notificationsParent?.idRedirect;
 
     if (notificationType === notificationTypes.BOOKING && idRedirect) {
-      to = `/schedule/${idRedirect}`;
+      // console.log("Type: ", notificationType);
+      to = `${routeConfig.schedule}/${idRedirect}`;
     }
 
     navigate(to);
@@ -82,7 +85,11 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
   };
 
   return (
-    <Box>
+    <Box
+      sx={{
+        overflow: "hidden"
+      }}
+    >
       <IconButton color="inherit" onClick={handleClick} size="large" sx={{ mr: 2 }}>
         {unreadNotificationCount > 0 ? (
           <Badge badgeContent={unreadNotificationCount} color="secondary">
@@ -109,7 +116,10 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
           {notifications.map((notification, index) => (
             <MenuItem
               key={notification?.id}
-              onClick={handleClose}
+              onClick={async () => {
+                handleClose();
+                await handleToNotificationDetail(notification, index);
+              }}
               sx={{
                 position: "relative"
               }}
@@ -123,7 +133,6 @@ function CustomNotification({ notifications, unreadNotificationCount }) {
                 state={{
                   notification
                 }}
-                onClick={async () => handleToNotificationDetail(notification, index)}
               >
                 <Typography variant="h5" fontSize={16} fontWeight={600} color="black">
                   {notification?.notificationsParent?.title?.slice(0, 50)}

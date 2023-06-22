@@ -155,9 +155,52 @@ const getBookingDetail = async (id) => {
   }
 };
 
+const getCountBookingSchedule = async ({ expertiseIds, doctorId, from, to, bookingMethod }) => {
+  const params = cleanUndefinedAndEmptyStrValueObject({
+    id_expertise: expertiseIds,
+    id_doctor: doctorId,
+    from,
+    to,
+    bookingMethod
+  });
+
+  // console.log("params: ", params);
+
+  try {
+    const res = await axiosClient.get(bookingApi.getCountBookingSchedule(), {
+      params
+    });
+    // console.log("res: ", res);
+    if (res?.status) {
+      const bookingSchedules = camelcaseKeys(res?.data, { deep: true });
+
+      return {
+        bookingSchedules,
+        success: true,
+        message: res?.message,
+        isMustLoginAgain: res?.isMustLoginAgain,
+        statusCode: res?.statusCode
+      };
+    }
+    return {
+      success: false,
+      message: res?.message || `Status is ${res.status}`,
+      isMustLoginAgain: res?.isMustLoginAgain,
+      statusCode: res?.statusCode
+    };
+  } catch (e) {
+    // console.error(e.message);
+    return {
+      success: false,
+      message: e.message
+    };
+  }
+};
+
 export default {
   getBookingList,
   book,
   cancelBooking,
-  getBookingDetail
+  getBookingDetail,
+  getCountBookingSchedule
 };

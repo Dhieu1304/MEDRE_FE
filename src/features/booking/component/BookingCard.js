@@ -436,6 +436,10 @@ function BookingCard({ booking, cancelBookingModal }) {
                       </TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableCell {...tableFirstCellProps}>{tBooking("ordinalNumber")}</TableCell>
+                      <TableCell {...tableSecondCellProps}>{booking?.ordinalNumber}</TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableCell {...tableFirstCellProps}>{tBooking("schedule.expertise")}</TableCell>
                       <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleExpertise?.name}</TableCell>
                     </TableRow>

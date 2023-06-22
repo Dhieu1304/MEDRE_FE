@@ -39,7 +39,8 @@ const bookingApi = {
   bookingList: () => "/booking/list",
   book: () => "/booking/new-booking",
   cancelBooking: () => "/booking/cancel",
-  bookingDetail: (id) => `/booking/detail/${id}`
+  bookingDetail: (id) => `/booking/detail/${id}`,
+  getCountBookingSchedule: () => "/booking/schedule-booking-count"
 };
 
 const patientApi = {

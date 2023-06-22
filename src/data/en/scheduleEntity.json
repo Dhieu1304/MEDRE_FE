@@ -19,7 +19,9 @@
     },
     "sessions": {
       "morning": "Morning",
-      "afternoon": "Afternoon"
+      "afternoon": "Afternoon",
+      "evening": "Evening",
+      "wholeDay": "Whole day"
     },
     "daysOfWeek": {
       "monday": "Monday",

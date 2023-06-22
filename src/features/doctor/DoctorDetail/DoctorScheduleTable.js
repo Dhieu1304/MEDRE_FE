@@ -26,21 +26,29 @@ import { formatDateLocale, getNext7DaysFrom, isEqualDateWithoutTime, subtractDat
 
 import WithTimesLoaderWrapper from "../../time/hocs/WithTimesLoaderWrapper";
 
-import { findBookingsByDate, groupSchedulesDayOfWeekAndSession, isTimeOffAtThisScheduleTime } from "./utils";
+import {
+  findBookingsUserId,
+  groupBookingSchedulesByScheduleAndDateAndTime,
+  groupBookingsByScheduleAndDateAndTime,
+  groupSchedulesDayOfWeekAndSession,
+  isTimeOffAtThisScheduleTime
+} from "./utils";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
 import timeOffServices from "../../../services/timeOffServices";
 import { scheduleSessions } from "../../../entities/Schedule";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
-import { bookingStatuses } from "../../../entities/Booking";
+import { bookingMethods, bookingStatuses } from "../../../entities/Booking";
 import BookingModal from "../../booking/component/BookingModal";
 import paymentServices from "../../../services/paymentServices";
 import { settingNames } from "../../../entities/Setting/constant";
 import { checkUserInfoIsCompleted } from "../../../utils/userUtil";
 import routeConfig from "../../../config/routeConfig";
+import bookingServices from "../../../services/bookingServices";
 
 function DoctorScheduleTable({ timesList, doctorId }) {
   const [schedules, setSchedules] = useState([]);
+  const [bookingSchedules, setBookingSchedules] = useState([]);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [timeOffs, setTimeOffs] = useState([]);
 
@@ -75,26 +83,73 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     };
   }, [locale]);
 
-  const loadData = async () => {
-    await fetchApi(
-      async () => {
-        const res = await scheduleServices.getScheduleListByDoctorId(
-          doctorId,
-          formatDate.format(heads[0], "YYYY-MM-DD"),
-          formatDate.format(heads[6], "YYYY-MM-DD")
-        );
+  // const loadData = async () => {
+  //   await fetchApi(
+  //     async () => {
+  //       const res = await scheduleServices.getScheduleListByDoctorId(
+  //         doctorId,
+  //         formatDate.format(heads[0], "YYYY-MM-DD"),
+  //         formatDate.format(heads[6], "YYYY-MM-DD")
+  //       );
 
-        if (res.success) {
-          const schedulesData = res.schedules;
-          // console.log("res: ", res);
-          setSchedules(schedulesData);
-          return { ...res };
-        }
-        setSchedules([]);
+  //       if (res.success) {
+  //         const schedulesData = res.schedules;
+  //         // console.log("res: ", res);
+  //         setSchedules(schedulesData);
+  //         return { ...res };
+  //       }
+  //       setSchedules([]);
+  //       return { ...res };
+  //     },
+  //     { hideSuccessToast: true }
+  //   );
+  // };
+
+  const loadData = async () => {
+    let schedulesData = [];
+    let bookingSchedulesData = [];
+
+    await fetchApi(async () => {
+      const res = await scheduleServices.getScheduleListByDoctorId(
+        doctorId,
+        formatDate.format(heads[0], "YYYY-MM-DD"),
+        formatDate.format(heads[6], "YYYY-MM-DD")
+      );
+
+      if (res.success) {
+        schedulesData = [...res.schedules];
+        // console.log("res: ", res);
+        // setSchedules(schedulesData);
         return { ...res };
-      },
-      { hideSuccessToast: true }
-    );
+      }
+      return { ...res };
+    });
+
+    await fetchApi(async () => {
+      // Sử dụng phương thức map() để trích xuất các idExpertise
+      const expertiseIdsFull = schedulesData.map((schedule) => schedule.idExpertise);
+
+      // Sử dụng phương thức filter() và indexOf() để lọc ra các idExpertise duy nhất
+      const expertiseIds = expertiseIdsFull.filter((id, index, self) => self.indexOf(id) === index);
+
+      // console.log("expertiseIds: ", expertiseIds);
+      const res = await bookingServices.getCountBookingSchedule({
+        expertiseIds,
+        doctorId,
+        from: formatDate.format(heads[0], "YYYY-MM-DD"),
+        to: formatDate.format(heads[6], "YYYY-MM-DD"),
+        bookingMethod: bookingMethods.REMOTE
+      });
+
+      if (res.success) {
+        bookingSchedulesData = [...res.bookingSchedules];
+        return { ...res };
+      }
+      return { ...res };
+    });
+
+    setSchedules([...schedulesData]);
+    setBookingSchedules([...bookingSchedulesData]);
   };
 
   const loadTimeOffs = async () => {
@@ -130,9 +185,19 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     formatDate.locale(formatDateLocale[code]);
   }, [locale]);
 
-  const schedulesDayOfWeekAndSession = useMemo(() => {
-    return groupSchedulesDayOfWeekAndSession(schedules);
+  const [schedulesDayOfWeekAndSession, bookingsByScheduleAnnDateAndTime] = useMemo(() => {
+    return [groupSchedulesDayOfWeekAndSession(schedules), groupBookingsByScheduleAndDateAndTime(schedules)];
   }, [schedules]);
+
+  // console.log("schedules: ", schedules);
+  // console.log("schedulesDayOfWeekAndSession: ", schedulesDayOfWeekAndSession);
+
+  const bookingSchedulesByScheduleAndDateAndTime = useMemo(() => {
+    return groupBookingSchedulesByScheduleAndDateAndTime(bookingSchedules);
+  }, [bookingSchedules]);
+
+  // console.log("bookingSchedules: ", bookingSchedules);
+  // console.log("bookingSchedulesByScheduleAndDateAndTime: ", bookingSchedulesByScheduleAndDateAndTime);
 
   const handlePayment = async (booking) => {
     let language = "vn";
@@ -156,52 +221,12 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     });
   };
 
-  const renderBookingButton = (schedule, booking, colDate, time) => {
-    if (!booking) {
-      // Số ngày cần đặt trước
-      const bookAdvanceDay = settingConfig[settingNames.BOOK_ADVANCE_DAY]?.value;
-      // Số ngày được phép đặt trước
-      const bookAfterDay = settingConfig[settingNames.BOOK_AFTER_DAY]?.value;
+  const renderBookingButton = (schedule, bookings, colDate, time, bookingSchedule) => {
+    // console.log("bookings: ", bookings);
+    const booking = findBookingsUserId(bookings, authStore.user?.id);
+    // console.log("booking: ", booking);
 
-      const canBooking =
-        subtractDate(colDate, new Date()) > bookAdvanceDay && subtractDate(colDate, new Date()) < bookAfterDay;
-      return (
-        <Button
-          variant="contained"
-          sx={{
-            backgroundColor: "#009dff",
-            color: "white"
-          }}
-          disabled={!canBooking}
-          onClick={() => {
-            const isUserInfoCompleted = checkUserInfoIsCompleted(authStore.user);
-
-            if (isUserInfoCompleted) {
-              bookingModal.setShow(true);
-              bookingModal.setData({
-                schedule,
-                date: colDate,
-                time
-              });
-            } else {
-              const { pathname, search } = location;
-
-              const oldPath = `${pathname}${search}`;
-
-              navigate(routeConfig.profile, {
-                state: {
-                  oldPath
-                }
-              });
-            }
-          }}
-        >
-          {t("button.book")}
-        </Button>
-      );
-    }
-
-    if (booking?.idUser === authStore?.user?.id) {
+    if (booking) {
       if (booking?.bookingStatus === bookingStatuses.BOOKED)
         return (
           <Button
@@ -227,16 +252,73 @@ function DoctorScheduleTable({ timesList, doctorId }) {
             {t("button.waiting")}
           </Button>
         );
-      return null;
     }
+
+    let isFullSlot;
+
+    if (bookingSchedule) {
+      // console.log("bookingSchedule: ", bookingSchedule);
+      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+      const countBooking = bookingSchedule?.countBooking || 0;
+      isFullSlot = countBooking >= totalOffBookOnl;
+
+      // console.log("totalOffBookOnl: ", totalOffBookOnl);
+      // console.log("countBooking: ", countBooking);
+      // console.log("isFullSlot: ", isFullSlot);
+    }
+
+    if (isFullSlot) {
+      return (
+        <Button
+          variant="text"
+          sx={{
+            color: theme.palette.success.light
+          }}
+        >
+          {t("button.reserved")}
+        </Button>
+      );
+    }
+
+    // Số ngày cần đặt trước
+    const bookAdvanceDay = settingConfig[settingNames.BOOK_ADVANCE_DAY]?.value;
+    // Số ngày được phép đặt trước
+    const bookAfterDay = settingConfig[settingNames.BOOK_AFTER_DAY]?.value;
+
+    const canBooking =
+      subtractDate(colDate, new Date()) > bookAdvanceDay && subtractDate(colDate, new Date()) < bookAfterDay;
     return (
       <Button
-        variant="text"
+        variant="contained"
         sx={{
-          color: theme.palette.success.light
+          backgroundColor: "#009dff",
+          color: "white"
+        }}
+        disabled={!canBooking}
+        onClick={() => {
+          const isUserInfoCompleted = checkUserInfoIsCompleted(authStore.user);
+
+          if (isUserInfoCompleted) {
+            bookingModal.setShow(true);
+            bookingModal.setData({
+              schedule,
+              date: colDate,
+              time
+            });
+          } else {
+            const { pathname, search } = location;
+
+            const oldPath = `${pathname}${search}`;
+
+            navigate(routeConfig.profile, {
+              state: {
+                oldPath
+              }
+            });
+          }
         }}
       >
-        {t("button.reserved")}
+        {t("button.book")}
       </Button>
     );
   };
@@ -244,8 +326,13 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   // console.log("schedules: ", schedules);
 
   const renderCell = (schedule, colDate, time) => {
-    const booking = findBookingsByDate(schedule?.bookings, colDate, time);
+    // const booking = findBookingsByDate(schedule?.bookings, colDate, time);
+    const colDateFormat = formatDate.format(colDate, "YYYY-MM-DD");
+    const bookings = bookingsByScheduleAnnDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
     const isTimeOff = isTimeOffAtThisScheduleTime(timeOffs, colDate, time);
+
+    const bookingSchedule = bookingSchedulesByScheduleAndDateAndTime[schedule?.id]?.[colDateFormat]?.[time?.id];
+
     // if (dayOfWeek === 5) {
     //   console.log(formatDate.format(colDate, "ddd DD/MM/YYYY"));
     //   console.log("schedule: ", schedule);
@@ -300,10 +387,10 @@ function DoctorScheduleTable({ timesList, doctorId }) {
                   // bgcolor: isCurrentTime ? theme.palette.info.light : booking && theme.palette.success.light,
                   // bgcolor: isCurrentTime ? "red" : "inherit",
                   position: "relative",
-                  cursor: booking && "pointer"
+                  cursor: bookings && "pointer"
                 }}
               >
-                {renderBookingButton(schedule, booking, colDate, time)}
+                {renderBookingButton(schedule, bookings, colDate, time, bookingSchedule)}
               </Box>
             </>
           )}
@@ -333,6 +420,10 @@ function DoctorScheduleTable({ timesList, doctorId }) {
 
         case scheduleSessions.AFFTERNOON:
           schedule = schedulesBySession.afternoon || schedulesBySession.wholeDay;
+          break;
+
+        case scheduleSessions.EVENING:
+          schedule = schedulesBySession.evening || schedulesBySession.wholeDay;
           break;
 
         default:

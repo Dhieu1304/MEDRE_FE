@@ -28,10 +28,6 @@ export const headerLeftItemsNotLogin = [
 
 export const headerLeftItemsLogined = [
   {
-    to: routeConfig.forum,
-    label: "forum_label"
-  },
-  {
     to: routeConfig.about,
     label: "about_label"
   },
