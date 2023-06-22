@@ -222,9 +222,12 @@ function DoctorScheduleTable({ timesList, doctorId }) {
   };
 
   const renderBookingButton = (schedule, bookings, colDate, time, bookingSchedule) => {
-    // console.log("bookings: ", bookings);
     const booking = findBookingsUserId(bookings, authStore.user?.id);
-    // console.log("booking: ", booking);
+    // if (bookings) {
+    //   // console.log("bookings: ", bookings);
+    //   // console.log("booking: ", booking);
+    //   // console.log("time: ", time);
+    // }
 
     if (booking) {
       if (booking?.bookingStatus === bookingStatuses.BOOKED)
@@ -258,9 +261,17 @@ function DoctorScheduleTable({ timesList, doctorId }) {
 
     if (bookingSchedule) {
       // console.log("bookingSchedule: ", bookingSchedule);
-      const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+
       const countBooking = bookingSchedule?.countBooking || 0;
-      isFullSlot = countBooking >= totalOffBookOnl;
+      if (schedule?.type === scheduleTypes.OFFLINE) {
+        const totalOffBookOnl = bookingSchedule?.totalOffBookOnl || 0;
+        isFullSlot = countBooking >= totalOffBookOnl;
+      }
+      // online
+      else {
+        const totalBookingOnline = bookingSchedule?.totalBookingOnline || 0;
+        isFullSlot = countBooking >= totalBookingOnline;
+      }
 
       // console.log("totalOffBookOnl: ", totalOffBookOnl);
       // console.log("countBooking: ", countBooking);

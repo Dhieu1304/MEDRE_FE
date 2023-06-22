@@ -3,7 +3,7 @@ import authPage from "./authPage.json";
 import doctorFeature from "./doctorFeature.json";
 import doctorEntity from "./doctorEntity.json";
 import scheduleEntity from "./scheduleEntity.json";
-// import homePage from "./homePage.json";
+import homePage from "./homePage.json";
 import input from "./input.json";
 import layout from "./layout.json";
 // import paymentPage from "./paymentPage.json";
@@ -25,7 +25,7 @@ const vi = {
   doctorFeature,
   doctorEntity,
   scheduleEntity,
-  //   homePage,
+  homePage,
   input,
   layout,
   //   paymentPage,

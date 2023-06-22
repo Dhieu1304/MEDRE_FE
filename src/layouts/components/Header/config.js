@@ -28,10 +28,6 @@ export const headerLeftItemsNotLogin = [
 
 export const headerLeftItemsLogined = [
   {
-    to: routeConfig.about,
-    label: "about_label"
-  },
-  {
     to: routeConfig.doctor,
     label: "doctor_label"
   },

@@ -6,6 +6,7 @@ import notifiedToMinistryIndustryAndTrade from "./notified-to-the-Ministry-of-In
 import registeredWithMinistryIndustryAndTrade from "./registered-with-the-Ministry-of-Industry-and-Trade.png";
 import english from "./english.png";
 import vietnamese from "./vietnamese.png";
+import medreIntro from "./medre_intro.png";
 
 const images = {
   logo,
@@ -15,7 +16,8 @@ const images = {
   notifiedToMinistryIndustryAndTrade,
   registeredWithMinistryIndustryAndTrade,
   english,
-  vietnamese
+  vietnamese,
+  medreIntro
 };
 
 export default images;
