@@ -9,6 +9,8 @@
     "note": "Ghi chú",
     "ordinalNumber": "Số thứ tự",
     "conclusion": "Kết luận bác sĩ",
+    "prescription": "Đơn thuốc",
+    "price": "Giá khám",
     "schedule": {
       "expertise": "Chuyên khoa"
     },

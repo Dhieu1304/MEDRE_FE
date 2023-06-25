@@ -7,7 +7,6 @@ import SchedulePage from "../pages/SchedulePage";
 import HistoryPage from "../pages/HistoryPage";
 import ProfilePage from "../pages/ProfilePage";
 import ChangePasswordPage from "../pages/ChangePasswordPage";
-import AboutPage from "../pages/AboutPage";
 import MeetingPage from "../pages/MeetingPage";
 import VerificationPage from "../pages/VerificationPage";
 import NotificationPage from "../pages/NotificationPage";
@@ -18,7 +17,6 @@ import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout";
 const publicRoutes = [
   { path: routeConfig.home, component: HomePage },
   { path: `${routeConfig.auth}/*`, component: AuthPage, layout: AuthLayout },
-  { path: `${routeConfig.about}/*`, component: AboutPage },
 
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
   // ------------ private-------------
@@ -40,7 +38,6 @@ const publicRoutes = [
 
 const privateRoutes = [
   { path: routeConfig.home, component: HomePage },
-  { path: `${routeConfig.about}/*`, component: AboutPage },
 
   { path: `${routeConfig.doctor}/*`, component: DoctorPage },
   { path: `${routeConfig.schedule}/*`, component: SchedulePage },

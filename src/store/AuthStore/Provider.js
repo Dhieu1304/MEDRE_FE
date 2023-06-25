@@ -103,9 +103,12 @@ function AuthProvider({ children }) {
           dispatch(actions.fetchApiSuccess());
           return user;
         }
-        const { message } = res;
-        dispatch(actions.fetchApiFailed(message));
-        toast.success(message);
+        // const { message } = res;
+        // dispatch(actions.fetchApiFailed(message));
+        // toast.success(message);
+
+        dispatch(actions.fetchApiFailed(""));
+        // toast.success(message);
         return false;
       },
 

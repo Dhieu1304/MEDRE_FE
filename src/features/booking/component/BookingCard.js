@@ -103,6 +103,20 @@ function BookingCard({ booking, cancelBookingModal }) {
     return date;
   }, []);
 
+  // console.log("waitingTimeToSchedule: ", waitingTimeToSchedule);
+
+  const countMinutesElapsedAfterTimeEnd = useMemo(() => {
+    const dateTimeEnd = new Date(booking?.date);
+    const timeEnd = booking?.bookingTimeSchedule?.timeEnd;
+    const [h = 0, m = 0, s = 0] = timeEnd ? timeEnd.split(":") : [0, 0, 0];
+
+    dateTimeEnd.setHours(h, m, s, 0);
+
+    return formatDate.subtract(dateTimeEnd, new Date()).toMinutes();
+  }, []);
+
+  // console.log("countMinutesElapsedAfterTimeEnd: ", countMinutesElapsedAfterTimeEnd);
+
   const tableFirstCellProps = {
     component: "th",
     scope: "row",
@@ -193,32 +207,36 @@ function BookingCard({ booking, cancelBookingModal }) {
             </Button>
           )}
 
-        {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
-          <Box
-            component={Link}
-            to={`${routeConfig.meeting}/${booking?.id}`}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              px: 1,
-              py: 0.5,
-              borderRadius: 5,
-              textDecoration: "none",
-              width: { sm: "inherit", xs: "100%" },
-              mb: { sm: 0, xs: 1 },
-              ml: { sm: 1, xs: 0 },
-              backgroundColor: theme.palette.success.light,
-              color: theme.palette.success.contrastText,
-              ":hover": {
-                backgroundColor: theme.palette.success.dark,
-                color: theme.palette.success.contrastText
-              }
-            }}
-          >
-            <VideoCallIcon sx={{ mr: 1 }} />
-            {t("button.meet")}
-          </Box>
-        )}
+        {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE &&
+          booking?.isPayment &&
+          booking?.code &&
+          booking?.bookingStatus !== bookingStatuses.CANCELED &&
+          countMinutesElapsedAfterTimeEnd > 10 && (
+            <Box
+              component={Link}
+              to={`${routeConfig.meeting}/${booking?.id}`}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                px: 1,
+                py: 0.5,
+                borderRadius: 5,
+                textDecoration: "none",
+                width: { sm: "inherit", xs: "100%" },
+                mb: { sm: 0, xs: 1 },
+                ml: { sm: 1, xs: 0 },
+                backgroundColor: theme.palette.success.light,
+                color: theme.palette.success.contrastText,
+                ":hover": {
+                  backgroundColor: theme.palette.success.dark,
+                  color: theme.palette.success.contrastText
+                }
+              }}
+            >
+              <VideoCallIcon sx={{ mr: 1 }} />
+              {t("button.meet")}
+            </Box>
+          )}
 
         {!booking?.isPayment &&
           booking?.bookingStatus !== bookingStatuses.CANCELED &&

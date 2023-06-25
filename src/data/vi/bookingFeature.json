@@ -35,7 +35,8 @@
       "scheduleInfo": "Thông tin lịch khám",
       "doctorInfo": "Thông tin bác sĩ",
       "patientInfo": "Thông tin bệnh nhân",
-      "doctorConclusion": "Kết luận của bác sĩ"
+      "doctorConclusion": "Kết luận của bác sĩ",
+      "doctorPrescription": "Đơn thuốc"
     },
     "button": {
       "exportFile": "Xuất file",

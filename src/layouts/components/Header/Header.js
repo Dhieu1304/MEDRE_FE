@@ -79,7 +79,7 @@ function Header({ window }) {
 
   const handleChangeLanguage = () => {
     const newLocale = locale === "viVN" ? "enUS" : "viVN";
-    const code = newLocale.slice(0, 2);
+    const code = newLocale?.slice(0, 2);
     setLocale(newLocale);
     i18n.changeLanguage(code);
   };

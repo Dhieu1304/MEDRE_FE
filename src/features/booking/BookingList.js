@@ -104,7 +104,7 @@ function BookingList({ title, bookingListType }) {
           from = formatDate.format(new Date(), "YYYY-MM-DD");
         }
         // from = new Date();
-        order = "date:asc";
+        order = "date:desc";
       }
 
       // console.log({ from, to });

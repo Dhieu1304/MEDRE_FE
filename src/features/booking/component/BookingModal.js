@@ -283,6 +283,31 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
           </Typography>
         </Box>
 
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "center",
+              xs: "flex-start"
+            },
+            mb: 2
+          }}
+        >
+          <Typography fontWeight={600} mr={2}>
+            {tBooking("price")}:
+          </Typography>
+          <Typography fontWeight={500} textAlign="center">
+            {data?.schedule?.type === scheduleTypes.TYPE_OFFLINE
+              ? data?.schedule?.scheduleExpertise?.priceOffline
+              : data?.schedule?.scheduleExpertise?.priceOnline}
+          </Typography>
+        </Box>
+
         <FormControl
           sx={{
             mb: 2
