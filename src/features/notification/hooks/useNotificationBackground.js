@@ -3,7 +3,7 @@ import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useAppConfigStore } from "../../../store/AppConfigStore";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-import CustomNotificatioToast from "../../../components/CustomNotificatioToast";
+import CustomNotificationToast from "../../../components/CustomNotificationToast";
 import { SOCKET, socket } from "../../../config/socketConfig";
 import { useAuthStore } from "../../../store/AuthStore/hooks";
 import cookiesUtil from "../../../utils/cookiesUtil";
@@ -63,7 +63,7 @@ const useNotificationBackground = () => {
   };
 
   const handleNotifications = async (payload) => {
-    toast(<CustomNotificatioToast title={payload?.notification?.title} body={payload?.notification?.body} />, {
+    toast(<CustomNotificationToast title={payload?.notification?.title} body={payload?.notification?.body} />, {
       position: toast.POSITION.BOTTOM_RIGHT,
       autoClose: 3000,
       hideProgressBar: true,

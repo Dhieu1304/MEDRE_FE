@@ -2,6 +2,9 @@ import { Box, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 
 import { useParams } from "react-router";
+import { decode } from "html-entities";
+import ReactQuill from "react-quill";
+import "react-quill/dist/quill.snow.css";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 import notificationServices from "../../services/notificationServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
@@ -62,8 +65,7 @@ function NotificationDetail() {
         >
           {notification?.notificationsParent?.title}
         </Typography>
-        <Box component="p">{notification?.notificationsParent?.content}</Box>
-        <Box component="p">{notification?.notificationsParent?.description}</Box>
+        <ReactQuill value={decode(notification?.notificationsParent?.description)} readOnly theme="bubble" />
       </Box>
     </>
   );
