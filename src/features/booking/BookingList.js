@@ -20,6 +20,7 @@ import NoDataBox from "../../components/NoDataBox";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import { subtractDate } from "../../utils/datetimeUtil";
 import useObjDebounce from "../../hooks/useObjDebounce";
+import { bookingStatuses } from "../../entities/Booking";
 
 function BookingList({ title, bookingListType }) {
   const [bookings, setBookings] = useState([]);
@@ -104,7 +105,7 @@ function BookingList({ title, bookingListType }) {
           from = formatDate.format(new Date(), "YYYY-MM-DD");
         }
         // from = new Date();
-        order = "date:desc";
+        order = "date:asc";
       }
 
       // console.log({ from, to });
@@ -115,7 +116,8 @@ function BookingList({ title, bookingListType }) {
         from,
         to,
         order,
-        type: watch().type
+        type: watch().type,
+        bookingStatus: [bookingStatuses.BOOKED, bookingStatuses.WAITING]
       });
 
       let countData = 0;
