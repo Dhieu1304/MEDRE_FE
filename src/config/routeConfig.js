@@ -4,7 +4,7 @@ const routeConfig = {
   doctor: "/doctor",
   schedule: "/schedule",
   history: "/history",
-  forum: "/forum",
+  support: "/support",
   about: "/about",
   profile: "/profile",
   changePassword: "/change-password",

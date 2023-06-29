@@ -4,6 +4,8 @@ import doctorFeature from "./doctorFeature.json";
 import doctorEntity from "./doctorEntity.json";
 import scheduleEntity from "./scheduleEntity.json";
 import homePage from "./homePage.json";
+import aboutPage from "./aboutPage.json";
+import supportPage from "./supportPage.json";
 import input from "./input.json";
 import layout from "./layout.json";
 // import paymentPage from "./paymentPage.json";
@@ -39,7 +41,9 @@ const vi = {
   userEntity,
   userFeature,
   patientEntity,
-  verificationFeature
+  verificationFeature,
+  aboutPage,
+  supportPage
 };
 
 export default vi;
