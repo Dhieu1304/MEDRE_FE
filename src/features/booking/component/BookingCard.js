@@ -18,7 +18,6 @@ import {
 
 import PropTypes from "prop-types";
 import formatDate from "date-and-time";
-import Countdown from "react-countdown";
 import { useTranslation } from "react-i18next";
 
 import { useMemo } from "react";
@@ -371,39 +370,15 @@ function BookingCard({ booking, cancelBookingModal }) {
               }}
             >
               <Typography variant="h5">{formatDate.format(new Date(booking?.date), "ddd, DD/MM/YY")}</Typography>
-              <Box sx={{ color: "red" }}>
-                <Countdown
-                  date={waitingTimeToSchedule}
-                  renderer={({ days, hours, minutes, seconds, completed }) => {
-                    return (
-                      !completed && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            alignItems: "center"
-                          }}
-                        >
-                          {!!days && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                mr: 1
-                              }}
-                            >
-                              {days} {t("countDown.day")}
-                            </Typography>
-                          )}
-                          <Typography variant="body2">
-                            {hours.toString().padStart(2, "0")}:{minutes.toString().padStart(2, "0")}:
-                            {seconds.toString().padStart(2, "0")}
-                          </Typography>
-                        </Box>
-                      )
-                    );
-                  }}
-                />
-              </Box>
+              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE ? (
+                <Typography sx={{ color: theme.palette.success.light }}>
+                  {scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}
+                </Typography>
+              ) : (
+                <Typography sx={{ color: theme.palette.warning.light }}>
+                  {scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}
+                </Typography>
+              )}
             </Box>
 
             <Box sx={{ display: "flex", flexDirection: "column" }}>
