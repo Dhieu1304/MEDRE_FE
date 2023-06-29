@@ -30,6 +30,7 @@ import WithPatientsLoaderWrapper from "../../patient/hocs/WithPatientsLoaderWrap
 import useDebounce from "../../../hooks/useDebounce";
 import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
 import patientServices from "../../../services/patientServices";
+import { formatCurrency } from "../../../utils/stringFormat";
 
 const findItemByName = (data, name) => {
   // console.log("data: ", data);
@@ -303,8 +304,8 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
           </Typography>
           <Typography fontWeight={500} textAlign="center">
             {data?.schedule?.type === scheduleTypes.TYPE_OFFLINE
-              ? data?.schedule?.scheduleExpertise?.priceOffline
-              : data?.schedule?.scheduleExpertise?.priceOnline}
+              ? formatCurrency(data?.schedule?.scheduleExpertise?.priceOffline)
+              : formatCurrency(data?.schedule?.scheduleExpertise?.priceOnline)}
           </Typography>
         </Box>
 
