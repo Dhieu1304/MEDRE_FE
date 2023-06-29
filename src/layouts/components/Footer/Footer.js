@@ -82,7 +82,7 @@ function Footer() {
                 ml: 1
               }}
             >
-              {t("website_value")}
+              {process.env.REACT_APP_FE_URL || "https://medre.site/"}
             </Box>
           </Typography>
           <Typography variant="body2" color="text.secondary" gutterBottom>
