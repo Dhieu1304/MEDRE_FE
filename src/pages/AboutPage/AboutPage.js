@@ -1,7 +1,3 @@
-<<<<<<< Updated upstream
-export default function AboutPage() {
-  return <div>AboutPage</div>;
-=======
 import { useTranslation } from "react-i18next";
 import "./AboutPage.css";
 export default function AboutPage() {
@@ -44,5 +40,4 @@ export default function AboutPage() {
       </div>
     </div>
   );
->>>>>>> Stashed changes
 }

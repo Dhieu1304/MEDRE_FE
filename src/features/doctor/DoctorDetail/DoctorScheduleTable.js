@@ -297,7 +297,7 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     const bookAfterDay = settingConfig[settingNames.BOOK_AFTER_DAY]?.value;
 
     const canBooking =
-      subtractDate(colDate, new Date()) > bookAdvanceDay && subtractDate(colDate, new Date()) < bookAfterDay;
+      subtractDate(colDate, new Date()) >= bookAdvanceDay && subtractDate(colDate, new Date()) < bookAfterDay;
     return (
       <Button
         variant="contained"

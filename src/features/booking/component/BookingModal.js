@@ -30,6 +30,7 @@ import WithPatientsLoaderWrapper from "../../patient/hocs/WithPatientsLoaderWrap
 import useDebounce from "../../../hooks/useDebounce";
 import { cleanUndefinedAndNullValueObjectToStrObj } from "../../../utils/objectUtil";
 import patientServices from "../../../services/patientServices";
+import { formatCurrency } from "../../../utils/stringFormat";
 
 const findItemByName = (data, name) => {
   // console.log("data: ", data);
@@ -280,6 +281,31 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
           <Typography fontWeight={500} textAlign="center">
             {`${data?.time?.timeStart?.split(":")[0]}:${data?.time?.timeStart?.split(":")[1]}`} -{" "}
             {`${data?.time?.timeEnd?.split(":")[0]}:${data?.time?.timeEnd?.split(":")[1]}`}
+          </Typography>
+        </Box>
+
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "center",
+              xs: "flex-start"
+            },
+            mb: 2
+          }}
+        >
+          <Typography fontWeight={600} mr={2}>
+            {tBooking("price")}:
+          </Typography>
+          <Typography fontWeight={500} textAlign="center">
+            {data?.schedule?.type === scheduleTypes.TYPE_OFFLINE
+              ? formatCurrency(data?.schedule?.scheduleExpertise?.priceOffline)
+              : formatCurrency(data?.schedule?.scheduleExpertise?.priceOnline)}
           </Typography>
         </Box>
 

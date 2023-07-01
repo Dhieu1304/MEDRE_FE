@@ -20,6 +20,7 @@ import NoDataBox from "../../components/NoDataBox";
 import CustomInput from "../../components/CustomInput/CustomInput";
 import { subtractDate } from "../../utils/datetimeUtil";
 import useObjDebounce from "../../hooks/useObjDebounce";
+import { bookingStatuses } from "../../entities/Booking";
 
 function BookingList({ title, bookingListType }) {
   const [bookings, setBookings] = useState([]);
@@ -49,8 +50,8 @@ function BookingList({ title, bookingListType }) {
     return result;
   }, []);
 
-  const scheduleTypesList = useMemo(() => {
-    return [
+  const [scheduleTypesList, scheduleTypesListObj] = useMemo(() => {
+    const list = [
       {
         label: tSelectType("online"),
         value: "Online"
@@ -64,6 +65,15 @@ function BookingList({ title, bookingListType }) {
         value: ""
       }
     ];
+
+    const listObj = list.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [list, listObj];
   }, [locale]);
 
   const { watch, setValue, control, trigger, reset } = useForm({
@@ -115,7 +125,8 @@ function BookingList({ title, bookingListType }) {
         from,
         to,
         order,
-        type: watch().type
+        type: watch().type,
+        bookingStatus: [bookingStatuses.BOOKED, bookingStatuses.WAITING]
       });
 
       let countData = 0;
@@ -175,9 +186,8 @@ function BookingList({ title, bookingListType }) {
             <Grid item xs={12} md={4} lg={4}>
               <CustomInput control={control} label={tfilter("type")} trigger={trigger} name="type">
                 <Select
-                  // multiple
                   renderValue={(selected) => {
-                    return selected;
+                    return scheduleTypesListObj[selected]?.label;
                   }}
                 >
                   {scheduleTypesList.map((item) => {

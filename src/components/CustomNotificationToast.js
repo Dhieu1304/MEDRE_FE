@@ -1,7 +1,7 @@
 import PropTypes from "prop-types";
 import { Box, Typography } from "@mui/material";
 
-function CustomNotificatioToast({ title, body }) {
+function CustomNotificationToast({ title, body }) {
   return (
     <Box>
       {title && (
@@ -20,14 +20,14 @@ function CustomNotificatioToast({ title, body }) {
   );
 }
 
-CustomNotificatioToast.defaultProps = {
+CustomNotificationToast.defaultProps = {
   title: undefined,
   body: undefined
 };
 
-CustomNotificatioToast.propTypes = {
+CustomNotificationToast.propTypes = {
   title: PropTypes.string,
   body: PropTypes.string
 };
 
-export default CustomNotificatioToast;
+export default CustomNotificationToast;

@@ -9,6 +9,8 @@
     "note": "Note",
     "ordinalNumber": "Ordinal Number",
     "conclusion": "Doctor's Conclusion",
+    "prescription": "Prescription",
+    "price": "Price",
     "schedule": {
       "expertise": "Expertise"
     },

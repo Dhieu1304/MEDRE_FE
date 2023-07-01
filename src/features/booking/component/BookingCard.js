@@ -18,7 +18,6 @@ import {
 
 import PropTypes from "prop-types";
 import formatDate from "date-and-time";
-import Countdown from "react-countdown";
 import { useTranslation } from "react-i18next";
 
 import { useMemo } from "react";
@@ -102,6 +101,20 @@ function BookingCard({ booking, cancelBookingModal }) {
 
     return date;
   }, []);
+
+  // console.log("waitingTimeToSchedule: ", waitingTimeToSchedule);
+
+  const countMinutesElapsedAfterTimeEnd = useMemo(() => {
+    const dateTimeEnd = new Date(booking?.date);
+    const timeEnd = booking?.bookingTimeSchedule?.timeEnd;
+    const [h = 0, m = 0, s = 0] = timeEnd ? timeEnd.split(":") : [0, 0, 0];
+
+    dateTimeEnd.setHours(h, m, s, 0);
+
+    return formatDate.subtract(dateTimeEnd, new Date()).toMinutes();
+  }, []);
+
+  // console.log("countMinutesElapsedAfterTimeEnd: ", countMinutesElapsedAfterTimeEnd);
 
   const tableFirstCellProps = {
     component: "th",
@@ -193,32 +206,36 @@ function BookingCard({ booking, cancelBookingModal }) {
             </Button>
           )}
 
-        {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
-          <Box
-            component={Link}
-            to={`${routeConfig.meeting}/${booking?.id}`}
-            sx={{
-              display: "flex",
-              alignItems: "center",
-              px: 1,
-              py: 0.5,
-              borderRadius: 5,
-              textDecoration: "none",
-              width: { sm: "inherit", xs: "100%" },
-              mb: { sm: 0, xs: 1 },
-              ml: { sm: 1, xs: 0 },
-              backgroundColor: theme.palette.success.light,
-              color: theme.palette.success.contrastText,
-              ":hover": {
-                backgroundColor: theme.palette.success.dark,
-                color: theme.palette.success.contrastText
-              }
-            }}
-          >
-            <VideoCallIcon sx={{ mr: 1 }} />
-            {t("button.meet")}
-          </Box>
-        )}
+        {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE &&
+          booking?.isPayment &&
+          booking?.code &&
+          booking?.bookingStatus !== bookingStatuses.CANCELED &&
+          countMinutesElapsedAfterTimeEnd > 10 && (
+            <Box
+              component={Link}
+              to={`${routeConfig.meeting}/${booking?.id}`}
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                px: 1,
+                py: 0.5,
+                borderRadius: 5,
+                textDecoration: "none",
+                width: { sm: "inherit", xs: "100%" },
+                mb: { sm: 0, xs: 1 },
+                ml: { sm: 1, xs: 0 },
+                backgroundColor: theme.palette.success.light,
+                color: theme.palette.success.contrastText,
+                ":hover": {
+                  backgroundColor: theme.palette.success.dark,
+                  color: theme.palette.success.contrastText
+                }
+              }}
+            >
+              <VideoCallIcon sx={{ mr: 1 }} />
+              {t("button.meet")}
+            </Box>
+          )}
 
         {!booking?.isPayment &&
           booking?.bookingStatus !== bookingStatuses.CANCELED &&
@@ -353,39 +370,15 @@ function BookingCard({ booking, cancelBookingModal }) {
               }}
             >
               <Typography variant="h5">{formatDate.format(new Date(booking?.date), "ddd, DD/MM/YY")}</Typography>
-              <Box sx={{ color: "red" }}>
-                <Countdown
-                  date={waitingTimeToSchedule}
-                  renderer={({ days, hours, minutes, seconds, completed }) => {
-                    return (
-                      !completed && (
-                        <Box
-                          sx={{
-                            display: "flex",
-                            justifyContent: "flex-start",
-                            alignItems: "center"
-                          }}
-                        >
-                          {!!days && (
-                            <Typography
-                              variant="body2"
-                              sx={{
-                                mr: 1
-                              }}
-                            >
-                              {days} {t("countDown.day")}
-                            </Typography>
-                          )}
-                          <Typography variant="body2">
-                            {hours.toString().padStart(2, "0")}:{minutes.toString().padStart(2, "0")}:
-                            {seconds.toString().padStart(2, "0")}
-                          </Typography>
-                        </Box>
-                      )
-                    );
-                  }}
-                />
-              </Box>
+              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE ? (
+                <Typography sx={{ color: theme.palette.success.light }}>
+                  {scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}
+                </Typography>
+              ) : (
+                <Typography sx={{ color: theme.palette.warning.light }}>
+                  {scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}
+                </Typography>
+              )}
             </Box>
 
             <Box sx={{ display: "flex", flexDirection: "column" }}>

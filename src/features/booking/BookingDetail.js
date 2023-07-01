@@ -45,7 +45,7 @@ function BookingDetail() {
   const theme = useTheme();
 
   useMemo(() => {
-    const code = locale.slice(0, 2);
+    const code = locale?.slice(0, 2);
     const currentLocale = formatDateLocale[code] || formatDateLocale.en;
     formatDate.locale(currentLocale);
   }, [locale]);
@@ -67,6 +67,16 @@ function BookingDetail() {
       };
     }, {});
   }, [locale]);
+
+  const countMinutesElapsedAfterTimeEnd = useMemo(() => {
+    const dateTimeEnd = new Date(booking?.date);
+    const timeEnd = booking?.bookingTimeSchedule?.timeEnd;
+    const [h = 0, m = 0, s = 0] = timeEnd ? timeEnd.split(":") : [0, 0, 0];
+
+    dateTimeEnd.setHours(h, m, s, 0);
+
+    return formatDate.subtract(dateTimeEnd, new Date()).toMinutes();
+  }, []);
 
   useEffect(() => {
     const loadData = async () => {
@@ -161,25 +171,29 @@ function BookingDetail() {
                     {t("button.payment")}
                   </Button>
                 )}
-              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE && booking?.isPayment && booking?.code && (
-                <Box
-                  component={Link}
-                  to={`${routeConfig.meeting}/${booking?.id}`}
-                  sx={{
-                    display: "flex",
-                    alignItems: "center",
-                    px: 2,
-                    py: 1,
-                    background: theme.palette.success.light,
-                    color: theme.palette.success.contrastText,
-                    borderRadius: 10,
-                    textDecoration: "none"
-                  }}
-                >
-                  <VideoCallIcon sx={{ mr: 1 }} />
-                  {t("button.meet")}
-                </Box>
-              )}
+              {booking?.bookingSchedule?.type === scheduleTypes.TYPE_ONLINE &&
+                booking?.isPayment &&
+                booking?.code &&
+                booking?.bookingStatus !== bookingStatuses.CANCELED &&
+                countMinutesElapsedAfterTimeEnd > 10 && (
+                  <Box
+                    component={Link}
+                    to={`${routeConfig.meeting}/${booking?.id}`}
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      px: 2,
+                      py: 1,
+                      background: theme.palette.success.light,
+                      color: theme.palette.success.contrastText,
+                      borderRadius: 10,
+                      textDecoration: "none"
+                    }}
+                  >
+                    <VideoCallIcon sx={{ mr: 1 }} />
+                    {t("button.meet")}
+                  </Box>
+                )}
             </Box>
           }
         />
@@ -365,6 +379,36 @@ function BookingDetail() {
             </Typography>
 
             <CustomInput label={tBooking("conclusion")} noNameValue={booking?.note} type="text" multiline rows={6} />
+          </Box>
+          <Box sx={{ flexDirection: "column", mb: 4 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+              sx={{
+                mb: 4
+              }}
+            >
+              {t("subTitle.doctorPrescription")}
+            </Typography>
+
+            {booking?.prescription && (
+              <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>
+                <Box
+                  component="img"
+                  sx={{
+                    width: 400,
+                    objectfit: "contain"
+                  }}
+                  variant="square"
+                  src={booking?.prescription}
+                />
+              </Box>
+            )}
           </Box>
         </Box>
       </Box>

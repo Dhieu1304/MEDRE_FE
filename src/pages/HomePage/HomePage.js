@@ -28,12 +28,12 @@ function HomePage() {
       flexDirection: "row"
     },
     {
-      title: t("subTitle.subTitle1"),
+      title: t("subTitle.subTitle2"),
       img: images.medreIntro,
       flexDirection: "row-reverse"
     },
     {
-      title: t("subTitle.subTitle1"),
+      title: t("subTitle.subTitle3"),
       img: images.medreIntro,
       flexDirection: "row"
     }
@@ -74,6 +74,7 @@ function HomePage() {
           {functionMenu.map((item) => {
             return (
               <Button
+                key={item.title}
                 variant="outlined"
                 sx={{ width: "10rem", height: "10rem", p: 1, m: 2, fontSize: "1.5rem" }}
                 onClick={() => {
@@ -92,6 +93,7 @@ function HomePage() {
       {subTitles.map((item) => {
         return (
           <Box
+            key={item.title}
             sx={{
               backgroundColor: "#f5f5f5",
               display: "flex",

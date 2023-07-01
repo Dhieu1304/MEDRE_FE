@@ -2,12 +2,12 @@ import routeConfig, { authRoutes } from "../../../config/routeConfig";
 
 export const headerLeftItemsNotLogin = [
   {
-    to: routeConfig.forum,
-    label: "forum_label"
-  },
-  {
     to: routeConfig.about,
     label: "about_label"
+  },
+  {
+    to: routeConfig.support,
+    label: "support_label"
   },
   {
     to: routeConfig.doctor,
@@ -27,6 +27,14 @@ export const headerLeftItemsNotLogin = [
 ];
 
 export const headerLeftItemsLogined = [
+  {
+    to: routeConfig.about,
+    label: "about_label"
+  },
+  {
+    to: routeConfig.support,
+    label: "support_label"
+  },
   {
     to: routeConfig.doctor,
     label: "doctor_label"

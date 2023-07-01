@@ -50,8 +50,8 @@ function DoctorList() {
   const { isLoading, fetchApi } = useFetchingStore();
   const { locale } = useAppConfigStore();
 
-  const doctorTypesList = useMemo(() => {
-    return [
+  const [doctorTypesList, doctorTypesListObj] = useMemo(() => {
+    const list = [
       {
         label: tSelectType("online"),
         value: "Online"
@@ -65,8 +65,16 @@ function DoctorList() {
         value: ""
       }
     ];
-  }, [locale]);
 
+    const listObj = list.reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+
+    return [list, listObj];
+  }, [locale]);
   const expertiseListObj = useMemo(() => {
     return expertisesList.reduce((obj, cur) => {
       return {
@@ -232,9 +240,8 @@ function DoctorList() {
             <Grid item xs={12} sm={6} md={6} lg={3}>
               <CustomInput control={control} label={tfilter("type")} trigger={trigger} name="type">
                 <Select
-                  // multiple
                   renderValue={(selected) => {
-                    return selected;
+                    return doctorTypesListObj[selected]?.label;
                   }}
                 >
                   {doctorTypesList.map((item) => {
