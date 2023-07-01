@@ -1,0 +1,30 @@
+{
+  "title": "Giới thiệu",
+  "process": "Quy trình",
+  "about-content": {
+    "intro1": "Chào mừng bạn đến với MEDRE - Hệ thống quản lý và hỗ trợ quy trình đăng ký, khám chữa bệnh cho phòng khám.",
+    "intro2": "Đây là phần mềm giúp bạn có thể thực hiện và tiếp cận các dịch vụ khám bệnh tại phòng khám vừa và nhỏ thông qua việc đặt lịch và đăng ký khám bệnh từ xa mà không cần đến trực tiếp tại phòng khám.",
+    "intro3": "Đến với MEDRE, bạn sẽ được trải nghiệm các tính năng sau đây:",
+    "feature1": "1. Đăng ký khám bệnh trực tuyến/ Đăng ký đặt lịch trực tiếp",
+    "feature2": "2. Đăng ký khám bệnh cho bản thân hoặc cho người thân trong nhà",
+    "feature3": "3. Theo dõi lịch sử khám bệnh trước đây của bản thân",
+    "feature4": "4. Theo dõi các lịch khám bệnh sắp tới, lịch tái khám bác sĩ đã sắp xếp",
+    "outro1": "MEDRE hy vọng với trải nghiệm mới này, MEDRE sẽ cung cấp thêm một cách thức giúp cho việc đăng ký và tiếp cận dịch vụ khám chữa bệnh tại phòng khám trở nên nhanh chóng và tiện lợi nhất.",
+    "outro2": "Trân trọng!"
+  },
+  "process-content": {
+    "feature1": {
+      "name": "Đặt lịch khám bệnh trực tiếp/ trực tuyến",
+      "step1": "1. Đăng nhập phần mềm trên web hoặc ứng dụng di động.",
+      "step2": "2. Lựa chọn chuyên khoa và bác sĩ để đặt lịch",
+      "step3": "3. Lựa chọn hình thức khám bệnh: trực tuyến hoặc trực tiếp",
+      "step4": " 4. Lựa chọn các thông tin khám bệnh: ngày khám, ca khám, thông tin người khám (bản thân hoặc thân nhân), lý do khám và xác nhận."
+    },
+    "feature2": {
+      "name": "Theo dõi lịch sử khám bệnh và lịch khám bệnh sắp tới",
+      "step1": "1. Đăng nhập phần mềm trên web hoặc ứng dụng di động.",
+      "step2": "2. Lựa chọn mục Lịch sử khám bệnh/ Lịch khám bệnh",
+      "step3": "3. Lựa chọn chi tiết để xem về một lịch khám chi tiết"
+    }
+  }
+}

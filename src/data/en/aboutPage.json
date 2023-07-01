@@ -1,0 +1,30 @@
+{
+  "title": "About",
+  "process": "Process",
+  "about-content": {
+    "intro1": "Welcome to MEDRE - The system to manage and support appointment booking, medical examination for the clinic.",
+    "intro2": "This is an application that helps you to perform and access medical services at tiny clinics through scheduling and registering for medical examination remotely without having to go this one directly.",
+    "intro3": "At MEDRE, you will be able to do some feature like:",
+    "feature1": "1. Register for online medical examination or direct appointment.",
+    "feature2": "2. Register for yourself and your relatives. ",
+    "feature3": "3. Watching your clinic history.",
+    "feature4": "4. Watching for up coming schedule.",
+    "outro1": "We hope that MEDRE will provide one more way to make registration and access to medical examination and treatment services at the clinic the fastest and most convenient.",
+    "outro2": "Thank you!"
+  },
+  "process-content": {
+    "feature1": {
+      "name": "Register for online medical examination or direct appointment.",
+      "step1": "1. Sign in on website or mobile app.",
+      "step2": "2. Select the expertise and doctor you want to booking.",
+      "step3": "3. Select your clinic type: Online or Offline.",
+      "step4": "4. Fill in your information: date, time, personal information, reason to booking and apply."
+    },
+    "feature2": {
+      "name": "Watching clinic history and up coming schedule.",
+      "step1": "1. Sign in on website or mobile app.",
+      "step2": "2. Select History or Schedule tab.",
+      "step3": "3. Click on Detail to see the booking detail."
+    }
+  }
+}
