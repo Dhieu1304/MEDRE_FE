@@ -1,0 +1,35 @@
+.about-title {
+  align-self: center;
+}
+.about-content {
+  margin-left: 0px;
+  margin-top: 15px;
+}
+h2 {
+  font-size: x-large;
+  color: black;
+  padding: 0pt;
+  margin: 2pt;
+}
+h3 {
+  font-size: large;
+  font-weight: lighter;
+  color: black;
+  padding: 0pt;
+  margin: 2pt;
+}
+h4 {
+  font-size: large;
+  font-style: normal;
+  font-weight: lighter;
+  color: black;
+  padding-left: 50pt;
+  margin: 2pt;
+}
+.process-title {
+  align-self: center;
+}
+.process-content {
+  margin-left: 0px;
+  margin-top: 15px;
+}
