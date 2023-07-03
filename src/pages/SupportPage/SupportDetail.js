@@ -1,48 +1,87 @@
+import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useAuthStore } from "../../store/AuthStore";
-import images from "../../assets/images";
 import "./SupportPage.css";
+import images from "../../assets/images";
 import { Avatar, Button, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
-import { useState } from "react";
+import { useFetchingStore } from "../../store/FetchingApiStore";
+import axiosClient from "../../config/axiosClient";
+import {useParams} from 'react-router-dom';
+import camelcaseKeys from "camelcase-keys";
+import CustomOverlay from "../../components/CustomOverlay";
+import CustomPageTitle from "../../components/CustomPageTitle";
 export default function SupportDetail() {
+  const { isLoading, fetchApi } = useFetchingStore();
   const authStore = useAuthStore();
   const { t } = useTranslation("supportPage");
-  function createData(avatar, name, description) {
-    return { avatar, name, description };
-  }
-
-  const chatDatas = [
-    createData(images.logo, "Thanh", "Dau dau qua"),
-    createData(images.logo, "Hieu", "Mua thuoc di"),
-    createData(images.logo, "Thanh", "Dau rang qua"),
-    createData(images.logo, "Hieu", "Di kham rang di"),
-    createData(images.logo, "Thanh", "Dau hong qua"),
-    createData(images.logo, "Hieu", "Mua thuoc ho di")
-  ];
+  const data = useParams();
+  const [ticketDetails, setTicketDetails] = useState([]);
   const [question, setQuestion] = useState("");
+  const loadData = async () => {
+    await fetchApi(async () => {
+      try {
+        const res = await axiosClient.get(`/ticket/detail/${data.ticketId}`);
+        if (res.status) {
+          const ticket = camelcaseKeys(res?.data, { deep: true });
+          const ticketDetailsData = ticket || [];
+          setTicketDetails(ticketDetailsData);
+  
+          return { ...res };
+        }
+        setTicketDetails([]);
+          return { ...res };
+
+      } catch (e) {
+        // console.error(e.message);
+        return {
+          success: false,
+          message: e.message
+        };
+      }
+
+    });
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
+
   const changeQuestion = (e) => {
     setQuestion(e.target.value);
   };
-  const sendQuestion = () => {
-    alert(question);
+  const sendQuestion = async() => {
+    await fetchApi(async () => {
+      try {
+        const res = await axiosClient.post('/ticket/response', {id_ticket: ticketDetails.id, content: question });
+        console.log(res);
+        if (res.status) {
+          return { ...res };
+        }
+          return { ...res };
+
+      } catch (e) {
+        // console.error(e.message);
+        return {
+          success: false,
+          message: e.message
+        };
+      }
+    })
+    loadData();
   };
   return (
     <>
-      <div>
-        <h2>
-          <b>{t("form-detail").toUpperCase()}</b>
-        </h2>
-      </div>
+      <CustomOverlay open={isLoading} />
+      <CustomPageTitle
+          title={t("form-detail")}
+      />
+      <h2>{t("topic")}: {ticketDetails.title}</h2>
       <div className="chatting-info">
-        {chatDatas.map((chatData) => (
+        {ticketDetails?.ticketDetails?.map((chatData) => (
           <div className="chatting-group">
             <div>
-              <Avatar alt="Bệnh nhân" src={chatData.avatar} />
-            </div>
-            <div>
-              <h3>{chatData.name}</h3>
-              <h4>{chatData.description}</h4>
+              <h3>{chatData.idUser == authStore.user.id ? t("form.question") : t("form.answer")}</h3>
+              <h4>{chatData.content}</h4>
             </div>
           </div>
         ))}

@@ -43,7 +43,7 @@ const publicRoutes = [
 const privateRoutes = [
   { path: routeConfig.home, component: HomePage },
   { path: routeConfig.about, component: AboutPage },
-  { path: routeConfig.support, component: SupportPage },
+  { path: `${routeConfig.support}/*`, component: SupportPage },
 
   { path: `${routeConfig.doctor}/*`, component: DoctorPage },
   { path: `${routeConfig.schedule}/*`, component: SchedulePage },
