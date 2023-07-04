@@ -1,4 +1,27 @@
-{
+{ 
   "title": "Support",
-  "form-deatil": "From detail"
+  "form-detail": "Form detail",
+  "topic": "Topic",
+  "button": {
+    "detail": "Detail",
+    "add": "Send support ticket"
+  },
+  "form": {
+    "question": "Question",
+    "answer": "Answer"
+  },
+  "properties": {
+    "id": "ID",
+    "title":"Topic",
+    "status": "Status",
+    "createdAt": "Created At",
+    "updatedAt": "Updated At",
+    "deletedAt": "Deleted At"
+  },
+  "AddTicketModal": {
+    "name": "Send support ticket",
+    "title": "Topic",
+    "content": "Content",
+    "button": "Send"
+  }
 }

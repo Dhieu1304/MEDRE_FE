@@ -1,7 +1,14 @@
-import { useTranslation } from "react-i18next";
-import "./SupportPage.css";
+import { Route, Routes } from "react-router";
+import SupportList from "./SupportList";
+import SupportDetail from "./SupportDetail";
+import routes from "./routes";
 
-export default function SupportPage() {
-  const { t } = useTranslation("supportPage");
-  return <div>{t("title")}</div>;
+export default function SchedulePage() {
+  return (
+    <Routes>
+      <Route path={routes.list} element={<SupportList />} />
+
+      <Route path={routes.detail} element={<SupportDetail />} />
+    </Routes>
+  );
 }
