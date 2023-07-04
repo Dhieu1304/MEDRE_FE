@@ -40,7 +40,9 @@ export default function SupportDetail() {
               <Avatar alt="Bệnh nhân" src={chatData.avatar} />
             </div>
             <div>
-              <h3>{chatData.name} {question}</h3>
+              <h3>
+                {chatData.name} {question}
+              </h3>
               <h4>{chatData.description}</h4>
             </div>
           </div>
