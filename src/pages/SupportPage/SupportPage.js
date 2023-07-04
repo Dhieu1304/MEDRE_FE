@@ -1,12 +1,7 @@
 import { useTranslation } from "react-i18next";
-import { useAuthStore } from "../../store/AuthStore";
+import "./SupportPage.css";
 
 export default function SupportPage() {
-  const authStore = useAuthStore();
   const { t } = useTranslation("supportPage");
-  return (
-    <div>
-      {t("title")} - {authStore.user?.name}
-    </div>
-  );
+  return <div>{t("title")}</div>;
 }

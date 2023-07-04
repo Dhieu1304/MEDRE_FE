@@ -1,3 +1,27 @@
 {
-  "title": "Hỗ trợ"
+  "title": "Hỗ trợ",
+  "form-detail": "Chi tiết hỗ trợ",
+  "topic": "Chủ đề",
+  "button": {
+    "detail": "Chi tiết",
+    "add": "Gửi hỗ trợ"
+  },
+  "form": {
+    "question": "Câu hỏi",
+    "answer": "Trả lời"
+  },
+  "properties": {
+    "id": "ID",
+    "title": "Chủ đề câu hỏi",
+    "status": "Trạng thái",
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "deletedAt": "Ngày xóa"
+  },
+  "AddTicketModal": {
+    "name": "Gửi hỗ trợ",
+    "title": "Chủ đề câu hỏi",
+    "content": "Nội dung",
+    "button": "Gửi"
+  }
 }
