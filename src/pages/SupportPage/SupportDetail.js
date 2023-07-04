@@ -1,12 +1,11 @@
 import { useTranslation } from "react-i18next";
-import { useAuthStore } from "../../store/AuthStore";
-import images from "../../assets/images";
-import "./SupportPage.css";
 import { Avatar, Button, TextField } from "@mui/material";
 import SendIcon from "@mui/icons-material/Send";
 import { useState } from "react";
+import images from "../../assets/images";
+import "./SupportPage.css";
+
 export default function SupportDetail() {
-  const authStore = useAuthStore();
   const { t } = useTranslation("supportPage");
   function createData(avatar, name, description) {
     return { avatar, name, description };
@@ -25,7 +24,7 @@ export default function SupportDetail() {
     setQuestion(e.target.value);
   };
   const sendQuestion = () => {
-    alert(question);
+    // alert(question);
   };
   return (
     <>
@@ -41,7 +40,9 @@ export default function SupportDetail() {
               <Avatar alt="Bệnh nhân" src={chatData.avatar} />
             </div>
             <div>
-              <h3>{chatData.name}</h3>
+              <h3>
+                {chatData.name} {question}
+              </h3>
               <h4>{chatData.description}</h4>
             </div>
           </div>
