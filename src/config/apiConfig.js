@@ -65,6 +65,13 @@ const settingApi = {
   settingList: () => "/setting/list"
 };
 
+const ticketApi = {
+  ticketList: () => "/ticket/list",
+  ticketDetail: (id) => `/ticket/detail/${id}`,
+  responseTicket: () => "/ticket/response",
+  createTicket: () => "/ticket/create"
+};
+
 export {
   authApi,
   userApi,
@@ -75,5 +82,6 @@ export {
   patientApi,
   paymentApi,
   notificationApi,
-  settingApi
+  settingApi,
+  ticketApi
 };
