@@ -20,6 +20,8 @@ import userEntity from "./userEntity.json";
 import userFeature from "./userFeature.json";
 import patientEntity from "./patientEntity.json";
 import verificationFeature from "./verificationFeature.json";
+import ticketEntity from "./ticketEntity.json";
+import ticketFeature from "./ticketFeature.json";
 
 const vi = {
   authFeature,
@@ -43,7 +45,9 @@ const vi = {
   patientEntity,
   verificationFeature,
   aboutPage,
-  supportPage
+  supportPage,
+  ticketEntity,
+  ticketFeature
 };
 
 export default vi;

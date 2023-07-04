@@ -8,7 +8,7 @@
 
     "select": {
       "statuses": {
-        "open": "open",
+        "open": "Open",
         "close": "Close",
         "all": "All"
       }

@@ -5,7 +5,7 @@ import { Grid } from "@mui/material";
 import CustomModal from "../../../components/CustomModal";
 import CustomInput from "../../../components/CustomInput";
 import { useFetchingStore } from "../../../store/FetchingApiStore";
-import axiosClient from "../../../config/axiosClient";
+import ticketServices from "../../../services/ticketServices";
 
 function AddTicketModal({ show, setShow, handleAfterAddTicket }) {
   const NAME_MAX_LENGTH = 500;
@@ -27,10 +27,11 @@ function AddTicketModal({ show, setShow, handleAfterAddTicket }) {
 
   const handleAddTicket = async ({ title, content }) => {
     await fetchApi(async () => {
-      const res = await axiosClient.post("/ticket/create", { title, content });
-      if (res.status) {
-        setShow(false);
+      const res = await ticketServices.createTicket({ title, content });
+
+      if (res.success) {
         if (handleAfterAddTicket) await handleAfterAddTicket();
+        setShow(false);
         return { ...res };
       }
       return { ...res };

@@ -2,16 +2,16 @@ import React, { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Box, Button, Paper, Table, TableBody, TableContainer, TableHead, TableRow, useTheme } from "@mui/material";
 import formatDate from "date-and-time";
-import camelcaseKeys from "camelcase-keys";
 import { Link, useLocation } from "react-router-dom";
 import CustomTableCell, { customTableCellVariant } from "../../components/CustomTableCell";
 import { useCustomModal } from "../../components/CustomModal";
 import CustomOverlay from "../../components/CustomOverlay";
 import CustomPageTitle from "../../components/CustomPageTitle";
 import { useFetchingStore } from "../../store/FetchingApiStore";
-import axiosClient from "../../config/axiosClient";
 import AddTicketModal from "./components/AddTicketModal";
 import { cleanUndefinedAndEmptyStrValueObject } from "../../utils/objectUtil";
+import ticketServices from "../../services/ticketServices";
+import { useTicketStatusesContantTranslation } from "./hooks/useTicketConstantsTranslation";
 
 export default function SupportList() {
   const { isLoading, fetchApi } = useFetchingStore();
@@ -48,6 +48,8 @@ export default function SupportList() {
       minWidth: 100
     }
   ]);
+  const [, ticketStatusListObj] = useTicketStatusesContantTranslation();
+
   // status: Open, Closed
   // order:'status:asc','status:desc','createdAt:asc','createdAt:desc',
   const params = cleanUndefinedAndEmptyStrValueObject({
@@ -58,26 +60,15 @@ export default function SupportList() {
 
   const loadData = async () => {
     await fetchApi(async () => {
-      try {
-        const res = await axiosClient.get("/ticket/list", { params });
+      const res = await ticketServices.getTickets(params);
 
-        // console.log("res: ", res);
-        if (res.status) {
-          const ticket = camelcaseKeys(res?.data, { deep: true });
-          const ticketsData = ticket || [];
-          setTickets(ticketsData);
-
-          return { ...res };
-        }
-        setTickets([]);
+      if (res.success) {
+        const ticketsData = res.tickets;
+        setTickets([...ticketsData]);
         return { ...res };
-      } catch (e) {
-        // console.error(e.message);
-        return {
-          success: false,
-          message: e.message
-        };
       }
+      setTickets([]);
+      return { ...res };
     });
   };
   useEffect(() => {
@@ -129,11 +120,11 @@ export default function SupportList() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {tickets?.results?.map((ticket) => {
+              {tickets?.map((ticket) => {
                 return (
                   <TableRow key={ticket?.id}>
                     <CustomTableCell>{ticket?.title}</CustomTableCell>
-                    <CustomTableCell>{ticket?.status}</CustomTableCell>
+                    <CustomTableCell>{ticketStatusListObj?.[ticket?.status]?.label}</CustomTableCell>
                     <CustomTableCell>{formatDate.format(new Date(ticket?.createdAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell>{formatDate.format(new Date(ticket?.updatedAt), "DD/MM/YYYY")}</CustomTableCell>
                     <CustomTableCell variant={customTableCellVariant.ACTION_BODY_CELL}>

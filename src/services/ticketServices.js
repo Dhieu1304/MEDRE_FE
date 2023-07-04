@@ -117,14 +117,17 @@ const responseTicket = async ({ id, content }) => {
   }
 };
 
-const createTicket = async ({ id, status }) => {
+const createTicket = async ({ title, content }) => {
   const dataBody = cleanUndefinedAndEmptyStrValueObject({
-    id,
-    status
+    title,
+    content
   });
 
+  // console.log("dataBody: ", dataBody);
   try {
-    const res = await axiosClient.put(ticketApi.createTicket(), dataBody);
+    const res = await axiosClient.post(ticketApi.createTicket(), dataBody);
+
+    // console.log("res: ", res);
 
     if (res?.status) {
       const ticket = camelcaseKeys(res?.data, { deep: true });

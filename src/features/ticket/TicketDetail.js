@@ -1,4 +1,18 @@
-import { Divider, Grid, ListItem, ListItemText, TextField, Paper, List, Fab, Box, Card, CardHeader } from "@mui/material";
+import {
+  Divider,
+  Grid,
+  ListItem,
+  ListItemText,
+  TextField,
+  Paper,
+  List,
+  Fab,
+  Box,
+  Card,
+  CardHeader,
+  Typography,
+  useTheme
+} from "@mui/material";
 import formatDate from "date-and-time";
 
 import SendIcon from "@mui/icons-material/Send";
@@ -9,7 +23,8 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Controller, useForm } from "react-hook-form";
 
-// import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
+import { Done } from "@mui/icons-material";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import ticketServices from "../../services/ticketServices";
@@ -21,7 +36,7 @@ function TicketDetail() {
   const params = useParams();
   const ticketId = params?.ticketId;
 
-  // const { t } = useTranslation("ticketFeature", { keyPrefix: "TicketDetail" });
+  const { t } = useTranslation("ticketFeature", { keyPrefix: "TicketDetail" });
 
   const { control, handleSubmit, reset } = useForm({
     defaultValues: {
@@ -30,6 +45,7 @@ function TicketDetail() {
   });
 
   const { isLoading, fetchApi } = useFetchingStore();
+  const theme = useTheme();
 
   const loadData = async () => {
     await fetchApi(async () => {
@@ -80,14 +96,29 @@ function TicketDetail() {
           borderRadius: 4
         }}
       >
-        <CardHeader title={ticket?.title} />
+        <CardHeader
+          title={ticket?.title}
+          action={
+            ticket?.status === ticketStatuses.CLOSE && (
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center"
+                }}
+              >
+                <Typography color={theme.palette.success.light}>{t("button.finished")}</Typography>
+                <Done sx={{ ml: 1, color: theme.palette.success.light }} />
+              </Box>
+            )
+          }
+        />
         <Divider />
 
         <Box component={Paper}>
           <Box>
             <List sx={{ height: "60vh", overflowY: "auto" }}>
               {ticket?.ticketDetails?.map((item) => {
-                return item?.idUser ? (
+                return item?.idStaff ? (
                   <ListItem key={item?.id}>
                     <Grid container>
                       <Grid item xs={12}>
