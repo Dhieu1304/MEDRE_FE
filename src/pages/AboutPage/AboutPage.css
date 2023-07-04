@@ -23,11 +23,13 @@ h4 {
   font-style: normal;
   font-weight: lighter;
   color: black;
-  padding-left: 50pt;
-  margin: 2pt;
+  margin-left: 50px;
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 .process-title {
   align-self: center;
+  margin-top: 45px;
 }
 .process-content {
   margin-left: 0px;

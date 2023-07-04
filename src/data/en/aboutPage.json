@@ -25,6 +25,10 @@
       "step1": "1. Sign in on website or mobile app.",
       "step2": "2. Select History or Schedule tab.",
       "step3": "3. Click on Detail to see the booking detail."
+    },
+    "feature3": {
+      "name": "Attention for patient",
+      "step1": "1. Please remember to attend hospital/ meeting room before 10 to 15 minutes."
     }
   }
 }
