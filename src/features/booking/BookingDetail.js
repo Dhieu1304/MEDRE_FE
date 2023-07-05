@@ -168,7 +168,7 @@ function BookingDetail() {
       <Typography>
         {`P.0${room}`}
         <Typography
-          component={"a"}
+          component="a"
           href="https://goo.gl/maps/LWXjMnq4NNbbFEJm9"
           sx={{
             ml: 2,
