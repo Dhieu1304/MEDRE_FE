@@ -109,21 +109,24 @@ function DoctorScheduleTable({ timesList, doctorId }) {
     let schedulesData = [];
     let bookingSchedulesData = [];
 
-    await fetchApi(async () => {
-      const res = await scheduleServices.getScheduleListByDoctorId(
-        doctorId,
-        formatDate.format(heads[0], "YYYY-MM-DD"),
-        formatDate.format(heads[6], "YYYY-MM-DD")
-      );
+    await fetchApi(
+      async () => {
+        const res = await scheduleServices.getScheduleListByDoctorId(
+          doctorId,
+          formatDate.format(heads[0], "YYYY-MM-DD"),
+          formatDate.format(heads[6], "YYYY-MM-DD")
+        );
 
-      if (res.success) {
-        schedulesData = [...res.schedules];
-        // console.log("res: ", res);
-        // setSchedules(schedulesData);
+        if (res.success) {
+          schedulesData = [...res.schedules];
+          // console.log("res: ", res);
+          // setSchedules(schedulesData);
+          return { ...res };
+        }
         return { ...res };
-      }
-      return { ...res };
-    });
+      },
+      { hideSuccessToast: true }
+    );
 
     await fetchApi(async () => {
       // Sử dụng phương thức map() để trích xuất các idExpertise

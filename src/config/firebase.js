@@ -22,7 +22,6 @@ export const requestPermission = async () => {
         vapidKey: process.env.REACT_APP_FIREBASE_VAPID_KEY
       });
       if (currentToken) {
-        // console.log("currentToken: ", currentToken);
         resultToken = currentToken;
       }
       // else {

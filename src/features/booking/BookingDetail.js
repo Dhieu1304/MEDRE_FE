@@ -148,7 +148,6 @@ function BookingDetail() {
     return `P.0${room}`;
   };
 
-
   return (
     <>
       <CustomOverlay open={isLoading} />
