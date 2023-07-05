@@ -333,8 +333,8 @@ function BookingCard({ booking, cancelBookingModal }) {
 
   const getRoomName = (bookingData) => {
     const expertiseId = bookingData?.bookingSchedule?.scheduleExpertise?.id || "1";
-    const room = expertiseId?.substring(expertiseId?.length || 10 - 1);
-    return room;
+    const room = expertiseId?.charAt(expertiseId.length - 1);
+    return `P.0${room}`;
   };
 
   return (
@@ -431,7 +431,6 @@ function BookingCard({ booking, cancelBookingModal }) {
                         {`${booking?.bookingTimeSchedule?.timeEnd?.split(":")[0]}:${
                           booking?.bookingTimeSchedule?.timeEnd?.split(":")[1]
                         }`}{" "}
-                        ({scheduleTypeListObj[booking?.bookingSchedule?.type]?.label})
                       </TableCell>
                     </TableRow>
                     <TableRow>
@@ -442,10 +441,12 @@ function BookingCard({ booking, cancelBookingModal }) {
                       <TableCell {...tableFirstCellProps}>{tBooking("schedule.expertise")}</TableCell>
                       <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleExpertise?.name}</TableCell>
                     </TableRow>
-                    <TableRow>
-                      <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
-                      <TableCell {...tableSecondCellProps}>{getRoomName(booking)}</TableCell>
-                    </TableRow>
+                    {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE && (
+                      <TableRow>
+                        <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
+                        <TableCell {...tableSecondCellProps}>{getRoomName(booking)}</TableCell>
+                      </TableRow>
+                    )}
                     <TableRow>
                       <TableCell {...tableFirstCellProps}>{tBooking("patient.name")}</TableCell>
                       <TableCell {...tableSecondCellProps}>{booking?.bookingOfPatient?.name}</TableCell>

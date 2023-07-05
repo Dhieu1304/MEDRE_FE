@@ -13,5 +13,19 @@
     "button": {
       "seeMore": "Xem thêm"
     }
+  },
+
+  "CustomDateFromToInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
+  },
+
+  "CustomDateInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
   }
 }

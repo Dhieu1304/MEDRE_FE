@@ -1,4 +1,4 @@
-{ 
+{
   "title": "Hỗ trợ",
   "form-detail": "Chi tiết hỗ trợ",
   "topic": "Chủ đề",
@@ -12,10 +12,10 @@
   },
   "properties": {
     "id": "ID",
-    "title":"Chủ đề câu hỏi",
+    "title": "Chủ đề câu hỏi",
     "status": "Trạng thái",
     "createdAt": "Ngày tạo",
-    "updatedAt": "Ngày cập nhập",
+    "updatedAt": "Ngày cập nhật",
     "deletedAt": "Ngày xóa"
   },
   "AddTicketModal": {

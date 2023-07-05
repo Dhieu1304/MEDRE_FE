@@ -16,6 +16,8 @@ import { useParams } from "react-router";
 import formatDate from "date-and-time";
 import { Link } from "react-router-dom";
 import { VideoCall as VideoCallIcon } from "@mui/icons-material";
+import { decode } from "html-entities";
+import ReactQuill from "react-quill";
 import bookingServices from "../../services/bookingServices";
 import { useFetchingStore } from "../../store/FetchingApiStore";
 import { useAppConfigStore } from "../../store/AppConfigStore";
@@ -23,7 +25,6 @@ import { formatDateLocale } from "../../utils/datetimeUtil";
 import { bookingPaymentStatuses, bookingStatuses } from "../../entities/Booking/constant";
 import CustomOverlay from "../../components/CustomOverlay/CustomOverlay";
 import CustomPageTitle from "../../components/CustomPageTitle";
-import CustomInput from "../../components/CustomInput/CustomInput";
 import { scheduleTypes } from "../../entities/Schedule";
 import routeConfig from "../../config/routeConfig";
 import paymentServices from "../../services/paymentServices";
@@ -143,9 +144,10 @@ function BookingDetail() {
 
   const getRoomName = (bookingData) => {
     const expertiseId = bookingData?.bookingSchedule?.scheduleExpertise?.id || "1";
-    const room = expertiseId?.substring(expertiseId?.length || 10 - 1);
-    return room;
+    const room = expertiseId?.charAt(expertiseId.length - 1);
+    return `P.0${room}`;
   };
+
 
   return (
     <>
@@ -289,10 +291,12 @@ function BookingDetail() {
                     <TableCell {...tableFirstCellProps}>{tBooking("schedule.expertise")}</TableCell>
                     <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleExpertise?.name}</TableCell>
                   </TableRow>
-                  <TableRow>
-                    <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
-                    <TableCell {...tableSecondCellProps}>{getRoomName(booking)}</TableCell>
-                  </TableRow>
+                  {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE && (
+                    <TableRow>
+                      <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
+                      <TableCell {...tableSecondCellProps}>{getRoomName(booking)}</TableCell>
+                    </TableRow>
+                  )}
                   <TableRow>
                     <TableCell {...tableFirstCellProps}>{tBooking("paymentStatus")}</TableCell>
                     <TableCell {...tableSecondCellProps}>{bookingPaymentStatusListObj[booking?.isPayment]?.label}</TableCell>
@@ -388,8 +392,29 @@ function BookingDetail() {
               {t("subTitle.doctorConclusion")}
             </Typography>
 
-            <CustomInput label={tBooking("conclusion")} noNameValue={booking?.note} type="text" multiline rows={6} />
+            <Box sx={{ border: "1px solid #ccc", borderRadius: 2 }}>
+              <ReactQuill value={decode(booking?.conclusion)} readOnly theme="bubble" />
+            </Box>
           </Box>
+
+          <Box sx={{ flexDirection: "column", mb: 2 }}>
+            <Typography
+              component="h1"
+              variant="h6"
+              fontWeight={600}
+              fontSize={{
+                sm: 25,
+                xs: 20
+              }}
+            >
+              {t("subTitle.doctorNote")}
+            </Typography>
+
+            <Box sx={{ border: "1px solid #ccc", borderRadius: 2 }}>
+              <ReactQuill value={decode(booking?.note)} readOnly theme="bubble" />
+            </Box>
+          </Box>
+
           <Box sx={{ flexDirection: "column", mb: 4 }}>
             <Typography
               component="h1"
@@ -407,7 +432,17 @@ function BookingDetail() {
             </Typography>
 
             {booking?.prescription && (
-              <Box sx={{ mb: 4, border: "1px solid #ccc", borderRadius: 10, p: 4 }}>
+              <Box
+                sx={{
+                  mb: 4,
+                  border: "1px solid #ccc",
+                  borderRadius: 2,
+                  p: 4,
+                  width: 500,
+                  display: "flex",
+                  justifyContent: "center"
+                }}
+              >
                 <Box
                   component="img"
                   sx={{

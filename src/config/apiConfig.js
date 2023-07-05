@@ -9,7 +9,7 @@ const authApi = {
   sendVerificationOtpToPhone: () => "",
   sendResetPasswordOtpToPhone: () => "",
 
-  verifyOtpToVerfifyPhoneNumber: () => "",
+  verifyOtpToVerfifyPhoneNumber: () => "/auth/verify/otp",
   verifyOtpToResetPasswordPhoneNumber: () => ""
 };
 

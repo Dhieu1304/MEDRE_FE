@@ -18,9 +18,9 @@ function Register() {
   const { handleSubmit, control, trigger, watch } = useForm({
     mode: "onChange",
     defaultValues: {
-      phoneNumberOrEmail: "0375435896",
-      password: "A@111111",
-      confirmPassword: "A@111111"
+      phoneNumberOrEmail: "",
+      password: "",
+      confirmPassword: ""
     },
     criteriaMode: "all"
   });

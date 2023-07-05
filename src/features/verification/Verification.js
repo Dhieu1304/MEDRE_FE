@@ -13,6 +13,7 @@ function Verification() {
   const sendVerificationOtpToPhone = async (phoneNumber) => {
     // return await fetchApi(async () => {
     return fetchApi(async () => {
+      // console.log("sendVerificationOtpToPhone: ");
       const res = await authServices.sendVerificationOtpToPhone(phoneNumber);
       return { ...res };
     });

@@ -13,5 +13,19 @@
     "button": {
       "seeMore": "See more"
     }
+  },
+
+  "CustomDateFromToInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
+  },
+
+  "CustomDateInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
   }
 }

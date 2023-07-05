@@ -36,6 +36,7 @@
       "doctorInfo": "Thông tin bác sĩ",
       "patientInfo": "Thông tin bệnh nhân",
       "doctorConclusion": "Kết luận của bác sĩ",
+      "doctorNote": "Ghi chút của bác sĩ",
       "doctorPrescription": "Đơn thuốc"
     },
     "button": {
