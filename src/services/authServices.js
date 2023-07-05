@@ -194,7 +194,7 @@ const registerVerifyOtp = async ({ otp }) => {
 
   return {
     success: true,
-    message: otp
+    message: ""
   };
 };
 
@@ -300,7 +300,7 @@ const sendVerificationOtpToPhone = async (phoneNumber) => {
 
   return {
     success: true,
-    message: phoneNumber
+    message: ""
   };
 };
 
@@ -334,7 +334,7 @@ const sendResetPasswordOtpToPhone = async (phoneNumber) => {
 
   return {
     success: true,
-    message: phoneNumber
+    message: ""
   };
 };
 
@@ -403,7 +403,7 @@ const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
 
   return {
     success: true,
-    message: otp
+    message: ""
   };
 };
 
