@@ -13,7 +13,7 @@ import { cleanUndefinedAndEmptyStrValueObject } from "../../utils/objectUtil";
 import ticketServices from "../../services/ticketServices";
 import { useTicketStatusesContantTranslation } from "./hooks/useTicketConstantsTranslation";
 
-export default function SupportList() {
+export default function TicketList() {
   const { isLoading, fetchApi } = useFetchingStore();
   const { t } = useTranslation("supportPage");
   const { t: tSupport } = useTranslation("supportPage", { keyPrefix: "properties" });

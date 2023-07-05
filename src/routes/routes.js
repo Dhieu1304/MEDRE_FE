@@ -19,12 +19,12 @@ import DefaultLayout from "../layouts/DefaultLayout/DefaultLayout";
 const publicRoutes = [
   { path: routeConfig.home, component: HomePage },
   { path: routeConfig.about, component: AboutPage },
-  { path: routeConfig.support, component: SupportPage },
   { path: `${routeConfig.auth}/*`, component: AuthPage, layout: AuthLayout },
 
   { path: `${routeConfig.verification}/*`, component: VerificationPage, layout: AuthLayout },
   // ------------ private-------------
   // { path: `${routeConfig.doctor}`, component: NotFoundPage, layout: null },
+  { path: routeConfig.support, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
   { path: `${routeConfig.doctor}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
   { path: `${routeConfig.schedule}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
   { path: `${routeConfig.history}`, component: Navigate, props: { replace: true, to: "/auth/login" }, layout: null },
