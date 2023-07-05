@@ -1,5 +1,5 @@
 import React from "react";
-import { Button, Stack, Typography, Box } from "@mui/material";
+import { Button, Stack, Typography, Box, useTheme } from "@mui/material";
 import { BookOnline, LocalHospital, History, CalendarMonth } from "@mui/icons-material";
 import { useNavigate } from "react-router";
 import { useTranslation } from "react-i18next";
@@ -7,7 +7,6 @@ import images from "../../assets/images";
 import routeConfig from "../../config/routeConfig";
 
 const titleSx = {
-  color: "black",
   fontSize: 20,
   fontWeight: 600,
   height: "max-content",
@@ -62,13 +61,22 @@ function HomePage() {
     }
   ];
 
+  const theme = useTheme();
+  // const [bgColor, color] = useMemo(() => {
+
+  //   const backgroundColor = theme.palette.
+
+  // }, [mode])
+
+  const backgroundColor = theme.palette.background.paper;
+
   return (
-    <Box sx={{ backgroundColor: "#f5f5f5", display: "flex", flexDirection: "column" }}>
-      <Box sx={{ display: "flex", flexDirection: "column", backgroundColor: "#f5f5f5", height: "550px" }}>
+    <Box sx={{ backgroundColor, display: "flex", flexDirection: "column" }}>
+      <Box sx={{ display: "flex", flexDirection: "column", backgroundColor, height: "550px" }}>
         <Typography sx={titleSx}>{t("title1")}</Typography>
         <Box component="img" src={images.medreIntro} sx={{ flexShrink: 1, width: "100%", height: "90%" }} alt="" />
       </Box>
-      <Box sx={{ backgroundColor: "#f5f5f5", display: "flex", flexDirection: "column", height: "max-content" }}>
+      <Box sx={{ backgroundColor, display: "flex", flexDirection: "column", height: "max-content" }}>
         <Typography sx={titleSx}>{t("title2")}</Typography>
         <Box sx={{ display: "flex", flexDirection: "row", alignSelf: "center" }}>
           {functionMenu.map((item) => {
@@ -95,7 +103,7 @@ function HomePage() {
           <Box
             key={item.title}
             sx={{
-              backgroundColor: "#f5f5f5",
+              backgroundColor,
               display: "flex",
               flexDirection: item.flexDirection,
               height: "max-content",

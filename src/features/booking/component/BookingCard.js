@@ -377,13 +377,9 @@ function BookingCard({ booking, cancelBookingModal }) {
             >
               <Typography variant="h5">{formatDate.format(new Date(booking?.date), "ddd, DD/MM/YY")}</Typography>
               {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE ? (
-                <Typography sx={{ color: theme.palette.success.light }}>
-                  {scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}
-                </Typography>
+                <Typography sx={{ color: "red" }}>{scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}</Typography>
               ) : (
-                <Typography sx={{ color: theme.palette.warning.light }}>
-                  {scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}
-                </Typography>
+                <Typography sx={{ color: "green" }}>{scheduleTypeListObj[booking?.bookingSchedule?.type]?.label}</Typography>
               )}
             </Box>
 

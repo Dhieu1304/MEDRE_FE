@@ -37,6 +37,7 @@ function BookingDetail() {
   const { t } = useTranslation("bookingFeature", { keyPrefix: "BookingDetail" });
   const { t: tBooking } = useTranslation("bookingEntity", { keyPrefix: "properties" });
   const { t: tBookingConstants } = useTranslation("bookingEntity", { keyPrefix: "constants" });
+  const { t: tScheduleConstants } = useTranslation("scheduleEntity", { keyPrefix: "constants" });
 
   const params = useParams();
   const bookingId = useMemo(() => params?.bookingId, [params?.bookingId]);
@@ -60,6 +61,24 @@ function BookingDetail() {
       {
         label: tBookingConstants("paymentStatuses.unpaid"),
         value: bookingPaymentStatuses.UNPAID
+      }
+    ].reduce((obj, cur) => {
+      return {
+        ...obj,
+        [cur?.value]: cur
+      };
+    }, {});
+  }, [locale]);
+
+  const scheduleTypeListObj = useMemo(() => {
+    return [
+      {
+        label: tScheduleConstants("types.offline"),
+        value: scheduleTypes.TYPE_OFFLINE
+      },
+      {
+        label: tScheduleConstants("types.online"),
+        value: scheduleTypes.TYPE_ONLINE
       }
     ].reduce((obj, cur) => {
       return {
@@ -280,6 +299,15 @@ function BookingDetail() {
                       {`${booking?.bookingTimeSchedule?.timeEnd?.split(":")[0]}:${
                         booking?.bookingTimeSchedule?.timeEnd?.split(":")[1]
                       }`}{" "}
+                      {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE ? (
+                        <Typography sx={{ color: "red" }}>
+                          ({scheduleTypeListObj[booking?.bookingSchedule?.type]?.label})
+                        </Typography>
+                      ) : (
+                        <Typography sx={{ color: "green" }}>
+                          ({scheduleTypeListObj[booking?.bookingSchedule?.type]?.label})
+                        </Typography>
+                      )}
                     </TableCell>
                   </TableRow>
                   <TableRow>

@@ -7,14 +7,14 @@
 }
 h2 {
   font-size: x-large;
-  color: black;
+
   padding: 0pt;
   margin: 2pt;
 }
 h3 {
   font-size: large;
   font-weight: lighter;
-  color: black;
+
   padding: 0pt;
   margin: 2pt;
 }
@@ -22,7 +22,7 @@ h4 {
   font-size: large;
   font-style: normal;
   font-weight: lighter;
-  color: black;
+
   margin-left: 50px;
   margin-top: 0px;
   margin-bottom: 0px;
