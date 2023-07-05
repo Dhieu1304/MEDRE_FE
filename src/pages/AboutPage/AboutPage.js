@@ -38,6 +38,10 @@ export default function AboutPage() {
         <h4>{t("process-content.feature2.step1")}</h4>
         <h4>{t("process-content.feature2.step2")}</h4>
         <h4>{t("process-content.feature2.step3")}</h4>
+        <h3>
+          <b>{t("process-content.feature3.name").toUpperCase()}</b>
+        </h3>
+        <h4>{t("process-content.feature3.step1")}</h4>
       </div>
     </div>
   );

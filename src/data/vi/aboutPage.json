@@ -25,6 +25,10 @@
       "step1": "1. Đăng nhập phần mềm trên web hoặc ứng dụng di động.",
       "step2": "2. Lựa chọn mục Lịch sử khám bệnh/ Lịch khám bệnh",
       "step3": "3. Lựa chọn chi tiết để xem về một lịch khám chi tiết"
+    },
+    "feature3": {
+      "name": "Lưu ý dành cho bệnh nhân",
+      "step1": "1. Đến phòng khám/ đến phòng họp trước 10 đến 15 phút so với lịch khám bệnh."
     }
   }
 }
