@@ -284,6 +284,14 @@ function BookingDetail() {
                     <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleExpertise?.name}</TableCell>
                   </TableRow>
                   <TableRow>
+                    <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
+                    <TableCell {...tableSecondCellProps}>
+                      {booking?.bookingSchedule?.scheduleExpertise?.id?.substring(
+                        booking?.bookingSchedule?.scheduleExpertise?.id?.length || 4 - 1
+                      )}
+                    </TableCell>
+                  </TableRow>
+                  <TableRow>
                     <TableCell {...tableFirstCellProps}>{tBooking("paymentStatus")}</TableCell>
                     <TableCell {...tableSecondCellProps}>{bookingPaymentStatusListObj[booking?.isPayment]?.label}</TableCell>
                   </TableRow>

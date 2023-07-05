@@ -437,6 +437,14 @@ function BookingCard({ booking, cancelBookingModal }) {
                       <TableCell {...tableSecondCellProps}>{booking?.bookingSchedule?.scheduleExpertise?.name}</TableCell>
                     </TableRow>
                     <TableRow>
+                      <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
+                      <TableCell {...tableSecondCellProps}>
+                        {booking?.bookingSchedule?.scheduleExpertise?.id?.substring(
+                          booking?.bookingSchedule?.scheduleExpertise?.id?.length || 4 - 1
+                        )}
+                      </TableCell>
+                    </TableRow>
+                    <TableRow>
                       <TableCell {...tableFirstCellProps}>{tBooking("patient.name")}</TableCell>
                       <TableCell {...tableSecondCellProps}>{booking?.bookingOfPatient?.name}</TableCell>
                     </TableRow>

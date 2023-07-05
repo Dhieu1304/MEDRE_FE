@@ -10,6 +10,7 @@
     "ordinalNumber": "Ordinal Number",
     "conclusion": "Doctor's Conclusion",
     "prescription": "Prescription",
+    "room": "Room",
     "price": "Price",
     "schedule": {
       "expertise": "Expertise"
