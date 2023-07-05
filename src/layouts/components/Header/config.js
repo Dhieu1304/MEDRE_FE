@@ -6,10 +6,6 @@ export const headerLeftItemsNotLogin = [
     label: "about_label"
   },
   {
-    to: routeConfig.support,
-    label: "support_label"
-  },
-  {
     to: routeConfig.doctor,
     label: "doctor_label"
   },
@@ -21,6 +17,10 @@ export const headerLeftItemsNotLogin = [
   {
     to: routeConfig.history,
     label: "history_label"
+  },
+  {
+    to: routeConfig.support,
+    label: "support_label"
   }
 
   // ------------ private-------------
@@ -32,10 +32,6 @@ export const headerLeftItemsLogined = [
     label: "about_label"
   },
   {
-    to: routeConfig.support,
-    label: "support_label"
-  },
-  {
     to: routeConfig.doctor,
     label: "doctor_label"
   },
@@ -46,6 +42,10 @@ export const headerLeftItemsLogined = [
   {
     to: routeConfig.history,
     label: "history_label"
+  },
+  {
+    to: routeConfig.support,
+    label: "support_label"
   }
 ];
 

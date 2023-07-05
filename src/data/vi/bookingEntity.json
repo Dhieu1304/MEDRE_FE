@@ -13,7 +13,7 @@
     "room": "Phòng",
     "price": "Giá khám",
     "schedule": {
-      "expertise": "Chuyên khoa"
+      "expertise": "Khoa khám"
     },
 
     "patient": {

@@ -219,6 +219,7 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
     }, {});
   }, [locale]);
 
+  // console.log("data: ", data);
   return (
     <CustomModal
       show={show}
@@ -258,6 +259,28 @@ function BookingModal({ show, setShow, data, setData, handleAfterBooking, patien
           <Typography fontWeight={500} textAlign="center">
             {formatDate.format(new Date(data?.date), "ddd, DD/MM/YYYY")}{" "}
             {`(${scheduleTypeListObj?.[data?.schedule?.type]?.label})`}
+          </Typography>
+        </Box>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: {
+              sm: "row",
+              xs: "column"
+            },
+            justifyContent: "flex-start",
+            alignItems: {
+              sm: "center",
+              xs: "flex-start"
+            },
+            mb: 2
+          }}
+        >
+          <Typography fontWeight={600} mr={2}>
+            {tBooking("schedule.expertise")}:
+          </Typography>
+          <Typography fontWeight={500} textAlign="center">
+            {data?.schedule?.scheduleExpertise?.name}
           </Typography>
         </Box>
         <Box
