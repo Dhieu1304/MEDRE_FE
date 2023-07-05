@@ -300,11 +300,11 @@ function BookingDetail() {
                         booking?.bookingTimeSchedule?.timeEnd?.split(":")[1]
                       }`}{" "}
                       {booking?.bookingSchedule?.type === scheduleTypes.TYPE_OFFLINE ? (
-                        <Typography component={"span"} sx={{ color: "red" }}>
+                        <Typography component="span" sx={{ color: "red" }}>
                           ({scheduleTypeListObj[booking?.bookingSchedule?.type]?.label})
                         </Typography>
                       ) : (
-                        <Typography component={"span"} sx={{ color: "green" }}>
+                        <Typography component="span" sx={{ color: "green" }}>
                           ({scheduleTypeListObj[booking?.bookingSchedule?.type]?.label})
                         </Typography>
                       )}
