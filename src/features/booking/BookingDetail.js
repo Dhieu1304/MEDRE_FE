@@ -133,7 +133,7 @@ function BookingDetail() {
   const tableSecondCellProps = {
     align: "left",
     sx: {
-      width: "40%",
+      width: "60%",
       fontSize: {
         md: 16,
         xs: 10
@@ -164,7 +164,21 @@ function BookingDetail() {
   const getRoomName = (bookingData) => {
     const expertiseId = bookingData?.bookingSchedule?.scheduleExpertise?.id || "1";
     const room = expertiseId?.charAt(expertiseId.length - 1);
-    return `P.0${room}`;
+    return (
+      <Typography>
+        {`P.0${room}`}
+        <Typography
+          component={"a"}
+          href="https://goo.gl/maps/LWXjMnq4NNbbFEJm9"
+          sx={{
+            ml: 2,
+            textDecoration: "none"
+          }}
+        >
+          227 Đường Nguyễn Văn Cừ, Phường 4, Quận 5, Thành phố Hồ Chí Minh
+        </Typography>
+      </Typography>
+    );
   };
 
   return (

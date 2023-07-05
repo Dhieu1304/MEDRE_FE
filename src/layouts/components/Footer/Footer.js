@@ -90,7 +90,7 @@ function Footer() {
             variant="body2"
             color="text.secondary"
             gutterBottom
-            href="https://www.google.com/maps/place/University+of+Science+-+VNUHCM/@10.7628356,106.6824824,15z/data=!4m2!3m1!1s0x0:0x43900f1d4539a3d?sa=X&ved=2ahUKEwi_4Iaa_vb_AhVUsFYBHSdlBL8Q_BJ6BAhEEAA&ved=2ahUKEwi_4Iaa_vb_AhVUsFYBHSdlBL8Q_BJ6BAhXEAg"
+            href="https://goo.gl/maps/9j8cE2qaWyEVehNZ6"
           >
             {t("address_label")}: {t("address_value_p1")}:
             <br />
