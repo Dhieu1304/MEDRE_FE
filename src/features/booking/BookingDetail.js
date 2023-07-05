@@ -420,6 +420,7 @@ function BookingDetail() {
               </Table>
             </TableContainer>
           </Box>
+
           <Box sx={{ flexDirection: "column", mb: 2 }}>
             <Typography
               component="h1"
