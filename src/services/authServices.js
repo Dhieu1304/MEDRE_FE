@@ -160,7 +160,7 @@ const register = async ({ phoneNumber, email, password }) => {
   }
 };
 
-const registerVerifyOtp = async ({ otp }) => {
+const registerVerifyOtp = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   otp
   // });
@@ -270,7 +270,7 @@ const sendResetPasswordToEmail = async (email) => {
   }
 };
 
-const sendVerificationOtpToPhone = async (phoneNumber) => {
+const sendVerificationOtpToPhone = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   phone_number: phoneNumber
   // });
@@ -304,7 +304,7 @@ const sendVerificationOtpToPhone = async (phoneNumber) => {
   };
 };
 
-const sendResetPasswordOtpToPhone = async (phoneNumber) => {
+const sendResetPasswordOtpToPhone = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   phone_number: phoneNumber
   // });
@@ -373,7 +373,7 @@ const verifyOtpToVerfifyPhoneNumber = async (phoneNumber) => {
   }
 };
 
-const verifyOtpToResetPasswordPhoneNumber = async (otp) => {
+const verifyOtpToResetPasswordPhoneNumber = async () => {
   // const dataBody = cleanUndefinedAndEmptyStrValueObject({
   //   otp
   // });
