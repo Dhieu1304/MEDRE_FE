@@ -42,7 +42,7 @@ function DoctorDetail() {
       );
     };
     loadData();
-  }, []);
+  }, [doctorId]);
 
   return (
     <>

@@ -37,7 +37,7 @@ function MeetingDetail() {
       );
     };
     loadData();
-  }, []);
+  }, [bookingId]);
 
   const handleJitsiIFrameRef = (iframeRef) => {
     // eslint-disable-next-line no-param-reassign

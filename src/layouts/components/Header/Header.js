@@ -265,6 +265,19 @@ function Header({ window }) {
                     </MenuItem>
                     <MenuItem>
                       <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
+                        <Typography>{t("turn_on_notifications")} </Typography>
+                        <Switch
+                          checked={mode === DARK}
+                          onClick={() => {
+                            setMode((prev) => {
+                              return prev === LIGHT ? DARK : LIGHT;
+                            });
+                          }}
+                        />
+                      </Box>
+                    </MenuItem>
+                    <MenuItem>
+                      <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%" }}>
                         <Typography>{t("english_language_label")} </Typography>
                         <Switch checked={locale === "enUS"} onClick={handleChangeLanguage} />
                       </Box>

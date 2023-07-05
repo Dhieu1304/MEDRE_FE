@@ -331,6 +331,12 @@ function BookingCard({ booking, cancelBookingModal }) {
     }
   };
 
+  const getRoomName = (bookingData) => {
+    const expertiseId = bookingData?.bookingSchedule?.scheduleExpertise?.id || "1";
+    const room = expertiseId?.substring(expertiseId?.length || 10 - 1);
+    return room;
+  };
+
   return (
     <Card
       sx={{
@@ -438,11 +444,7 @@ function BookingCard({ booking, cancelBookingModal }) {
                     </TableRow>
                     <TableRow>
                       <TableCell {...tableFirstCellProps}>{tBooking("room")}</TableCell>
-                      <TableCell {...tableSecondCellProps}>
-                        {booking?.bookingSchedule?.scheduleExpertise?.id?.substring(
-                          booking?.bookingSchedule?.scheduleExpertise?.id?.length || 4 - 1
-                        )}
-                      </TableCell>
+                      <TableCell {...tableSecondCellProps}>{getRoomName(booking)}</TableCell>
                     </TableRow>
                     <TableRow>
                       <TableCell {...tableFirstCellProps}>{tBooking("patient.name")}</TableCell>
