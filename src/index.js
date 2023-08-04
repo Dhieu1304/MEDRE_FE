@@ -1,14 +1,22 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import { AuthProvider } from "./store/AuthStore";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { AppConfigProvider } from "./store/AppConfigStore";
+import "./config/i18n";
+import { FetchingApiProvider } from "./store/FetchingApiStore";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <AppConfigProvider>
+    <AuthProvider>
+      <FetchingApiProvider>
+        <App />
+      </FetchingApiProvider>
+    </AuthProvider>
+  </AppConfigProvider>
 );
 
 // If you want to start measuring performance in your app, pass a function

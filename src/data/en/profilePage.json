@@ -1,0 +1,17 @@
+{
+  "title": {
+    "account": "Identify Information",
+    "personality": "Personality Information"
+  },
+  "subtitle": {
+    "email": "Email",
+    "username": "Username",
+    "phone": "Phone",
+    "author": "Role",
+    "status": "Status",
+    "fullname": "Name",
+    "dob": "Date Of Birth",
+    "gender": "Gender",
+    "address": "Address"
+  }
+}

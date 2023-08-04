@@ -1,0 +1,58 @@
+{
+  "Login": {
+    "title": "Sign in",
+    "button": {
+      "login": "Login"
+    },
+
+    "subTitle": {
+      "remember": "Remember me"
+    },
+
+    "link": {
+      "verification": "Verification account",
+      "forgotPassword": "Forgot password",
+      "dontHaveAnAccount": "Don't have an account?",
+      "signUp": "Sign up"
+    }
+  },
+
+  "Register": {
+    "title": "Sign up",
+    "button": {
+      "login": "Register"
+    },
+
+    "link": {
+      "verification": "Verification account",
+      "forgotPassword": "Forgot password",
+      "haveAnAccount": "Have an account?",
+      "signIn": "Sign in"
+    }
+  },
+
+  "Profile": {
+    "title": {
+      "identify": "Identify Information",
+      "account": "Account Information",
+      "personality": "Personality Information"
+    },
+    "button": {
+      "reset": "Reset",
+      "save": "Save",
+      "verify": "Verify"
+    }
+  },
+
+  "ForgotPassword": {
+    "title": "Reset password"
+  },
+
+  "ChangePassword": {
+    "title": "Change password",
+    "button": {
+      "save": "Save"
+    }
+  }
+
+}

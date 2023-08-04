@@ -1,0 +1,31 @@
+{
+  "CustomModal": {
+    "button": {
+      "cancel": "Cancel"
+    }
+  },
+  "NoDataBox": {
+    "title": "No relevant data available"
+  },
+
+  "CustomNotification": {
+    "title": "Notifications",
+    "button": {
+      "seeMore": "See more"
+    }
+  },
+
+  "CustomDateFromToInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
+  },
+
+  "CustomDateInput": {
+    "preview": "Preview",
+    "button": {
+      "submit": "Submit"
+    }
+  }
+}

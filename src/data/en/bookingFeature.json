@@ -1,0 +1,73 @@
+{
+  "BookingCard": {
+    "button": {
+      "detail": "Detail",
+      "payment": "Payment",
+      "cancel": "Cancel",
+      "meet": "Meet"
+    },
+    "countDown": {
+      "day": "Day"
+    }
+  },
+
+  "BookingList": {
+    "filter": {
+      "type": "Type",
+      "date": "Date",
+      "from": "From",
+      "to": "To",
+      "button": {
+        "reset": "Reset"
+      }
+    },
+    "select": {
+      "types": {
+        "online": "Online",
+        "offline": "Offline",
+        "all": "All"
+      }
+    }
+  },
+
+  "BookingDetail": {
+    "title": "Booking detail",
+    "subTitle": {
+      "scheduleInfo": "Schedule information",
+      "doctorInfo": "Doctor information",
+      "patientInfo": "Patient information",
+      "doctorConclusion": "Doctor conclusion",
+      "doctorNote": "Doctor note",
+      "doctorPrescription": "Doctor prescription"
+    },
+    "button": {
+      "exportFile": "Export file",
+      "meet": "Meet",
+      "payment": "Payment",
+      "cancel": "Cancel"
+    }
+  },
+
+  "BookingModal": {
+    "title": "Booking",
+    "subTitle": {
+      "bookingForOther": "Booking for other"
+    },
+    "form": {
+      "bookingFor": "Booking for",
+      "self": "Self",
+      "other": "Other"
+    },
+    "button": {
+      "book": "Book"
+    }
+  },
+
+  "CancelBookingModal": {
+    "title": "Cancel booking",
+    "confirmQuestion": "Are you sure to cancel this booking?",
+    "button": {
+      "cancel": "Cancel booking"
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "header": {
+    "profile_label": "Profile",
+    "change_password_label": "Change password",
+    "dark_mode_label": "Dark mode",
+    "turn_on_notifications": "Turn on notifications",
+    "turn_off_notifications": "Turn off notifications",
+    "english_language_label": "English",
+    "logout_label": "Logout",
+    "about_label": "About",
+    "support_label": "Support",
+    "doctor_label": "Doctor",
+    "history_label": "History",
+    "schedule_label": "Schedule",
+    "meeting_label": "Demo",
+    "sign_in_label": "Sign in",
+    "sign_up_label": "Sign up",
+    "filter": {
+      "search_label": "Search by name"
+    }
+  },
+  "footer": {
+    "email_label": "Email",
+    "phone_label": "Phone",
+    "website_label": "Website",
+    "address_label": "Address",
+    "email_value": "info@example.com",
+    "phone_value": "+0123456789",
+    "website_value": "https://medre-fe.vercel.app",
+    "address_value_p1": "227 Nguyen Van Cu Street, ",
+    "address_value_p2": "Ward 4, District 5, Ho Chi Minh City",
+    "terms_of_service": "Terms of Service",
+    "privacy_policy": "Privacy Policy",
+    "usage_rules": "Usage rules",
+    "contact": "Contact"
+  }
+}

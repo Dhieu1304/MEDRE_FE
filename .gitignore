@@ -16,6 +16,7 @@
 .env
 .env.local
 .env.development.local
+.env.development
 .env.test.local
 .env.production.local
 
@@ -55,3 +56,6 @@ lerna-debug.log*
 !.vscode/tasks.json
 !.vscode/launch.json
 !.vscode/extensions.json
+
+# local
+/note

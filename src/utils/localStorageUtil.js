@@ -1,9 +1,15 @@
+const ACCESS_TOKEN = "ACCESS_TOKEN";
+const REFRESH_TOKEN = "REFRESH_TOKEN";
+const UUID = "UUID";
+const ACCESS_TOKEN_EXP = "ACCESS_TOKEN_EXP";
+const REFRESH_TOKEN_EXP = "REFRESH_TOKEN_EXP";
+
 const LOCAL_STORAGE = {
-  ACCESS_TOKEN: "ACCESS_TOKEN",
-  REFRESH_TOKEN: "REFRESH_TOKEN",
-  RECENT_GROUPS: "RECENT_GROUPS",
-  RECENT_PRESENTATIONS: "RECENT_PRESENTATIONS",
-  UUID: "UUID"
+  ACCESS_TOKEN,
+  REFRESH_TOKEN,
+  UUID,
+  ACCESS_TOKEN_EXP,
+  REFRESH_TOKEN_EXP
 };
 
 const setItem = (name, value) => {
@@ -18,4 +24,4 @@ const removeItem = (name) => {
   localStorage.removeItem(name);
 };
 
-export { LOCAL_STORAGE, setItem, getItem, removeItem };
+export default { LOCAL_STORAGE, setItem, getItem, removeItem };

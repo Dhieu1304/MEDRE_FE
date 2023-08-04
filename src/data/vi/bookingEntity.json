@@ -1,0 +1,43 @@
+{
+  "properties": {
+    "date": "Ngày khám",
+    "time": "Ca khám",
+    "status": "Tình trạng",
+    "code": "Code",
+    "paymentStatus": "Thanh toán",
+    "reason": "Lý do khám",
+    "note": "Ghi chú",
+    "ordinalNumber": "Số thứ tự",
+    "conclusion": "Kết luận bác sĩ",
+    "prescription": "Đơn thuốc",
+    "room": "Phòng",
+    "price": "Giá khám",
+    "schedule": {
+      "expertise": "Khoa khám"
+    },
+
+    "patient": {
+      "phoneNumber": "Số điện thoại",
+      "name": "Họ tên",
+      "address": "Địa chỉ",
+      "gender": "Giới tính",
+      "dob": "Ngày sinh",
+      "healthInsurance": "Bảo hiểm y tế"
+    },
+    "doctor": {
+      "name": "Họ tên",
+      "expertises": "Chuyên khoa"
+    }
+  },
+  "constants": {
+    "statuses": {
+      "cancel": "Hủy lịch",
+      "booked": "Đã đặt",
+      "waiting": "Chờ thanh toán"
+    },
+    "paymentStatuses": {
+      "paid": "Đã thanh toán",
+      "unpaid": "Chưa thanh toán"
+    }
+  }
+}

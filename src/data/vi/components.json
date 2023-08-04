@@ -1,0 +1,31 @@
+{
+  "CustomModal": {
+    "button": {
+      "cancel": "Thoát"
+    }
+  },
+  "NoDataBox": {
+    "title": "Không có dữ liệu phù hợp"
+  },
+
+  "CustomNotification": {
+    "title": "Thông báo",
+    "button": {
+      "seeMore": "Xem thêm"
+    }
+  },
+
+  "CustomDateFromToInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
+  },
+
+  "CustomDateInput": {
+    "preview": "Xem trước",
+    "button": {
+      "submit": "Xác nhận"
+    }
+  }
+}

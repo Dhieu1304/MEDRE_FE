@@ -1,0 +1,17 @@
+{
+  "header": {
+    "profile_label": "Profile",
+    "change_password_label": "Change password",
+    "logout_label": "Logout",
+    "about_label": "About",
+    "forum_label": "Forum",
+    "doctor_label": "Doctor",
+    "history_label": "History",
+    "schedule_label": "Schedule",
+    "sign_in_label": "Sign in",
+    "sign_up_label": "Sign up",
+    "filter": {
+      "search_label": "Search by name"
+    }
+  }
+}

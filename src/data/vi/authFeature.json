@@ -1,0 +1,57 @@
+{
+  "Login": {
+    "title": "Đăng nhập",
+    "button": {
+      "login": "Đăng nhập"
+    },
+
+    "subTitle": {
+      "remember": "Ghi nhớ"
+    },
+
+    "link": {
+      "verification": "Xác thực tài khoản",
+      "forgotPassword": "Quên mật khẩu",
+      "dontHaveAnAccount": "Không có tài khoản",
+      "signUp": "Đăng ký"
+    }
+  },
+
+  "Register": {
+    "title": "Đăng ký",
+    "button": {
+      "login": "Đăng ký"
+    },
+
+    "link": {
+      "verification": "Xác thực tài khoản",
+      "forgotPassword": "Quên mật khẩu",
+      "haveAnAccount": "Đã có tài khoản",
+      "signIn": "Đăng nhập"
+    }
+  },
+
+  "Profile": {
+    "title": {
+      "identify": "Thông tin xác thực",
+      "account": "Thông tin tài khoản",
+      "personality": "Thông tin cá nhân"
+    },
+    "button": {
+      "reset": "Đặt lại",
+      "save": "Lưu",
+      "verify": "Xác thực"
+    }
+  },
+
+  "ForgotPassword": {
+    "title": "Đặt lại mật khẩu"
+  },
+
+  "ChangePassword": {
+    "title": "Thay đổi mật khẩu",
+    "button": {
+      "save": "Lưu"
+    }
+  }
+}

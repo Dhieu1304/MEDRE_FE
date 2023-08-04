@@ -1,72 +1,115 @@
-# Medre React App
+## I. Structure project
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+```js
+/*
+----src
+-------assets
+-------components
+-------config
+-------data
+-------features
+-------hooks
+-------layouts
+---------components
+---------DefaultLayout
+-------pages
+---------AuthPage.js
+---------AuthPage.module.scss
+---------routes.js
+---------index.js
+-------routes
+---------routes.js
+---------index.js
+-------services
+---------authServices
+---------userServices
+-------store
+---------AppConfigStore
+---------AuthStore
+-------utils
+-------App.js
+*/
+```
 
-## Available Scripts
+# II. Hướng dẫn chia folder:
+1. Thư mục public/locales:
+- Chứa các folder ngôn ngữ, phiên dịch của text trong project
+- Mỗi folder bên trong tương ứng với 1 ngôn ngữ
+    + Tên folder là code của ngôn ngữ: Ví dụ: en, vi
+    + Bên trong mỗi folder là tên các file json. Ví dụ authFeature, authPage
+    ```json
+    {
+        "login": {
+            "title": "Sign in",
+            "button_title": "Login",
+            "input": {
+            "require_error_message": "can not empty",
+            "email_format_error_message": "is wrong format",
+            "password_min_length_error_message": "must be at least {{min_length}} characters",
+            "password_format_error_message": "must have at least one digit and one character",
+            "email_label": "Email",
+            "password_label": "Password"
+            }
+        },
+        "no_have_access": {
+            "error_message": "You don't have access"
+        }
+        }
 
-In the project directory, you must create .env file and copy all from .env.example then change config if needed
+    ```
 
-Then, you can run:
+2. assets/images:
+- Chứa các images, logo, ...
+- Mỗi lần thêm image mới thì import vào index.js và export
+    ```js
+        import logo from "./logo.svg";
+        import noAvatar from "./no-avatar.png";
+        import noData from "./no-data.png";
+        import authCover from "./auth-cover.png";
 
-### `npm start`
+        const images = {
+            logo,
+            noAvatar,
+            noData,
+            authCover
+        };
+    ```
 
-Runs the app in the development mode.\
-Open [http://localhost:3456](http://localhost:3456) to view it in your browser.
+3. components:
+- Chứa các UI dùng chung, như modal, CustomInput,...
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+4. config
 
-### `npm test`
+5. features:
+- Chứa các feature và gôm nhóm feature. VD: auth, doctor
+- Mỗi feature có thể thuộc nhiều pages
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+6. hooks
 
-### `npm run build`
+7. layouts:
+- Hiện tại, web chỉ có 1 layout là DefaultLayout
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+8. pages:
+- Mỗi page chứa giao diện chung của từng pages và các route con
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+9. routes:
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+10. services
 
-### `npm run eject`
+11. stores.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+12. utils:
+- Chứa các hàm dùng chung
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+# III. Quy ước chung:
+- tên folder: viết thường theo camelCase: VD: store, services
+- tên components và folder ứng với componets đó: Viết hoa. 
+    + VD: AuthPage.js, AuthPage.module.scss
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## MEDRE_FE
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Start with docker
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+### `docker compose up` to run

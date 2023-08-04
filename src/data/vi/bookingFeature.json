@@ -1,0 +1,72 @@
+{
+  "BookingCard": {
+    "button": {
+      "detail": "Chi tiết",
+      "payment": "Thanh toán",
+      "cancel": "Hủy lịch",
+      "meet": "Khám"
+    },
+    "countDown": {
+      "day": "Ngày"
+    }
+  },
+
+  "BookingList": {
+    "filter": {
+      "type": "Loại",
+      "date": "Ngày",
+      "from": "Từ ngày",
+      "to": "Đến ngày",
+      "button": {
+        "reset": "Đặt lại"
+      }
+    },
+    "select": {
+      "types": {
+        "online": "Trực tuyến",
+        "offline": "Trực tiếp",
+        "all": "Tất cả"
+      }
+    }
+  },
+  "BookingDetail": {
+    "title": "Chi tiết lịch khám",
+    "subTitle": {
+      "scheduleInfo": "Thông tin lịch khám",
+      "doctorInfo": "Thông tin bác sĩ",
+      "patientInfo": "Thông tin bệnh nhân",
+      "doctorConclusion": "Kết luận của bác sĩ",
+      "doctorNote": "Ghi chú của bác sĩ",
+      "doctorPrescription": "Đơn thuốc"
+    },
+    "button": {
+      "exportFile": "Xuất file",
+      "payment": "Thanh toán",
+      "cancel": "Hủy lịch",
+      "meet": "Khám"
+    }
+  },
+
+  "BookingModal": {
+    "title": "Đặt lịch",
+    "subTitle": {
+      "bookingForOther": "Đặt lịch cho người khác"
+    },
+    "form": {
+      "bookingFor": "Đặt lịch cho",
+      "self": "Bản thân",
+      "other": "Người khác"
+    },
+    "button": {
+      "book": "Đặt lịch"
+    }
+  },
+
+  "CancelBookingModal": {
+    "title": "Hủy lịch khám",
+    "confirmQuestion": "Bạn có chắc chắn hủy lịch?",
+    "button": {
+      "cancel": "Hủy lịch"
+    }
+  }
+}

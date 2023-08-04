@@ -1,0 +1,62 @@
+{
+  "DoctorList": {
+    "title": "Tìm kiếm bác sĩ",
+    "subTitle": {
+      "list": "Danh sách bác sĩ"
+    },
+    "filter": {
+      "search": "Tìm kiếm theo tên",
+      "type": "Loại khám",
+      "date": "Ngày",
+      "expertises": "Chuyên khoa",
+      "button": {
+        "reset": "Đặt lại"
+      }
+    },
+    "select": {
+      "types": {
+        "online": "Trực tuyến",
+        "offline": "Trực tiếp",
+        "all": "Tất cả"
+      }
+    },
+    "DoctorCard": {
+      "button": {
+        "book": "Đặt lịch"
+      }
+    }
+  },
+
+  "DoctorDetail": {
+    "title": "Thông tin chi tiết bác sĩ",
+    "DoctorScheduleTable": {
+      "title": "Lịch khám bệnh bác sĩ",
+      "button": {
+        "currentWeek": "Tuần hiện tại",
+        "book": "Đặt lịch",
+        "booked": "Đã đặt",
+        "reserved": "Hết chỗ",
+        "waiting": "Đang đợi"
+      }
+    }
+  },
+
+  "BookingModal": {
+    "date": "Ngày",
+    "time": "Thời gian",
+    "gender": "Giới tính",
+    "self": "Bản thân",
+    "other": "Người khác",
+    "reason": "Lý do",
+    "reasonPlaceholder": "Lý do khám",
+    "info": {
+      "title": "Thông tin",
+      "name": "Họ tên",
+      "phone": "Số điện thoại",
+      "gender": "Giới tính",
+      "male": "Nam",
+      "female": "Nữ",
+      "birthday": "Ngày sinh"
+    }
+  }
+}
